@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>テスト：平安時代②</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Meiryo",sans-serif;background:#f0f2f5;min-height:100vh;padding:20px 16px 80px}
+  .back-btn{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:20px;text-decoration:none}
+  .back-btn:hover{background:#1e2d6b}
+  h1{text-align:center;font-size:22px;color:#1a1a2e;margin-bottom:6px}
+  .unit-label{text-align:center;color:#888;font-size:13px;margin-bottom:24px}
+  .card{max-width:720px;margin:0 auto 20px;background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border:1px solid #e5e8f0}
+  .q-num{font-size:12px;color:#5b4a8c;font-weight:bold;margin-bottom:8px}
+  .q-text{font-size:17px;color:#1a1a2e;line-height:1.7;margin-bottom:18px}
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{padding:12px 16px;border:2px solid #dde;border-radius:8px;cursor:pointer;font-size:15px;color:#333;transition:all 0.15s;background:#fafafa}
+  .choice:hover{border-color:#5b4a8c;background:#f5f0ff}
+  .choice.selected{border-color:#5b4a8c;background:#ede8ff;color:#3d2a8c;font-weight:bold}
+  .choice.correct{border-color:#27ae60;background:#e8fff2;color:#1e8a4d;font-weight:bold}
+  .choice.wrong{border-color:#e74c3c;background:#fff0ef;color:#c0392b}
+  .choice.show-correct{border-color:#27ae60;background:#e8fff2;color:#1e8a4d}
+  .footer{max-width:720px;margin:0 auto;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+  .btn{padding:12px 28px;border-radius:10px;border:none;font-size:16px;font-weight:bold;cursor:pointer;transition:0.15s}
+  .btn-primary{background:#5b4a8c;color:#fff;box-shadow:0 3px 0 #3d3060}
+  .btn-primary:hover{background:#3d3060}
+  .btn-secondary{background:#6c757d;color:#fff;box-shadow:0 3px 0 #495057}
+  #result-screen{display:none;max-width:720px;margin:0 auto;text-align:center}
+  .result-card{background:#fff;border-radius:16px;padding:40px 24px;box-shadow:0 4px 20px rgba(0,0,0,0.1);border:2px solid #e5e8f0}
+  .result-score{font-size:72px;font-weight:bold;margin:10px 0}
+  .result-score.pass{color:#1976d2}
+  .result-score.fail{color:#e67e22}
+  .result-msg{font-size:22px;font-weight:bold;margin-bottom:8px}
+  .result-detail{font-size:15px;color:#888;margin-bottom:30px}
+  .confetti-piece{position:fixed;width:10px;height:10px;top:-10px;opacity:0;animation:fall linear forwards;border-radius:2px;pointer-events:none;z-index:9999}
+  @keyframes fall{0%{top:-10px;opacity:1;transform:rotate(0deg)}100%{top:110vh;opacity:0.3;transform:rotate(720deg)}}
+</style>
+</head>
+<body>
+<a class="back-btn" href="rekishi.html">← 単元一覧に戻る</a>
+<h1>🎯 テスト</h1>
+<p class="unit-label">平安時代② 武士の台頭・源平</p>
+<div id="quiz-screen">
+  <div id="questions-area"></div>
+  <div class="footer">
+    <button class="btn btn-secondary" onclick="location.href='rekishi.html'">中断して戻る</button>
+    <button class="btn btn-primary" onclick="submitTest()">採点する</button>
+  </div>
+</div>
+<div id="result-screen">
+  <div class="result-card">
+    <div id="result-msg" class="result-msg"></div>
+    <div id="result-score" class="result-score"></div>
+    <div id="result-detail" class="result-detail"></div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-secondary" onclick="retryTest()">もう一度挑戦</button>
+      <button class="btn btn-primary" onclick="location.href='rekishi.html'">単元一覧へ戻る</button>
+    </div>
+  </div>
+</div>
+<script>
+const UNIT_ID='heian2',PASS_SCORE=70;
+const questions=[{ q: '天皇が退位後も政治の実権を握る仕組みを何といいますか？', choices: ["摂関政治", "院政", "幕藩体制", "律令政治"], ans: 1 },
+  { q: '院政を始めた上皇は誰ですか？', choices: ["後鳥羽上皇", "後白河上皇", "白河上皇", "崇徳上皇"], ans: 2 },
+  { q: '1156年に起きた天皇家・摂関家の内乱を何といいますか？', choices: ["応仁の乱", "壬申の乱", "保元の乱", "平治の乱"], ans: 2 },
+  { q: '1159年に源氏と平氏が争った乱を何といいますか？', choices: ["保元の乱", "壬申の乱", "応仁の乱", "平治の乱"], ans: 3 },
+  { q: '武士として初めて太政大臣になった人物は誰ですか？', choices: ["源頼朝", "平清盛", "源義経", "平将門"], ans: 1 },
+  { q: '平清盛が整備して行った中国（宋）との貿易を何といいますか？', choices: ["南蛮貿易", "勘合貿易", "朱印船貿易", "日宋貿易"], ans: 3 },
+  { q: '源平合戦の最後の決戦で平氏が滅んだ戦いはどれですか？', choices: ["一ノ谷の戦い", "屋島の戦い", "壇ノ浦の戦い", "富士川の戦い"], ans: 2 },
+  { q: '壇ノ浦の戦いが行われたのは何年ですか？', choices: ["1180年", "1183年", "1185年", "1192年"], ans: 2 },
+  { q: '源頼朝の弟で壇ノ浦での戦いを指揮した武将は誰ですか？', choices: ["源義仲", "源範頼", "源義経", "源行家"], ans: 2 },
+  { q: '武士団の中で東国を拠点にした氏族はどちらですか？', choices: ["平氏", "藤原氏", "橘氏", "源氏"], ans: 3 }];
+let userAnswers=new Array(questions.length).fill(-1);
+function renderQuestions(){
+  const area=document.getElementById('questions-area');area.innerHTML='';
+  questions.forEach((q,qi)=>{
+    const card=document.createElement('div');card.className='card';
+    card.innerHTML=`<div class="q-num">問題 ${qi+1} / ${questions.length}</div><div class="q-text">${q.q}</div><div class="choices" id="choices-${qi}">${q.choices.map((c,ci)=>`<div class="choice" onclick="selectChoice(${qi},${ci})"><span style="font-weight:bold;margin-right:8px">${['①','②','③','④'][ci]}</span>${c}</div>`).join('')}</div>`;
+    area.appendChild(card);
+  });
+}
+function selectChoice(qi,ci){userAnswers[qi]=ci;document.querySelectorAll(`#choices-${qi} .choice`).forEach((el,i)=>el.classList.toggle('selected',i===ci));}
+function submitTest(){
+  let correct=0;
+  questions.forEach((q,qi)=>{
+    const ua=userAnswers[qi];
+    document.querySelectorAll(`#choices-${qi} .choice`).forEach((el,ci)=>{
+      if(ci===q.ans)el.classList.add('show-correct');
+      if(ua===ci&&ci!==q.ans)el.classList.add('wrong');
+      if(ua===ci&&ci===q.ans){el.classList.add('correct');correct++;}
+      el.onclick=null;
+    });
+  });
+  const score=Math.round(correct/questions.length*100),pass=score>=PASS_SCORE;
+  try{const p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p[UNIT_ID]=p[UNIT_ID]||{};p[UNIT_ID].testScore=score;p[UNIT_ID].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}
+  document.getElementById('quiz-screen').style.display='none';
+  const rs=document.getElementById('result-screen');rs.style.display='block';
+  const se=document.getElementById('result-score');se.textContent=score+'点';se.className='result-score '+(pass?'pass':'fail');
+  document.getElementById('result-msg').textContent=pass?'🎉 合格！':'😅 おしい！';
+  document.getElementById('result-detail').textContent=`${correct} / ${questions.length} 問正解（合格ライン：${PASS_SCORE}点）`;
+  if(pass)launchConfetti();
+}
+function retryTest(){userAnswers=new Array(questions.length).fill(-1);document.getElementById('result-screen').style.display='none';document.getElementById('quiz-screen').style.display='block';renderQuestions();window.scrollTo(0,0);}
+function launchConfetti(){
+  const colors=['#f43f5e','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899','#14b8a6'];
+  for(let i=0;i<80;i++)setTimeout(()=>{const el=document.createElement('div');el.className='confetti-piece';el.style.left=Math.random()*100+'vw';el.style.background=colors[Math.floor(Math.random()*colors.length)];el.style.animationDuration=(1.5+Math.random()*2)+'s';el.style.width=(6+Math.random()*8)+'px';el.style.height=(6+Math.random()*8)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),4000);},i*30);
+}
+renderQuestions();
+</script>
+</body>
+</html>

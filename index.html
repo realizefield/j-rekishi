@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA — 単元一覧</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Meiryo", sans-serif; background: #f0f2f5; min-height: 100vh; padding: 24px 16px 60px; }
+  h1 { text-align: center; font-size: 26px; color: #1a1a2e; margin-bottom: 6px; }
+  .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 28px; }
+  .era-block { max-width: 860px; margin: 0 auto 28px; }
+  .era-title { font-size: 18px; font-weight: bold; color: #fff; background: #2c3e8c; padding: 10px 18px; border-radius: 10px 10px 0 0; display: flex; align-items: center; gap: 10px; }
+  .era-title .era-icon { font-size: 20px; }
+  .unit-grid { background: #fff; border: 1px solid #dde; border-top: none; border-radius: 0 0 10px 10px; padding: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .unit-card { border: 1.5px solid #dde; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; position: relative; background: #fafafa; }
+  .unit-card:hover { border-color: #2c3e8c; background: #f0f4ff; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(44,62,140,0.1); }
+  .unit-card.done { border-color: #27ae60; background: #f0fff5; }
+  .unit-card.done:hover { background: #e4fced; }
+  .unit-card.test-done { border-color: #e67e22; background: #fffaf0; }
+  .unit-title { font-size: 15px; font-weight: bold; color: #1a1a2e; margin-bottom: 6px; padding-right: 30px; }
+  .unit-sub { font-size: 12px; color: #888; }
+  .badge-area { position: absolute; top: 10px; right: 12px; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: bold; }
+  .badge-done { background: #27ae60; color: #fff; }
+  .badge-test { background: #e67e22; color: #fff; }
+  .score-badge { background: #2c3e8c; color: #fff; }
+  .unit-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .btn-small { padding: 5px 12px; border-radius: 6px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.15s; }
+  .btn-study { background: #2c3e8c; color: #fff; }
+  .btn-study:hover { background: #1e2d6b; }
+  .btn-quiz { background: #27ae60; color: #fff; }
+  .btn-quiz:hover { background: #1e8a4d; }
+  .btn-test { background: #e67e22; color: #fff; }
+  .btn-test:hover { background: #c96a10; }
+  .progress-bar-wrap { max-width: 860px; margin: 0 auto 24px; background: #fff; border-radius: 10px; padding: 16px 20px; border: 1px solid #dde; }
+  .progress-label { font-size: 13px; color: #555; margin-bottom: 8px; display: flex; justify-content: space-between; }
+  .progress-bar { background: #eee; border-radius: 99px; height: 10px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, #2c3e8c, #27ae60); height: 100%; border-radius: 99px; transition: width 0.5s ease; }
+</style>
+</head>
+<body>
+
+<h1>📚 歴史学習 GAMBA</h1>
+<p class="subtitle">単元を選んで学習しよう！</p>
+
+<div class="progress-bar-wrap">
+  <div class="progress-label">
+    <span>学習進捗</span>
+    <span id="progress-text">0 / 0 単元完了</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+
+<div id="unit-list"></div>
+
+<script>
+const UNITS = [
+  {
+    era: "古代①　四大文明〜邪馬台国",
+    icon: "🏛️",
+    color: "#6d4c41",
+    units: [
+      { id: "kodai1", title: "四大文明", sub: "メソポタミア・エジプト・インダス・黄河", study: "kodai1.html", quiz: "kodai1_quiz.html", test: "kodai1_test.html" },
+      { id: "kodai2", title: "古代ギリシャ・ローマ", sub: "ポリス・民主政・共和政", study: "kodai2.html", quiz: "kodai2_quiz.html", test: "kodai2_test.html" },
+      { id: "kodai3", title: "中国の統一と日本", sub: "秦・漢・邪馬台国・卑弥呼", study: "kodai3.html", quiz: "kodai3_quiz.html", test: "kodai3_test.html" },
+    ]
+  },
+  {
+    era: "古代②　古墳〜奈良時代",
+    icon: "⛩️",
+    color: "#4a6741",
+    units: [
+      { id: "kofun1", title: "古墳時代と大和政権", sub: "大王・古墳・渡来人", study: "kofun1.html", quiz: "kofun1_quiz.html", test: "kofun1_test.html" },
+      { id: "asuka1", title: "飛鳥時代", sub: "聖徳太子・大化の改新・律令国家", study: "asuka1.html", quiz: "asuka1_quiz.html", test: "asuka1_test.html" },
+      { id: "nara1", title: "奈良時代", sub: "平城京・聖武天皇・天平文化", study: "nara1.html", quiz: "nara1_quiz.html", test: "nara1_test.html" },
+    ]
+  },
+  {
+    era: "中世①　平安〜鎌倉時代",
+    icon: "🏯",
+    color: "#1a5276",
+    units: [
+      { id: "heian1", title: "平安時代①", sub: "桓武天皇・国風文化・藤原氏", study: "heian1.html", quiz: "heian1_quiz.html", test: "heian1_test.html" },
+      { id: "heian2", title: "平安時代②", sub: "武士の台頭・平氏と源氏", study: "heian2.html", quiz: "heian2_quiz.html", test: "heian2_test.html" },
+      { id: "kamakura1", title: "鎌倉幕府の成立", sub: "源頼朝・御恩と奉公・執権政治", study: "kamakura1.html", quiz: "kamakura1_quiz.html", test: "kamakura1_test.html" },
+      { id: "kamakura2", title: "元寇と鎌倉幕府の滅亡", sub: "フビライ・元寇・建武の新政", study: "kamakura2.html", quiz: "kamakura2_quiz.html", test: "kamakura2_test.html" },
+    ]
+  },
+  {
+    era: "中世②　室町時代",
+    icon: "⚔️",
+    color: "#2c3e8c",
+    units: [
+      { id: "muro1", title: "鎌倉幕府の滅亡", sub: "後醍醐天皇・足利尊氏・室町幕府成立", study: "muromachi.html", quiz: "muromachi_quiz.html", test: "muromachi_test.html" },
+      { id: "muro2", title: "南北朝・足利義満", sub: "南北朝統一・勘合貿易", study: "muromachi2.html", quiz: "muromachi2_quiz.html", test: "muromachi2_test.html" },
+      { id: "muro3", title: "応仁の乱と戦国時代", sub: "応仁の乱・下剋上・一揆", study: "muromachi3.html", quiz: "muromachi3_quiz.html", test: "muromachi3_test.html" },
+      { id: "muro4", title: "室町文化", sub: "金閣・銀閣・能・書院造", study: "muromachi4.html", quiz: "muromachi4_quiz.html", test: "muromachi4_test.html" },
+    ]
+  },
+  {
+    era: "近世①　戦国〜安土桃山時代",
+    icon: "🔥",
+    color: "#922b21",
+    units: [
+      { id: "sen1", title: "十字軍とルネサンス", sub: "エルサレム・ミケランジェロ・ダ・ヴィンチ", study: "sengoku1.html", quiz: "sengoku1_quiz.html", test: "sengoku1_test.html" },
+      { id: "sen2", title: "大航海時代", sub: "コロンブス・バスコ・ダ・ガマ・マゼラン", study: "sengoku2.html", quiz: "sengoku2_quiz.html", test: "sengoku2_test.html" },
+      { id: "sen3", title: "宗教改革とキリスト教伝来", sub: "ルター・ザビエル・イエズス会", study: "sengoku3.html", quiz: "sengoku3_quiz.html", test: "sengoku3_test.html" },
+      { id: "sen4", title: "鉄砲伝来と南蛮貿易", sub: "種子島・南蛮人・キリシタン大名", study: "sengoku4.html", quiz: "sengoku4_quiz.html", test: "sengoku4_test.html" },
+      { id: "sen5", title: "織田信長の統一", sub: "桶狭間・楽市楽座・本能寺の変", study: "sengoku5.html", quiz: "sengoku5_quiz.html", test: "sengoku5_test.html" },
+      { id: "sen6", title: "豊臣秀吉の天下統一", sub: "太閤検地・刀狩・朝鮮出兵", study: "sengoku6.html", quiz: "sengoku6_quiz.html", test: "sengoku6_test.html" },
+      { id: "sen7", title: "桃山文化", sub: "千利休・歌舞伎・有田焼", study: "sengoku7.html", quiz: "sengoku7_quiz.html", test: "sengoku7_test.html" },
+    ]
+  },
+  {
+    era: "近世②　江戸時代",
+    icon: "🗾",
+    color: "#1a5276",
+    units: [
+      { id: "edo1", title: "幕府の成立と支配", sub: "徳川家康・参勤交代・武家諸法度", study: "edo1.html", quiz: "edo1_quiz.html", test: "edo1_test.html" },
+      { id: "edo2", title: "鎖国と外交", sub: "島原の乱・出島・朝鮮通信使", study: "edo2.html", quiz: "edo2_quiz.html", test: "edo2_test.html" },
+      { id: "edo3", title: "産業と身分制度", sub: "士農工商・天下の台所・西廻り航路", study: "edo3.html", quiz: "edo3_quiz.html", test: "edo3_test.html" },
+      { id: "edo4", title: "元禄文化と改革", sub: "松尾芭蕉・享保の改革・寛政の改革", study: "edo4.html", quiz: "edo4_quiz.html", test: "edo4_test.html" },
+    ]
+  },
+];
+
+function getProgress() {
+  try { return JSON.parse(localStorage.getItem('gamba_progress') || '{}'); } catch(e) { return {}; }
+}
+
+function renderUnits() {
+  const prog = getProgress();
+  const container = document.getElementById('unit-list');
+  container.innerHTML = '';
+  let totalUnits = 0, doneUnits = 0;
+
+  UNITS.forEach(era => {
+    const block = document.createElement('div');
+    block.className = 'era-block';
+    block.innerHTML = `
+      <div class="era-title" style="background:${era.color}">
+        <span class="era-icon">${era.icon}</span>
+        ${era.era}
+      </div>
+      <div class="unit-grid" id="grid-${era.era}"></div>
+    `;
+    container.appendChild(block);
+    const grid = block.querySelector('.unit-grid');
+
+    era.units.forEach(unit => {
+      totalUnits++;
+      const p = prog[unit.id] || {};
+      const studyDone = p.studyDone;
+      const testScore = p.testScore;
+      if (studyDone) doneUnits++;
+
+      const card = document.createElement('div');
+      card.className = 'unit-card' + (studyDone ? ' done' : '') + (testScore !== undefined ? ' test-done' : '');
+      card.innerHTML = `
+        <div class="badge-area">
+          ${studyDone ? '<span class="badge badge-done">✓ 完了</span>' : ''}
+          ${testScore !== undefined ? `<span class="badge badge-test">テスト ${testScore}点</span>` : ''}
+        </div>
+        <div class="unit-title">${unit.title}</div>
+        <div class="unit-sub">${unit.sub}</div>
+        <div class="unit-actions">
+          <button class="btn-small btn-study" onclick="location.href='${unit.study}'">📖 学習</button>
+          <button class="btn-small btn-quiz" onclick="location.href='${unit.quiz}'">✏️ 確認問題</button>
+          <button class="btn-small btn-test" onclick="location.href='${unit.test}'">🎯 テスト</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  });
+
+  const pct = totalUnits > 0 ? Math.round(doneUnits / totalUnits * 100) : 0;
+  document.getElementById('progress-text').textContent = `${doneUnits} / ${totalUnits} 単元完了`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+renderUnits();
+
+// 他ページから戻ってきたとき再描画
+window.addEventListener('focus', renderUnits);
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：平安時代②</title>
+<style>
+  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
+  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
+  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
+  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
+  .back-to-index:hover { background: #1e2d6b; }
+  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
+  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
+  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
+  .word-chip.used { opacity: 0.3; }
+  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
+  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
+  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
+  .blank.correct { background-color: #ffeb3b; }
+  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
+  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
+  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
+  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
+  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
+  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+</style>
+</head>
+<body>
+<a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
+<h1>⑧ 平安時代②〜武士の台頭</h1>
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+<div class="section"><h2>武士の誕生と院政</h2><div class="question-text">荘園を守るために武装した<span class="blank" data-id="A">武士</span>が誕生した。武士団の中で東国の<span class="blank" data-id="B">源氏</span>と西国の<span class="blank" data-id="C">平氏</span>が最大勢力となった。藤原摂関政治が衰えると、天皇が退位後も実権を握る<span class="blank" data-id="D">院政</span>が始まった。1086年、<span class="blank" data-id="E">白河</span>上皇が院政を開始した。</div></div>
+<div class="section"><h2>平氏の台頭と源平の争乱</h2><div class="question-text">1156年の<span class="blank" data-id="F">保元</span>の乱、1159年の<span class="blank" data-id="G">平治</span>の乱を経て<span class="blank" data-id="H">平清盛</span>が武士として初めて<span class="blank" data-id="I">太政大臣</span>となり政権を握った。平氏は<span class="blank" data-id="J">日宋貿易</span>（大輪田泊を整備）で富を蓄えた。その後、源頼朝・<span class="blank" data-id="K">源義経</span>が立ち上がり、1185年の<span class="blank" data-id="L">壇ノ浦</span>の戦いで平氏が滅亡した。</div></div>
+
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button onclick="startChallenge()">チャレンジ開始</button>
+      <button onclick="checkAnswers()">判定</button>
+      <button class="secondary" onclick="location.reload()">やり直す</button>
+      <button class="secondary" onclick="resetTimer()">時間リセット</button>
+      <button id="next-btn" onclick="location.href='kamakura1.html'" disabled>次へ：鎌倉幕府 ▶</button>
+      <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
+    </div>
+    <div class="timer-info" id="timer-display">経過時間：---</div>
+    <div class="explain-box" id="explain-box">武士の誕生→源氏・平氏の台頭→院政という流れを覚えよう。</div>
+  </div>
+</div>
+<script>
+
+  const answers = { "A":"武士", "B":"源氏", "C":"平氏", "D":"院政", "E":"白河", "F":"保元", "G":"平治", "H":"平清盛", "I":"太政大臣", "J":"日宋貿易", "K":"源義経", "L":"壇ノ浦" };
+  let startTime, timerId, selectedChip = null;
+  function renderBank() {
+    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
+    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
+      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
+      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
+      bank.appendChild(chip);
+    });
+  }
+  function startChallenge() {
+    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
+    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
+    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
+  }
+  document.querySelectorAll('.blank').forEach(blank => {
+    blank.onclick = () => {
+      if (selectedChip) {
+        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
+        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
+      } else if (blank.textContent) {
+        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
+      }
+    };
+  });
+  function checkAnswers() {
+    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
+    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
+  }
+  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
+  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
+  // 学習完了を保存
+  (function() {
+    try {
+      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
+      prog['heian2'] = prog['heian2'] || {};
+      prog['heian2'].studyDone = true;
+      localStorage.setItem('gamba_progress', JSON.stringify(prog));
+    } catch(e) {}
+  })();
+
+</script>
+</body>
+</html>
