@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：縄文・弥生・邪馬台国</title>
+<style>
+  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
+  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
+  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
+  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
+  .back-to-index:hover { background: #1e2d6b; }
+  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
+  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
+  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
+  .word-chip.used { opacity: 0.3; }
+  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
+  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
+  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
+  .blank.correct { background-color: #ffeb3b; }
+  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
+  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
+  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
+  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
+  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
+  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+</style>
+</head>
+<body>
+<a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
+<h1>③ 縄文・弥生時代と邪馬台国</h1>
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+<div class="section"><h2>縄文時代</h2><div class="question-text">約1万年前、氷河時代が終わり<span class="blank" data-id="A">縄文</span>時代が始まった。縄目模様の<span class="blank" data-id="B">縄文土器</span>が使われ、<span class="blank" data-id="C">たて穴住居</span>に住み、食べた貝殻のゴミ捨て場<span class="blank" data-id="D">貝塚</span>が残された。祈りのための土人形<span class="blank" data-id="E">土偶</span>も作られた。青森県の<span class="blank" data-id="F">三内丸山</span>遺跡には巨大な縄文集落の跡が残る。</div></div>
+<div class="section"><h2>弥生時代と邪馬台国</h2><div class="question-text">紀元前3世紀ごろ、朝鮮半島から<span class="blank" data-id="G">稲作</span>が伝わり<span class="blank" data-id="H">弥生</span>時代が始まった。薄くて丈夫な<span class="blank" data-id="I">弥生土器</span>が使われ、稲を高床の<span class="blank" data-id="J">高床倉庫</span>に保存した。<span class="blank" data-id="K">青銅器</span>・鉄器も伝わり、佐賀県の<span class="blank" data-id="L">吉野ヶ里</span>遺跡は環濠集落の代表例。<br><br>3世紀、<span class="blank" data-id="M">邪馬台国</span>の女王<span class="blank" data-id="N">卑弥呼</span>が30余りの国を治め、中国の<span class="blank" data-id="O">魏</span>に使いを送り「親魏倭王」の称号と<span class="blank" data-id="P">金印</span>・銅鏡を授けられた。これは中国の歴史書<span class="blank" data-id="Q">魏志倭人伝</span>に記されている。</div></div>
+
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button onclick="startChallenge()">チャレンジ開始</button>
+      <button onclick="checkAnswers()">判定</button>
+      <button class="secondary" onclick="location.reload()">やり直す</button>
+      <button class="secondary" onclick="resetTimer()">時間リセット</button>
+      <button id="next-btn" onclick="location.href='kofun1.html'" disabled>次へ：古墳時代 ▶</button>
+      <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
+    </div>
+    <div class="timer-info" id="timer-display">経過時間：---</div>
+    <div class="explain-box" id="explain-box">縄文時代のキーワード：縄文土器・たて穴住居・土偶・貝塚・三内丸山遺跡を整理しよう。</div>
+  </div>
+</div>
+<script>
+
+  const answers = { "A":"縄文", "B":"縄文土器", "C":"たて穴住居", "D":"貝塚", "E":"土偶", "F":"三内丸山", "G":"稲作", "H":"弥生", "I":"弥生土器", "J":"高床倉庫", "K":"青銅器", "L":"吉野ヶ里", "M":"邪馬台国", "N":"卑弥呼", "O":"魏", "P":"金印", "Q":"魏志倭人伝" };
+  let startTime, timerId, selectedChip = null;
+  function renderBank() {
+    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
+    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
+      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
+      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
+      bank.appendChild(chip);
+    });
+  }
+  function startChallenge() {
+    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
+    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
+    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
+  }
+  document.querySelectorAll('.blank').forEach(blank => {
+    blank.onclick = () => {
+      if (selectedChip) {
+        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
+        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
+      } else if (blank.textContent) {
+        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
+      }
+    };
+  });
+  function checkAnswers() {
+    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
+    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
+  }
+  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
+  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
+  // 学習完了を保存
+  (function() {
+    try {
+      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
+      prog['kodai3'] = prog['kodai3'] || {};
+      prog['kodai3'].studyDone = true;
+      localStorage.setItem('gamba_progress', JSON.stringify(prog));
+    } catch(e) {}
+  })();
+
+</script>
+</body>
+</html>

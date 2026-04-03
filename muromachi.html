@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>歴史学習：室町時代 ① 鎌倉幕府滅亡</title>
+<style>
+  body { font-family: "Meiryo", sans-serif; max-width: 950px; margin: 20px auto; line-height: 1.8; background-color: #f4f7f9; color: #333; }
+  .container { background-color: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  h1 { text-align: center; color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+  .nav-menu { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .nav-menu a { text-decoration: none; color: #1976d2; padding: 8px 12px; border: 1px solid #1976d2; border-radius: 20px; font-size: 14px; }
+  .nav-menu a.current { background: #1976d2; color: #fff; font-weight: bold; }
+  .question-text { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 15px; font-size: 18px; line-height: 2.2; border: 1px solid #eee; }
+  .blank { display: inline-block; min-width: 110px; border-bottom: 2px solid #666; margin: 0 4px; text-align: center; color: #e67e22; font-weight: bold; cursor: pointer; transition: 0.2s; }
+  .blank.waiting { color: transparent; background-color: #eee; border-radius: 4px; }
+  .blank.correct { background-color: #ccf; border-bottom-color: #339; color: #339; }
+  .word-bank-wrapper { margin-top: 15px; }
+  .word-bank-title { font-weight: bold; margin-bottom: 8px; }
+  .word-bank { border: 1px solid #ccc; border-radius: 8px; padding: 15px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fafafa; }
+  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #f5f5f5; cursor: pointer; user-select: none; font-size: 14px; }
+  .word-chip.used { opacity: 0.3; cursor: default; pointer-events: none; }
+  .word-chip.selected { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
+  .controls { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  button { padding: 10px 18px; border-radius: 8px; border: none; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.2s; }
+  .start-btn { background-color: #1976d2; }
+  .check-btn { background-color: #1976d2; }
+  .reset-btn { background-color: #666; }
+  .time-reset-btn { background-color: #666; }
+  .next-btn { background-color: #90caf9; }
+  .next-btn.active { background-color: #1976d2; }
+  .explain-btn { background-color: #666; }
+  .timer-info { margin-top: 15px; padding: 10px 15px; font-size: 16px; border: 1px solid #1976d2; border-radius: 6px; display: inline-block; background-color: #fff; min-width: 320px; }
+  .explain-box { display: none; margin-top: 15px; padding: 15px; border-left: 5px solid #1976d2; background-color: #f0f4ff; line-height: 1.6; }
+
+  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
+  .back-to-index:hover { background: #1e2d6b; }
+
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>室町時代</h1>
+  <div class="nav-menu">
+    <a href="muromachi.html" class="current">① 鎌倉幕府滅亡</a>
+    <a href="muromachi2.html">② 南北朝時代・義満</a>
+    <a href="muromachi3.html">③ 応仁の乱</a>
+    <a href="muromachi4.html">④ 室町文化</a>
+  </div>
+  <div class="question-text" id="quest">
+    鎌倉時代の後半、幕府や荘園領主に従わず、年貢を奪ったりする <span class="blank" data-ans="悪党">悪党</span> が増え、鎌倉幕府は弱体化しました。 <span class="blank" data-ans="後醍醐天皇">後醍醐天皇</span> の挙兵・・・北条氏の執権政治に不満をもつ御家人が増えたことを背景に、 <span class="blank" data-ans="後醍醐天皇">後醍醐天皇</span> は挙兵します。 密告により2度失敗しとらえられ <span class="blank" data-ans="隠岐の島">隠岐の島</span> に流されます。 <span class="blank" data-ans="後醍醐天皇">後醍醐天皇</span> は、隠岐の島を抜け出し、鎌倉幕府を倒すように各地に命令を出し楠木正成らとともに再度挙兵します。 鎌倉幕府の滅亡・・・<br><br>
+    1333年鎌倉幕府は、後醍醐天皇軍鎮圧のため御家人の <span class="blank" data-ans="足利尊氏">足利尊氏</span> を派遣しましたが <span class="blank" data-ans="足利尊氏">足利尊氏</span> は鎌倉幕府を裏切り、京都の六波羅探題を襲いました。 鎌倉幕府の御家人の新田義貞も鎌倉幕府を裏切り、鎌倉幕府を包囲し北条氏一族は自害。 鎌倉幕府は滅亡しました。
+  </div>
+  <div class="word-bank-wrapper">
+    <div class="word-bank-title">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+    <div class="word-bank" id="bank"></div>
+  </div>
+  <div class="controls">
+    <button class="start-btn" onclick="startChallenge()">チャレンジ開始</button>
+    <button class="check-btn" onclick="checkAnswers()">判定</button>
+    <button class="reset-btn" onclick="resetParagraph()">この段落をやり直す</button>
+    <button class="time-reset-btn" onclick="resetTimer()">時間リセット</button>
+    <button class="next-btn" id="next" onclick="location.href='muromachi2.html'" disabled>次の段落へ進む ▶</button>
+    <button class="explain-btn" onclick="toggleExplain()">【解説】を見る</button>
+  </div>
+  <div class="timer-info" id="timer">経過時間：---　（まだ記録がありません）</div>
+  <div class="explain-box" id="exp"><b>【解説】</b><br>鎌倉末期、幕府の統制に従わない「悪党」が各地で活動。後醍醐天皇は倒幕を計画し隠岐に流されましたが、脱出後に足利尊氏や新田義貞といった有力な御家人の離反を招き、1333年に鎌倉幕府を滅亡させました。</div>
+</div>
+
+<script>
+  let selChip = null, timer = null, startTime = null;
+  // 原稿に基づき、後醍醐天皇は3個、足利尊氏は2個用意
+  const ansWords = ["悪党", "後醍醐天皇", "後醍醐天皇", "隠岐の島", "後醍醐天皇", "足利尊氏", "足利尊氏"];
+
+  function startChallenge() {
+    // 1. 文中の空欄をリセット
+    document.querySelectorAll('.blank').forEach(b => {
+      b.textContent = "？";
+      b.classList.add('waiting');
+      b.classList.remove('correct');
+      b.onclick = () => fillBlank(b);
+    });
+
+    // 2. 語群をランダムに生成
+    const bank = document.getElementById('bank');
+    bank.innerHTML = "";
+    const shuffled = [...ansWords].sort(() => Math.random() - 0.5);
+    shuffled.forEach(w => {
+      const chip = document.createElement("div");
+      chip.className = "word-chip";
+      chip.textContent = w;
+      chip.onclick = () => {
+        if (chip.classList.contains('used')) return;
+        if (selChip) selChip.classList.remove('selected');
+        selChip = chip;
+        chip.classList.add('selected');
+      };
+      bank.appendChild(chip);
+    });
+
+    // 3. タイマー開始
+    startTime = Date.now();
+    if (timer) clearInterval(timer);
+    timer = setInterval(() => {
+      const s = Math.floor((Date.now() - startTime) / 1000);
+      document.getElementById('timer').textContent = `経過時間：${s}秒`;
+    }, 1000);
+    selChip = null;
+  }
+
+  function fillBlank(b) {
+    if (!selChip) return;
+    // すでに言葉が入っている場合はチップの「使用済み」を解除
+    if (b.textContent !== "？") {
+      const oldVal = b.textContent;
+      const chips = document.querySelectorAll('.word-chip');
+      for (let c of chips) {
+        if (c.textContent === oldVal && c.classList.contains('used')) {
+          c.classList.remove('used');
+          break;
+        }
+      }
+    }
+    // 空欄に選択した語句を入れ、チップを使用済みにする
+    b.textContent = selChip.textContent;
+    b.classList.remove('waiting');
+    selChip.classList.add('used');
+    selChip.classList.remove('selected');
+    selChip = null;
+  }
+
+  function checkAnswers() {
+    let ok = true;
+    const blanks = document.querySelectorAll('.blank');
+    blanks.forEach(b => {
+      if (b.textContent === b.getAttribute('data-ans')) {
+        b.classList.add('correct');
+      } else {
+        ok = false;
+        b.classList.remove('correct');
+      }
+    });
+    if (ok) {
+      clearInterval(timer);
+      document.getElementById('next').disabled = false;
+      document.getElementById('next').classList.add('active');
+      alert("全問正解です！おめでとうございます。");
+    } else {
+      alert("間違いがあります。もう一度見直してみましょう。");
+    }
+  }
+
+  function resetParagraph() { location.reload(); }
+  function resetTimer() { clearInterval(timer); document.getElementById('timer').textContent = "経過時間：---"; }
+  function toggleExplain() { const e = document.getElementById('exp'); e.style.display = e.style.display === 'block' ? 'none' : 'block'; }
+</script>
+
+  // 学習完了を保存
+  (function() {
+    try {
+      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
+      prog['muro1'] = prog['muro1'] || {};
+      prog['muro1'].studyDone = true;
+      localStorage.setItem('gamba_progress', JSON.stringify(prog));
+    } catch(e) {}
+  })();
+
+</body>
+</html>

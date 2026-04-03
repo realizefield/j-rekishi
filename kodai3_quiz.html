@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>確認問題：縄文・弥生・邪馬台国</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Meiryo",sans-serif;background:#f0f2f5;min-height:100vh;padding:20px 16px 80px}
+  .back-btn{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:20px;text-decoration:none}
+  .back-btn:hover{background:#1e2d6b}
+  h1{text-align:center;font-size:22px;color:#1a1a2e;margin-bottom:6px}
+  .unit-label{text-align:center;color:#888;font-size:13px;margin-bottom:24px}
+  .card{max-width:720px;margin:0 auto 20px;background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border:1px solid #e5e8f0}
+  .section-title{font-size:16px;font-weight:bold;color:#5b4a8c;border-left:4px solid #5b4a8c;padding-left:12px;margin-bottom:16px}
+  .question-text{font-size:17px;line-height:2.2;color:#222}
+  .blank{display:inline-block;min-width:100px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;min-height:26px}
+  .blank.waiting{color:transparent;background:#eee;border-radius:4px}
+  .blank.correct{background:#d8d0ff;color:#3d2a8c;border-color:#5b4a8c}
+  .word-bank{border:1px solid #dde;border-radius:8px;padding:14px;display:flex;flex-wrap:wrap;gap:8px;background:#f8f9fc;margin-top:16px}
+  .word-chip{padding:7px 14px;border-radius:20px;border:1.5px solid #aab;background:#fff;cursor:pointer;font-size:14px;transition:0.15s}
+  .word-chip:hover{border-color:#5b4a8c;background:#ede8ff}
+  .word-chip.selected{border-color:#5b4a8c;background:#d8d0ff;font-weight:bold}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .controls{max-width:720px;margin:0 auto;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:16px 0}
+  .btn{padding:11px 24px;border-radius:10px;border:none;font-size:15px;font-weight:bold;cursor:pointer;transition:0.15s;text-decoration:none;display:inline-flex;align-items:center}
+  .btn-primary{background:#5b4a8c;color:#fff;box-shadow:0 3px 0 #3d3060}
+  .btn-secondary{background:#6c757d;color:#fff;box-shadow:0 3px 0 #495057}
+  .btn-orange{background:#e67e22;color:#fff;box-shadow:0 3px 0 #c96a10}
+  .result-bar{max-width:720px;margin:0 auto 16px;background:#fff;border-radius:10px;padding:14px 20px;display:none;text-align:center;border:1px solid #dde;font-size:16px}
+  .result-bar.pass{border-color:#1976d2;color:#1976d2;background:#e8f1fd}
+  .result-bar.fail{border-color:#e74c3c;color:#e74c3c;background:#fff5f5}
+</style>
+</head>
+<body>
+<a class="back-btn" href="rekishi.html">← 単元一覧に戻る</a>
+<h1>✏️ 確認問題</h1>
+<p class="unit-label">古代③ 縄文・弥生・邪馬台国</p>
+<div id="result-bar" class="result-bar"></div>
+<div class="card"><div class="section-title">縄文時代</div><div class="question-text">約1万年前から<span class="blank" data-ans="縄文土器">縄文土器</span>を使い<span class="blank" data-ans="たて穴住居">たて穴住居</span>に住んだ。貝殻を捨てた<span class="blank" data-ans="貝塚">貝塚</span>、祈りの土人形<span class="blank" data-ans="土偶">土偶</span>が残る。青森県の<span class="blank" data-ans="三内丸山">三内丸山</span>遺跡が有名。</div><div class="word-bank" id="bank0"></div></div>
+<div class="card"><div class="section-title">弥生時代と邪馬台国</div><div class="question-text">紀元前3世紀ごろ<span class="blank" data-ans="稲作">稲作</span>が伝わり<span class="blank" data-ans="弥生土器">弥生土器</span>・<span class="blank" data-ans="高床倉庫">高床倉庫</span>が使われた。佐賀県<span class="blank" data-ans="吉野ヶ里">吉野ヶ里</span>遺跡は有名な環濠集落。3世紀の<span class="blank" data-ans="邪馬台国">邪馬台国</span>の女王<span class="blank" data-ans="卑弥呼">卑弥呼</span>は中国の<span class="blank" data-ans="魏">魏</span>に使いを送り<span class="blank" data-ans="金印">金印</span>・銅鏡を授けられた。これは<span class="blank" data-ans="魏志倭人伝">魏志倭人伝</span>に記されている。</div><div class="word-bank" id="bank1"></div></div>
+
+<div class="controls">
+  <button class="btn btn-secondary" onclick="startChallenge()">チャレンジ開始</button>
+  <button class="btn btn-primary" onclick="checkAnswers()">採点する</button>
+  <button class="btn btn-secondary" onclick="location.reload()">やり直す</button>
+  <a class="btn btn-orange" href="kodai3_test.html">🎯 テストに挑戦</a>
+</div>
+<script>
+const UNIT_ID='kodai3';let sel=null;
+function startChallenge(){
+  document.querySelectorAll('.blank').forEach(b=>{b.textContent='？';b.classList.add('waiting');b.classList.remove('correct');b.onclick=()=>fillBlank(b);});
+  buildBank("bank0",["縄文土器", "たて穴住居", "貝塚", "土偶", "三内丸山"]);
+  buildBank("bank1",["稲作", "弥生土器", "高床倉庫", "吉野ヶ里", "邪馬台国", "卑弥呼", "魏", "金印", "魏志倭人伝"]);
+}
+function buildBank(id,words){
+  const b=document.getElementById(id);b.innerHTML='';
+  [...words].sort(()=>Math.random()-0.5).forEach(w=>{
+    const c=document.createElement('div');c.className='word-chip';c.textContent=w;
+    c.onclick=()=>{if(c.classList.contains('used'))return;document.querySelectorAll('.word-chip.selected').forEach(x=>x.classList.remove('selected'));sel=c;c.classList.add('selected');};
+    b.appendChild(c);
+  });
+}
+function fillBlank(b){
+  if(!sel)return;
+  if(b.textContent!=='？'){const old=b.textContent;let found=false;document.querySelectorAll('.word-chip').forEach(c=>{if(!found&&c.textContent===old&&c.classList.contains('used')){c.classList.remove('used');found=true;}});}
+  b.textContent=sel.textContent;b.classList.remove('waiting');sel.classList.add('used');sel.classList.remove('selected');sel=null;
+}
+function checkAnswers(){
+  let ok=0,total=0;
+  document.querySelectorAll('.blank').forEach(b=>{total++;if(b.textContent===b.dataset.ans){b.classList.add('correct');ok++;}else b.classList.remove('correct');});
+  const bar=document.getElementById('result-bar');bar.style.display='block';
+  if(ok===total){bar.className='result-bar pass';bar.textContent=`🎉 全問正解！(${ok}/${total}) テストにも挑戦してみよう！`;
+    try{const p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p[UNIT_ID]=p[UNIT_ID]||{};p[UNIT_ID].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}
+  }else{bar.className='result-bar fail';bar.textContent=`${ok}/${total} 正解。赤色の空欄をもう一度確認しよう！`;}
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
