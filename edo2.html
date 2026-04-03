@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>歴史学習：江戸時代 ② 鎖国と外交</title>
+<style>
+  body { font-family: "Meiryo", sans-serif; max-width: 950px; margin: 20px auto; line-height: 1.8; background-color: #f4f7f9; color: #333; }
+  .container { background-color: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  h1 { text-align: center; color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+  .nav-menu { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .nav-menu a { text-decoration: none; color: #1976d2; padding: 8px 12px; border: 1px solid #1976d2; border-radius: 20px; font-size: 14px; }
+  .nav-menu a.current { background: #1976d2; color: #fff; font-weight: bold; }
+  .question-text { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 15px; font-size: 18px; line-height: 2.2; border: 1px solid #eee; }
+  .blank { display: inline-block; min-width: 110px; border-bottom: 2px solid #666; margin: 0 4px; text-align: center; color: #e67e22; font-weight: bold; cursor: pointer; transition: 0.2s; }
+  .blank.waiting { color: transparent; background-color: #eee; border-radius: 4px; }
+  .blank.correct { background-color: #ccf; border-bottom-color: #339; color: #339; }
+  .word-bank-wrapper { margin-top: 15px; }
+  .word-bank-title { font-weight: bold; margin-bottom: 8px; }
+  .word-bank { border: 1px solid #ccc; border-radius: 8px; padding: 15px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fafafa; }
+  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #f5f5f5; cursor: pointer; user-select: none; font-size: 14px; }
+  .word-chip.used { opacity: 0.3; cursor: default; pointer-events: none; }
+  .word-chip.selected { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
+  .controls { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  button { padding: 10px 18px; border-radius: 8px; border: none; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.2s; }
+  .start-btn { background-color: #1976d2; }
+  .check-btn { background-color: #1976d2; }
+  .reset-btn { background-color: #666; }
+  .time-reset-btn { background-color: #666; }
+  .next-btn { background-color: #90caf9; }
+  .next-btn.active { background-color: #1976d2; }
+  .explain-btn { background-color: #666; }
+  .timer-info { margin-top: 15px; padding: 10px 15px; font-size: 16px; border: 1px solid #1976d2; border-radius: 6px; display: inline-block; background-color: #fff; min-width: 320px; }
+  .explain-box { display: none; margin-top: 15px; padding: 15px; border-left: 5px solid #1976d2; background-color: #f0f4ff; line-height: 1.6; }
+
+  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
+  .back-to-index:hover { background: #1e2d6b; }
+
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>江戸時代</h1>
+  <div class="nav-menu">
+    <a href="edo1.html">① 幕府の成立と支配</a>
+    <a href="edo2.html" class="current">② 鎖国と外交</a>
+    <a href="edo3.html">③ 産業と身分制度</a>
+    <a href="edo4.html">④ 元禄文化と改革</a>
+  </div>
+  <div class="question-text" id="quest">
+    徳川家康は、東南アジア諸国に日本船の渡航を認める <span class="blank" data-ans="朱印状">朱印状</span> を与え、 **朱印船貿易** を奨励しました。しかし、キリスト教の広まりを恐れた幕府は、次第に禁教政策を強めていきます。<br><br>
+    1637年、九州のキリシタンらが重い年貢に反対して <span class="blank" data-ans="島原・天草一揆">島原・天草一揆</span> を起こすと、幕府は禁教をさらに徹底しました。1639年にはポルトガル船の来航を禁止し、1641年にはオランダ商館を長崎の <span class="blank" data-ans="出島">出島</span> に移しました。これにより、日本人の海外渡航や帰国を禁じ、外国との窓口を制限する <span class="blank" data-ans="鎖国">鎖国</span> の体制が完成しました。<br><br>
+    鎖国下でも、幕府は **オランダ** と中国（ **清** ）とは長崎で貿易を続けました。また、朝鮮とは対馬藩を介して、将軍の代わりごとに <span class="blank" data-ans="朝鮮通信使">朝鮮通信使</span> が来日しました。琉球王国（沖縄）は薩摩藩を通じて服属させ、蝦夷地（北海道）の **アイヌ** 人とは松前藩が交易を行いました。
+  </div>
+  <div class="word-bank-wrapper">
+    <div class="word-bank-title">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+    <div class="word-bank" id="bank"></div>
+  </div>
+  <div class="controls">
+    <button class="start-btn" onclick="startChallenge()">チャレンジ開始</button>
+    <button class="check-btn" onclick="checkAnswers()">判定</button>
+    <button class="reset-btn" onclick="resetParagraph()">この段落をやり直す</button>
+    <button class="time-reset-btn" onclick="resetTimer()">時間リセット</button>
+    <button class="next-btn" id="next-btn" disabled>次の段落へ進む ▶</button>
+    <button class="explain-btn" onclick="toggleExplain()">【解説】を見る</button>
+  </div>
+  <div class="timer-info" id="timer">経過時間：---　（まだ記録がありません）</div>
+  <div class="explain-box" id="exp"><b>【解説】</b><br>当初、幕府は朱印船貿易などで外交を広げていましたが、キリスト教の浸透を警戒して制限に転じました。島原・天草一揆の後、出島への窓口限定やポルトガル船の禁止により「鎖国」が完成しました。しかし、長崎、対馬、薩摩、松前の「四つの窓口」を通じて、外国との関係は維持されていました。</div>
+</div>
+
+<script>
+  let selChip = null, timer = null, startTime = null;
+  const ansWords = ["朱印状", "島原・天草一揆", "出島", "鎖国", "朝鮮通信使"];
+
+  function startChallenge() {
+    document.querySelectorAll('.blank').forEach(b => {
+      b.textContent = "？";
+      b.classList.add('waiting');
+      b.classList.remove('correct');
+      b.onclick = () => fillBlank(b);
+    });
+    const bank = document.getElementById('bank');
+    bank.innerHTML = "";
+    const shuffled = [...ansWords].sort(() => Math.random() - 0.5);
+    shuffled.forEach(w => {
+      const chip = document.createElement("div");
+      chip.className = "word-chip";
+      chip.textContent = w;
+      chip.onclick = () => {
+        if (chip.classList.contains('used')) return;
+        if (selChip) selChip.classList.remove('selected');
+        selChip = chip;
+        chip.classList.add('selected');
+      };
+      bank.appendChild(chip);
+    });
+    startTime = Date.now();
+    if (timer) clearInterval(timer);
+    timer = setInterval(() => {
+      const s = Math.floor((Date.now() - startTime) / 1000);
+      document.getElementById('timer').textContent = `経過時間：${s}秒`;
+    }, 1000);
+    selChip = null;
+  }
+
+  function fillBlank(b) {
+    if (!selChip) return;
+    if (b.textContent !== "？") {
+      const oldVal = b.textContent;
+      const chips = document.querySelectorAll('.word-chip');
+      for (let c of chips) {
+        if (c.textContent === oldVal && c.classList.contains('used')) {
+          c.classList.remove('used');
+          break;
+        }
+      }
+    }
+    b.textContent = selChip.textContent;
+    b.classList.remove('waiting');
+    selChip.classList.add('used');
+    selChip.classList.remove('selected');
+    selChip = null;
+  }
+
+  function checkAnswers() {
+    let ok = true;
+    document.querySelectorAll('.blank').forEach(b => {
+      if (b.textContent === b.getAttribute('data-ans')) {
+        b.classList.add('correct');
+      } else {
+        ok = false;
+        b.classList.remove('correct');
+      }
+    });
+    if (ok) {
+      clearInterval(timer);
+      document.getElementById('next-btn').disabled = false;
+      document.getElementById('next-btn').classList.add('active');
+      alert("全問正解！鎖国と江戸の外交をマスターしました。");
+    } else {
+      alert("間違いがあります。");
+    }
+  }
+
+  function resetParagraph() { location.reload(); }
+  function resetTimer() { clearInterval(timer); document.getElementById('timer').textContent = "経過時間：---"; }
+  function toggleExplain() { const e = document.getElementById('exp'); e.style.display = e.style.display === 'block' ? 'none' : 'block'; }
+</script>
+
+  // 学習完了を保存
+  (function() {
+    try {
+      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
+      prog['edo2'] = prog['edo2'] || {};
+      prog['edo2'].studyDone = true;
+      localStorage.setItem('gamba_progress', JSON.stringify(prog));
+    } catch(e) {}
+  })();
+
+</body>
+</html>
