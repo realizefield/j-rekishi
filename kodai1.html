@@ -59,7 +59,7 @@
   let startTime, timerId, selectedChip = null;
   function renderBank() {
     const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
+    Object.values(answers).sort(() => Math.random() - 0.5).forEach(word => {
       const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
       chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
       bank.appendChild(chip);
