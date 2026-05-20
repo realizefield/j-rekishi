@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：江戸時代④ 確認ドリル</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:120px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:24px;color:#2c1800}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#5c3d00;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .nav-menu{display:flex;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+  .nav-menu a{text-decoration:none;color:#5c3d00;padding:8px 12px;border:1px solid #5c3d00;border-radius:20px;font-size:14px}
+  .nav-menu a.current{background:#5c3d00;color:#fff;font-weight:bold}
+  .score-bar{background:#fff;border:2px solid #3d2b00;border-radius:10px;padding:12px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .score-label{font-weight:bold;color:#3d2b00;font-size:15px}.score-val{font-size:22px;font-weight:bold;color:#a0522d}
+  .progress-wrap{flex:1;min-width:160px;background:#eee;border-radius:20px;height:12px;overflow:hidden}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#a0522d,#d4831a);border-radius:20px;transition:width 0.4s}
+  .reset-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer}
+  .section-header{display:flex;align-items:center;gap:10px;margin:28px 0 12px}
+  .section-badge{background:#3d2b00;color:#fff;border-radius:20px;padding:4px 16px;font-size:13px;font-weight:bold}
+  .section-title{font-size:17px;font-weight:bold;color:#2c1800}
+  .q-card{background:#fff;border-radius:10px;border:2px solid #ddd;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s}
+  .q-card.answered-ok{border-color:#27ae60}.q-card.answered-ng{border-color:#e74c3c}
+  .q-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .q-num{background:#3d2b00;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:bold}
+  .q-type-badge{border-radius:6px;padding:2px 9px;font-size:11px;font-weight:bold}
+  .badge-4{background:#1a6fa8;color:#fff}.badge-ox{background:#8e44ad;color:#fff}.badge-sort{background:#16a085;color:#fff}
+  .q-text{font-size:16px;line-height:2;margin-bottom:14px;color:#222}
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:600px){.choices{grid-template-columns:1fr}}
+  .choice-btn{background:#f5f0e8;border:2px solid #c9b89a;border-radius:8px;padding:10px 14px;font-size:14px;cursor:pointer;text-align:left;transition:0.15s;line-height:1.6}
+  .choice-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .choice-btn:disabled{cursor:default}
+  .choice-btn.selected-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35;font-weight:bold}
+  .choice-btn.selected-ng{background:#fadbd8;border-color:#e74c3c;color:#7b241c;font-weight:bold}
+  .ox-wrap{display:flex;gap:16px;margin-top:4px}
+  .ox-btn{flex:1;padding:14px;border-radius:10px;border:2px solid #c9b89a;background:#f5f0e8;font-size:28px;cursor:pointer;transition:0.15s;text-align:center}
+  .ox-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .ox-btn:disabled{cursor:default}
+  .ox-btn.selected-ok{background:#d5f5e3;border-color:#27ae60}
+  .ox-btn.selected-ng{background:#fadbd8;border-color:#e74c3c}
+  .feedback{display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:14px;line-height:1.85}
+  .feedback.ok{background:#eafaf1;border-left:4px solid #27ae60;color:#1a5c35}
+  .feedback.ng{background:#fdf3f0;border-left:4px solid #e74c3c;color:#7b241c}
+  .feedback.show{display:block}
+  .sort-label{font-size:13px;color:#666;margin-bottom:6px}
+  .sort-bank{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#f5f0e8;border-radius:8px;border:1px solid #c9b89a;min-height:52px;margin-bottom:8px}
+  .sort-answer{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#fff;border-radius:8px;border:2px dashed #a0522d;min-height:52px;align-items:center}
+  .sort-answer.correct-zone{border-color:#27ae60;background:#eafaf1}
+  .sort-answer.wrong-zone{border-color:#e74c3c;background:#fdf3f0}
+  .sort-chip{padding:8px 14px;border-radius:20px;border:2px solid #a0522d;background:#fff3e0;cursor:pointer;font-size:14px;font-weight:bold;color:#5c3d00;user-select:none}
+  .sort-chip:hover{background:#ffe0b2}
+  .sort-chip.disabled{cursor:default;opacity:0.85}
+  .sort-check-btn{background:#3d2b00;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:14px;font-weight:bold;cursor:pointer;margin-top:4px}
+  .sort-check-btn:disabled{background:#c9b89a;cursor:default}
+  .sort-reset-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:14px;cursor:pointer;margin-top:4px;margin-left:8px}
+  .finish-banner{display:none;background:linear-gradient(135deg,#3d2b00,#a0522d);color:#fff;border-radius:12px;padding:28px;text-align:center;margin-top:28px}
+  .finish-banner h2{margin:0 0 8px;font-size:22px}
+  .finish-score{font-size:42px;font-weight:bold;color:#ffd700;margin:8px 0}
+  .finish-msg{font-size:15px;margin-bottom:16px}
+  .finish-btn{background:#fff;color:#3d2b00;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:bold;cursor:pointer;margin:4px}
+  .finish-btn:hover{background:#fff3e0}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="edo_index.html">← 単元一覧に戻る</a>
+<h1>🎭 江戸時代④ 確認ドリル</h1>
+<div class="nav-menu">
+  <a href="edo4.html">④ 元禄文化と改革（学習）</a>
+  <a href="edo4_drill.html" class="current">④ 確認ドリル</a>
+  <a href="edo4_check.html">④ 過去問チェック</a>
+</div>
+<div class="score-bar">
+  <span class="score-label">正解数：</span>
+  <span class="score-val" id="score-val">0 / 15</span>
+  <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  <button class="reset-btn" onclick="location.reload()">🔄 やり直す</button>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 1</span><span class="section-title">4択問題</span></div>
+
+<div class="q-card" id="q1"><div class="q-meta"><span class="q-num">Q1</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">元禄文化が栄えた中心地域はどこか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q1',false)">江戸</button>
+    <button class="choice-btn" onclick="a4(this,'q1',true)">上方（京都・大阪）</button>
+    <button class="choice-btn" onclick="a4(this,'q1',false)">長崎</button>
+    <button class="choice-btn" onclick="a4(this,'q1',false)">東北地方</button>
+  </div>
+  <div class="feedback" id="q1-fb"></div>
+</div>
+
+<div class="q-card" id="q2"><div class="q-meta"><span class="q-num">Q2</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">「奥の細道」を著し、俳諧（俳句）を芸術の域まで高めた人物は誰か？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q2',false)">井原西鶴</button>
+    <button class="choice-btn" onclick="a4(this,'q2',false)">近松門左衛門</button>
+    <button class="choice-btn" onclick="a4(this,'q2',true)">松尾芭蕉</button>
+    <button class="choice-btn" onclick="a4(this,'q2',false)">菱川師宣</button>
+  </div>
+  <div class="feedback" id="q2-fb"></div>
+</div>
+
+<div class="q-card" id="q3"><div class="q-meta"><span class="q-num">Q3</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">「曽根崎心中」などの人形浄瑠璃の台本を書いた人物は誰か？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q3',false)">松尾芭蕉</button>
+    <button class="choice-btn" onclick="a4(this,'q3',true)">近松門左衛門</button>
+    <button class="choice-btn" onclick="a4(this,'q3',false)">井原西鶴</button>
+    <button class="choice-btn" onclick="a4(this,'q3',false)">菱川師宣</button>
+  </div>
+  <div class="feedback" id="q3-fb"></div>
+</div>
+
+<div class="q-card" id="q4"><div class="q-meta"><span class="q-num">Q4</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">浮世絵の祖とされ「見返り美人図」で知られる画家は誰か？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q4',false)">尾形光琳</button>
+    <button class="choice-btn" onclick="a4(this,'q4',false)">葛飾北斎</button>
+    <button class="choice-btn" onclick="a4(this,'q4',true)">菱川師宣</button>
+    <button class="choice-btn" onclick="a4(this,'q4',false)">俵屋宗達</button>
+  </div>
+  <div class="feedback" id="q4-fb"></div>
+</div>
+
+<div class="q-card" id="q5"><div class="q-meta"><span class="q-num">Q5</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">享保の改革を行い、「目安箱」を設置した8代将軍は誰か？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q5',false)">徳川家光</button>
+    <button class="choice-btn" onclick="a4(this,'q5',false)">徳川綱吉</button>
+    <button class="choice-btn" onclick="a4(this,'q5',true)">徳川吉宗</button>
+    <button class="choice-btn" onclick="a4(this,'q5',false)">松平定信</button>
+  </div>
+  <div class="feedback" id="q5-fb"></div>
+</div>
+
+<div class="q-card" id="q6"><div class="q-meta"><span class="q-num">Q6</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">老中として株仲間を奨励し、商業を重視した政治を行った人物は誰か？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q6',false)">新井白石</button>
+    <button class="choice-btn" onclick="a4(this,'q6',true)">田沼意次</button>
+    <button class="choice-btn" onclick="a4(this,'q6',false)">松平定信</button>
+    <button class="choice-btn" onclick="a4(this,'q6',false)">水野忠邦</button>
+  </div>
+  <div class="feedback" id="q6-fb"></div>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 2</span><span class="section-title">○×問題</span></div>
+
+<div class="q-card" id="q7"><div class="q-meta"><span class="q-num">Q7</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">元禄文化は江戸を中心に、武士を担い手として発展した文化である。</div>
+  <div class="ox-wrap"><button class="ox-btn" onclick="aOX(this,'q7',false)">○</button><button class="ox-btn" onclick="aOX(this,'q7',true)">×</button></div>
+  <div class="feedback" id="q7-fb"></div>
+</div>
+
+<div class="q-card" id="q8"><div class="q-meta"><span class="q-num">Q8</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">井原西鶴は当時の武士や町人の生活をありのままに描いた「浮世草子」という小説を書いた。</div>
+  <div class="ox-wrap"><button class="ox-btn" onclick="aOX(this,'q8',true)">○</button><button class="ox-btn" onclick="aOX(this,'q8',false)">×</button></div>
+  <div class="feedback" id="q8-fb"></div>
+</div>
+
+<div class="q-card" id="q9"><div class="q-meta"><span class="q-num">Q9</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">享保の改革では年貢率を引き下げて農民の負担を軽くした。</div>
+  <div class="ox-wrap"><button class="ox-btn" onclick="aOX(this,'q9',false)">○</button><button class="ox-btn" onclick="aOX(this,'q9',true)">×</button></div>
+  <div class="feedback" id="q9-fb"></div>
+</div>
+
+<div class="q-card" id="q10"><div class="q-meta"><span class="q-num">Q10</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">松平定信の寛政の改革は厳しすぎると批判され、「白河の清きに魚も棲みかねて もとの濁りの田沼恋しき」と庶民に皮肉られた。</div>
+  <div class="ox-wrap"><button class="ox-btn" onclick="aOX(this,'q10',true)">○</button><button class="ox-btn" onclick="aOX(this,'q10',false)">×</button></div>
+  <div class="feedback" id="q10-fb"></div>
+</div>
+
+<div class="q-card" id="q11"><div class="q-meta"><span class="q-num">Q11</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">浮世絵はヨーロッパの絵画（印象派）にも大きな影響を与えた。</div>
+  <div class="ox-wrap"><button class="ox-btn" onclick="aOX(this,'q11',true)">○</button><button class="ox-btn" onclick="aOX(this,'q11',false)">×</button></div>
+  <div class="feedback" id="q11-fb"></div>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 3</span><span class="section-title">並び替え問題</span></div>
+
+<div class="q-card" id="q12"><div class="q-meta"><span class="q-num">Q12</span><span class="q-type-badge badge-sort">並び替え</span></div>
+  <div class="q-text">元禄文化の人物を、ジャンルの順（俳諧→小説→演劇→絵画）に並べよ。</div>
+  <div class="sort-label">↓ クリックして並べよう</div>
+  <div class="sort-bank" id="bank12">
+    <div class="sort-chip" onclick="sc('s12','bank12','ans12',this,'A')">菱川師宣（浮世絵）</div>
+    <div class="sort-chip" onclick="sc('s12','bank12','ans12',this,'B')">松尾芭蕉（俳諧）</div>
+    <div class="sort-chip" onclick="sc('s12','bank12','ans12',this,'C')">近松門左衛門（人形浄瑠璃）</div>
+    <div class="sort-chip" onclick="sc('s12','bank12','ans12',this,'D')">井原西鶴（浮世草子）</div>
+  </div>
+  <div class="sort-label">↓ 並べた順（クリックで戻す）</div>
+  <div class="sort-answer" id="ans12"></div>
+  <div>
+    <button class="sort-check-btn" id="check12" onclick="cs('q12','s12','ans12',['B','D','C','A'],'松尾芭蕉（俳諧）→井原西鶴（浮世草子・小説）→近松門左衛門（人形浄瑠璃・演劇）→菱川師宣（浮世絵・絵画）')" disabled>答え合わせ</button>
+    <button class="sort-reset-btn" onclick="rs('s12','bank12','ans12','check12')">リセット</button>
+  </div>
+  <div class="feedback" id="q12-fb"></div>
+</div>
+
+<div class="q-card" id="q13"><div class="q-meta"><span class="q-num">Q13</span><span class="q-type-badge badge-sort">並び替え</span></div>
+  <div class="q-text">江戸時代の「3大改革」を古い順に並べよ。</div>
+  <div class="sort-label">↓ クリックして並べよう</div>
+  <div class="sort-bank" id="bank13">
+    <div class="sort-chip" onclick="sc('s13','bank13','ans13',this,'A')">天保の改革（水野忠邦）</div>
+    <div class="sort-chip" onclick="sc('s13','bank13','ans13',this,'B')">享保の改革（徳川吉宗）</div>
+    <div class="sort-chip" onclick="sc('s13','bank13','ans13',this,'C')">寛政の改革（松平定信）</div>
+  </div>
+  <div class="sort-label">↓ 並べた順（クリックで戻す）</div>
+  <div class="sort-answer" id="ans13"></div>
+  <div>
+    <button class="sort-check-btn" id="check13" onclick="cs('q13','s13','ans13',['B','C','A'],'享保の改革（1716〜）→寛政の改革（1787〜）→天保の改革（1841〜）')" disabled>答え合わせ</button>
+    <button class="sort-reset-btn" onclick="rs('s13','bank13','ans13','check13')">リセット</button>
+  </div>
+  <div class="feedback" id="q13-fb"></div>
+</div>
+
+<div class="q-card" id="q14"><div class="q-meta"><span class="q-num">Q14</span><span class="q-type-badge badge-sort">並び替え</span></div>
+  <div class="q-text">田沼意次の政治から寛政の改革への流れを順番に並べよ。</div>
+  <div class="sort-label">↓ クリックして並べよう</div>
+  <div class="sort-bank" id="bank14">
+    <div class="sort-chip" onclick="sc('s14','bank14','ans14',this,'A')">寛政の改革（松平定信）</div>
+    <div class="sort-chip" onclick="sc('s14','bank14','ans14',this,'B')">田沼意次の株仲間奨励</div>
+    <div class="sort-chip" onclick="sc('s14','bank14','ans14',this,'C')">天明の飢饉・打ちこわし</div>
+  </div>
+  <div class="sort-label">↓ 並べた順（クリックで戻す）</div>
+  <div class="sort-answer" id="ans14"></div>
+  <div>
+    <button class="sort-check-btn" id="check14" onclick="cs('q14','s14','ans14',['B','C','A'],'田沼の商業重視政策→天明の飢饉・打ちこわし（田沼失脚）→松平定信の寛政の改革（農村復興・引き締め）')" disabled>答え合わせ</button>
+    <button class="sort-reset-btn" onclick="rs('s14','bank14','ans14','check14')">リセット</button>
+  </div>
+  <div class="feedback" id="q14-fb"></div>
+</div>
+
+<div class="q-card" id="q15"><div class="q-meta"><span class="q-num">Q15</span><span class="q-type-badge badge-sort">並び替え</span></div>
+  <div class="q-text">享保の改革の主な内容を重要度の高い順に並べよ。</div>
+  <div class="sort-label">↓ クリックして並べよう</div>
+  <div class="sort-bank" id="bank15">
+    <div class="sort-chip" onclick="sc('s15','bank15','ans15',this,'A')">目安箱の設置（意見収集）</div>
+    <div class="sort-chip" onclick="sc('s15','bank15','ans15',this,'B')">年貢率の引き上げ（増収）</div>
+    <div class="sort-chip" onclick="sc('s15','bank15','ans15',this,'C')">公事方御定書（裁判基準）</div>
+  </div>
+  <div class="sort-label">↓ 並べた順（クリックで戻す）</div>
+  <div class="sort-answer" id="ans15"></div>
+  <div>
+    <button class="sort-check-btn" id="check15" onclick="cs('q15','s15','ans15',['B','C','A'],'年貢率引き上げ（直接の財政改善）→公事方御定書（法制整備）→目安箱（民意収集・副産物的成果）')" disabled>答え合わせ</button>
+    <button class="sort-reset-btn" onclick="rs('s15','bank15','ans15','check15')">リセット</button>
+  </div>
+  <div class="feedback" id="q15-fb"></div>
+</div>
+
+<div class="finish-banner" id="finish-banner">
+  <h2>🎉 ドリル完了！</h2>
+  <div class="finish-score" id="finish-score"></div>
+  <div class="finish-msg" id="finish-msg"></div>
+  <button class="finish-btn" onclick="location.reload()">🔄 もう一度</button>
+  <button class="finish-btn" onclick="location.href='edo4_check.html'">過去問チェックへ ▶</button>
+</div>
+
+<script>
+const TOTAL=15; let answered={};
+function upd(){const ok=Object.values(answered).filter(v=>v).length;const done=Object.keys(answered).length;document.getElementById('score-val').textContent=`${ok} / ${TOTAL}`;document.getElementById('progress-bar').style.width=`${done/TOTAL*100}%`;if(done===TOTAL)setTimeout(()=>fin(ok),400);}
+function fin(ok){const b=document.getElementById('finish-banner');b.style.display='block';document.getElementById('finish-score').textContent=`${ok} / ${TOTAL} 問正解`;document.getElementById('finish-msg').textContent=ok===TOTAL?'🏆 満点！':ok>=12?'⭐ すばらしい！':ok>=9?'👍 よくできました。':'📖 学習ページで復習しましょう。';b.scrollIntoView({behavior:'smooth'});}
+const FB4={q1:'元禄文化は上方（京都・大阪）が中心です。後の化政文化は江戸が中心になります。',q2:'松尾芭蕉は「古池や蛙飛び込む水の音」でも知られる俳諧の大家です。',q3:'近松門左衛門は義理と人情の板挟みを描いた作品で人気を集めました。「曽根崎心中」は実際の事件をもとにしています。',q4:'菱川師宣は浮世絵の祖。葛飾北斎・喜多川歌麿は後の化政文化の画家です。',q5:'徳川吉宗が目安箱を設置し、庶民の意見を聞きました。この意見をもとに小石川養生所（無料の病院）が設立されました。',q6:'田沼意次は株仲間（同業者組合）を奨励して税収を増やしました。商業重視の先進的な政策でしたが賄賂政治とも批判されました。'};
+const FBOX={q7:'× 不正解。元禄文化は上方（京都・大阪）が中心で、担い手は経済力をつけた町人でした。',q8:'○ 正解。井原西鶴は大阪の町人出身で「日本永代蔵」「好色一代男」などを書きました。',q9:'× 不正解。享保の改革では年貢率を引き上げて幕府収入を増やしました。農民への増税です。',q10:'○ 正解。松平定信の厳しい倹約・引き締め政策に庶民が皮肉で応じた有名な狂歌です。',q11:'○ 正解。江戸時代末期から明治にかけて、浮世絵がヨーロッパに輸出され、モネ・ゴッホなど印象派の画家に大きな影響を与えました（ジャポニスム）。'};
+function a4(btn,qId,ok){if(answered[qId]!==undefined)return;const card=document.getElementById(qId);card.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);const fb=document.getElementById(qId+'-fb');if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FB4[qId]||''}`;answered[qId]=true;}else{btn.classList.add('selected-ng');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FB4[qId]||''}`;answered[qId]=false;}upd();}
+function aOX(btn,qId,ok){if(answered[qId]!==undefined)return;const card=document.getElementById(qId);card.querySelectorAll('.ox-btn').forEach(b=>b.disabled=true);const fb=document.getElementById(qId+'-fb');if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FBOX[qId]||''}`;answered[qId]=true;}else{btn.classList.add('selected-ng');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FBOX[qId]||''}`;answered[qId]=false;}upd();}
+const ss={};
+function sc(sid,bankId,ansId,chip,key){if(chip.classList.contains('disabled'))return;chip.classList.add('disabled');const clone=document.createElement('div');clone.className='sort-chip in-answer disabled';clone.textContent=chip.textContent;clone.dataset.key=key;clone.onclick=()=>ret(sid,bankId,ansId,clone,chip);document.getElementById(ansId).appendChild(clone);if(!ss[sid])ss[sid]=[];ss[sid].push(key);const tot=document.getElementById(bankId).querySelectorAll('.sort-chip').length;if(ss[sid].length===tot)document.getElementById('check'+sid.replace('s','')).disabled=false;}
+function ret(sid,bankId,ansId,clone,orig){if(ss[sid+'_done'])return;clone.remove();orig.classList.remove('disabled');ss[sid]=ss[sid].filter(k=>k!==clone.dataset.key);document.getElementById('check'+sid.replace('s','')).disabled=true;}
+function cs(qId,sid,ansId,correct,exp){const cur=ss[sid]||[];const card=document.getElementById(qId);const fb=document.getElementById(qId+'-fb');const ok=JSON.stringify(cur)===JSON.stringify(correct);ss[sid+'_done']=true;document.getElementById(ansId).querySelectorAll('.sort-chip').forEach(c=>c.onclick=null);if(ok){document.getElementById(ansId).classList.add('correct-zone');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${exp}`;answered[qId]=true;}else{document.getElementById(ansId).classList.add('wrong-zone');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> 正しい順：${exp}`;answered[qId]=false;}document.getElementById('check'+qId.replace('q','')).disabled=true;upd();}
+function rs(sid,bankId,ansId,checkId){if(ss[sid+'_done'])return;ss[sid]=[];document.getElementById(ansId).innerHTML='';document.getElementById(ansId).className='sort-answer';document.getElementById(bankId).querySelectorAll('.sort-chip').forEach(c=>c.classList.remove('disabled'));document.getElementById(checkId).disabled=true;}
+</script>
+</body>
+</html>

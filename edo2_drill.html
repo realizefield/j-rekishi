@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：江戸時代② 確認ドリル</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:120px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:24px;color:#2c1800}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#5c3d00;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .nav-menu{display:flex;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+  .nav-menu a{text-decoration:none;color:#5c3d00;padding:8px 12px;border:1px solid #5c3d00;border-radius:20px;font-size:14px}
+  .nav-menu a.current{background:#5c3d00;color:#fff;font-weight:bold}
+  .score-bar{background:#fff;border:2px solid #3d2b00;border-radius:10px;padding:12px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .score-label{font-weight:bold;color:#3d2b00;font-size:15px}
+  .score-val{font-size:22px;font-weight:bold;color:#a0522d}
+  .progress-wrap{flex:1;min-width:160px;background:#eee;border-radius:20px;height:12px;overflow:hidden}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#a0522d,#d4831a);border-radius:20px;transition:width 0.4s}
+  .reset-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer}
+  .section-header{display:flex;align-items:center;gap:10px;margin:28px 0 12px}
+  .section-badge{background:#3d2b00;color:#fff;border-radius:20px;padding:4px 16px;font-size:13px;font-weight:bold}
+  .section-title{font-size:17px;font-weight:bold;color:#2c1800}
+  .q-card{background:#fff;border-radius:10px;border:2px solid #ddd;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s}
+  .q-card.answered-ok{border-color:#27ae60}
+  .q-card.answered-ng{border-color:#e74c3c}
+  .q-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .q-num{background:#3d2b00;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:bold}
+  .q-type-badge{border-radius:6px;padding:2px 9px;font-size:11px;font-weight:bold}
+  .badge-4{background:#1a6fa8;color:#fff}
+  .badge-ox{background:#8e44ad;color:#fff}
+  .badge-sort{background:#16a085;color:#fff}
+  .q-text{font-size:16px;line-height:2;margin-bottom:14px;color:#222}
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:600px){.choices{grid-template-columns:1fr}}
+  .choice-btn{background:#f5f0e8;border:2px solid #c9b89a;border-radius:8px;padding:10px 14px;font-size:14px;cursor:pointer;text-align:left;transition:0.15s;line-height:1.6}
+  .choice-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .choice-btn:disabled{cursor:default}
+  .choice-btn.selected-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35;font-weight:bold}
+  .choice-btn.selected-ng{background:#fadbd8;border-color:#e74c3c;color:#7b241c;font-weight:bold}
+  .choice-btn.reveal-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35}
+  .ox-wrap{display:flex;gap:16px;margin-top:4px}
+  .ox-btn{flex:1;padding:14px;border-radius:10px;border:2px solid #c9b89a;background:#f5f0e8;font-size:28px;cursor:pointer;transition:0.15s;text-align:center}
+  .ox-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .ox-btn:disabled{cursor:default}
+  .ox-btn.selected-ok{background:#d5f5e3;border-color:#27ae60}
+  .ox-btn.selected-ng{background:#fadbd8;border-color:#e74c3c}
+  .feedback{display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:14px;line-height:1.85}
+  .feedback.ok{background:#eafaf1;border-left:4px solid #27ae60;color:#1a5c35}
+  .feedback.ng{background:#fdf3f0;border-left:4px solid #e74c3c;color:#7b241c}
+  .feedback.show{display:block}
+  .sort-label{font-size:13px;color:#666;margin-bottom:6px}
+  .sort-bank{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#f5f0e8;border-radius:8px;border:1px solid #c9b89a;min-height:52px;margin-bottom:8px}
+  .sort-answer{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#fff;border-radius:8px;border:2px dashed #a0522d;min-height:52px;align-items:center}
+  .sort-answer.correct-zone{border-color:#27ae60;background:#eafaf1}
+  .sort-answer.wrong-zone{border-color:#e74c3c;background:#fdf3f0}
+  .sort-chip{padding:8px 14px;border-radius:20px;border:2px solid #a0522d;background:#fff3e0;cursor:pointer;font-size:14px;font-weight:bold;color:#5c3d00;user-select:none}
+  .sort-chip:hover{background:#ffe0b2}
+  .sort-chip.disabled{cursor:default;opacity:0.85}
+  .sort-check-btn{background:#3d2b00;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:14px;font-weight:bold;cursor:pointer;margin-top:4px}
+  .sort-check-btn:disabled{background:#c9b89a;cursor:default}
+  .sort-reset-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:14px;cursor:pointer;margin-top:4px;margin-left:8px}
+  .finish-banner{display:none;background:linear-gradient(135deg,#3d2b00,#a0522d);color:#fff;border-radius:12px;padding:28px;text-align:center;margin-top:28px}
+  .finish-banner h2{margin:0 0 8px;font-size:22px}
+  .finish-score{font-size:42px;font-weight:bold;color:#ffd700;margin:8px 0}
+  .finish-msg{font-size:15px;margin-bottom:16px}
+  .finish-btn{background:#fff;color:#3d2b00;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:bold;cursor:pointer;margin:4px}
+  .finish-btn:hover{background:#fff3e0}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="edo_index.html">← 単元一覧に戻る</a>
+<h1>🔒 江戸時代② 確認ドリル</h1>
+<div class="nav-menu">
+  <a href="edo2.html">② 鎖国と外交（学習）</a>
+  <a href="edo2_drill.html" class="current">② 確認ドリル</a>
+  <a href="edo2_check.html">② 過去問チェック</a>
+</div>
+<div class="score-bar">
+  <span class="score-label">正解数：</span>
+  <span class="score-val" id="score-val">0 / 15</span>
+  <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  <button class="reset-btn" onclick="location.reload()">🔄 やり直す</button>
+</div>
+
+<!-- Part1: 4択 -->
+<div class="section-header"><span class="section-badge">Part 1</span><span class="section-title">4択問題</span></div>
+
+<div class="q-card" id="q1">
+  <div class="q-meta"><span class="q-num">Q1</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">幕府が日本船の海外渡航を許可するために発行した文書を何というか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q1',false)">渡航許可状</button>
+    <button class="choice-btn" onclick="a4(this,'q1',true)">朱印状</button>
+    <button class="choice-btn" onclick="a4(this,'q1',false)">勘合</button>
+    <button class="choice-btn" onclick="a4(this,'q1',false)">朱印船</button>
+  </div>
+  <div class="feedback" id="q1-fb"></div>
+</div>
+
+<div class="q-card" id="q2">
+  <div class="q-meta"><span class="q-num">Q2</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">島原・天草一揆（1637年）の大将とされた少年は誰か？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q2',false)">山田長政</button>
+    <button class="choice-btn" onclick="a4(this,'q2',true)">天草四郎</button>
+    <button class="choice-btn" onclick="a4(this,'q2',false)">シャクシャイン</button>
+    <button class="choice-btn" onclick="a4(this,'q2',false)">石田三成</button>
+  </div>
+  <div class="feedback" id="q2-fb"></div>
+</div>
+
+<div class="q-card" id="q3">
+  <div class="q-meta"><span class="q-num">Q3</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">鎖国下で、オランダが貿易を許された理由として正しいものはどれか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q3',false)">ヨーロッパで最も強い国だったから</button>
+    <button class="choice-btn" onclick="a4(this,'q3',false)">日本と古くから友好関係があったから</button>
+    <button class="choice-btn" onclick="a4(this,'q3',true)">キリスト教の布教を行わないと約束したから</button>
+    <button class="choice-btn" onclick="a4(this,'q3',false)">幕府の参勤交代に協力したから</button>
+  </div>
+  <div class="feedback" id="q3-fb"></div>
+</div>
+
+<div class="q-card" id="q4">
+  <div class="q-meta"><span class="q-num">Q4</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">鎖国下で、朝鮮との外交・貿易を仲介した藩はどれか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q4',false)">松前藩</button>
+    <button class="choice-btn" onclick="a4(this,'q4',false)">薩摩藩</button>
+    <button class="choice-btn" onclick="a4(this,'q4',true)">対馬藩</button>
+    <button class="choice-btn" onclick="a4(this,'q4',false)">長州藩</button>
+  </div>
+  <div class="feedback" id="q4-fb"></div>
+</div>
+
+<div class="q-card" id="q5">
+  <div class="q-meta"><span class="q-num">Q5</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">幕府が毎年オランダから提出させた、ヨーロッパの情報をまとめた報告書を何というか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q5',false)">唐人屋敷報告書</button>
+    <button class="choice-btn" onclick="a4(this,'q5',true)">オランダ風説書</button>
+    <button class="choice-btn" onclick="a4(this,'q5',false)">海外渡航記録</button>
+    <button class="choice-btn" onclick="a4(this,'q5',false)">蘭学通知</button>
+  </div>
+  <div class="feedback" id="q5-fb"></div>
+</div>
+
+<div class="q-card" id="q6">
+  <div class="q-meta"><span class="q-num">Q6</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">薩摩藩に事実上支配されながら、中国（清）にも朝貢していた国はどれか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q6',false)">朝鮮</button>
+    <button class="choice-btn" onclick="a4(this,'q6',false)">蝦夷地</button>
+    <button class="choice-btn" onclick="a4(this,'q6',true)">琉球王国</button>
+    <button class="choice-btn" onclick="a4(this,'q6',false)">オランダ</button>
+  </div>
+  <div class="feedback" id="q6-fb"></div>
+</div>
+
+<!-- Part2: ○× -->
+<div class="section-header"><span class="section-badge">Part 2</span><span class="section-title">○×問題</span></div>
+
+<div class="q-card" id="q7">
+  <div class="q-meta"><span class="q-num">Q7</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">朱印船貿易では、東南アジアに多くの日本人が移住し「日本町」が形成された。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q7',true)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q7',false)">×</button>
+  </div>
+  <div class="feedback" id="q7-fb"></div>
+</div>
+
+<div class="q-card" id="q8">
+  <div class="q-meta"><span class="q-num">Q8</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">鎖国とは外国との交流を完全に遮断し、どの国とも貿易・外交をしなかった体制のことである。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q8',false)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q8',true)">×</button>
+  </div>
+  <div class="feedback" id="q8-fb"></div>
+</div>
+
+<div class="q-card" id="q9">
+  <div class="q-meta"><span class="q-num">Q9</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">出島はオランダ商館のために長崎港内に作られた人工島である。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q9',true)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q9',false)">×</button>
+  </div>
+  <div class="feedback" id="q9-fb"></div>
+</div>
+
+<div class="q-card" id="q10">
+  <div class="q-meta"><span class="q-num">Q10</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">朝鮮通信使は毎年欠かさず来日し、常設の外交機関が江戸に置かれていた。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q10',false)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q10',true)">×</button>
+  </div>
+  <div class="feedback" id="q10-fb"></div>
+</div>
+
+<div class="q-card" id="q11">
+  <div class="q-meta"><span class="q-num">Q11</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">蝦夷地（北海道）のアイヌの人々は、松前藩との不公平な取引に反発して1669年にシャクシャインを指導者として戦いを起こした。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q11',true)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q11',false)">×</button>
+  </div>
+  <div class="feedback" id="q11-fb"></div>
+</div>
+
+<!-- Part3: 並び替え -->
+<div class="section-header"><span class="section-badge">Part 3</span><span class="section-title">並び替え問題</span></div>
+
+<div class="q-card" id="q12">
+  <div class="q-meta"><span class="q-num">Q12</span><span class="q-type-badge badge-sort">並び替え</span></div>
+  <div class="q-text">鎖国完成までの流れを古い順に並べよ。</div>
+  <div class="sort-label">↓ クリックして並べよう</div>
+  <div class="sort-bank" id="bank12">
+    <div class="sort-chip" onclick="sc('s12','bank12','ans12',this,'A')">ポルトガル船の来航禁止</div>
+    <div class="sort-chip" onclick="sc('s12','bank12','ans12',this,'B')">島原・天草一揆</div>
+    <div class="sort-chip" onclick="sc('s12','bank12','ans12',this,'C')">オランダ商館を出島に移す</div>
+  </div>
+  <div class="sort-label">↓ 並べた順（クリックで戻す）</div>
+  <div class="sort-answer" id="ans12"></div>
+  <div>
+    <button class="sort-check-btn" id="check12" onclick="cs('q12','s12','ans12',['B','A','C'],'島原・天草一揆（1637）→ポルトガル船禁止（1639）→出島にオランダ商館移転（1641）')" disabled>答え合わせ</button>
+    <button class="sort-reset-btn" onclick="rs('s12','bank12','ans12','check12')">リセット</button>
+  </div>
+  <div class="feedback" id="q12-fb"></div>
+</div>
+
+<div class="q-card" id="q13">
+  <div class="q-meta"><span class="q-num">Q13</span><span class="q-type-badge badge-sort">並び替え</span></div>
+  <div class="q-text">鎖国下の「四つの窓口」を、長崎・対馬・薩摩・松前の順に正しく並べよ。</div>
+  <div class="sort-label">↓ クリックして並べよう</div>
+  <div class="sort-bank" id="bank13">
+    <div class="sort-chip" onclick="sc('s13','bank13','ans13',this,'A')">薩摩藩（琉球）</div>
+    <div class="sort-chip" onclick="sc('s13','bank13','ans13',this,'B')">長崎（オランダ・清）</div>
+    <div class="sort-chip" onclick="sc('s13','bank13','ans13',this,'C')">松前藩（アイヌ）</div>
+    <div class="sort-chip" onclick="sc('s13','bank13','ans13',this,'D')">対馬藩（朝鮮）</div>
+  </div>
+  <div class="sort-label">↓ 並べた順（クリックで戻す）</div>
+  <div class="sort-answer" id="ans13"></div>
+  <div>
+    <button class="sort-check-btn" id="check13" onclick="cs('q13','s13','ans13',['B','D','A','C'],'長崎（オランダ・清）→対馬藩（朝鮮）→薩摩藩（琉球）→松前藩（アイヌ）')" disabled>答え合わせ</button>
+    <button class="sort-reset-btn" onclick="rs('s13','bank13','ans13','check13')">リセット</button>
+  </div>
+  <div class="feedback" id="q13-fb"></div>
+</div>
+
+<div class="q-card" id="q14">
+  <div class="q-meta"><span class="q-num">Q14</span><span class="q-type-badge badge-sort">並び替え</span></div>
+  <div class="q-text">朱印船貿易から鎖国完成までの流れを古い順に並べよ。</div>
+  <div class="sort-label">↓ クリックして並べよう</div>
+  <div class="sort-bank" id="bank14">
+    <div class="sort-chip" onclick="sc('s14','bank14','ans14',this,'A')">鎖国体制の完成</div>
+    <div class="sort-chip" onclick="sc('s14','bank14','ans14',this,'B')">朱印船貿易の奨励</div>
+    <div class="sort-chip" onclick="sc('s14','bank14','ans14',this,'C')">キリスト教の禁教令</div>
+  </div>
+  <div class="sort-label">↓ 並べた順（クリックで戻す）</div>
+  <div class="sort-answer" id="ans14"></div>
+  <div>
+    <button class="sort-check-btn" id="check14" onclick="cs('q14','s14','ans14',['B','C','A'],'朱印船貿易の奨励→キリスト教の禁教令→鎖国体制の完成')" disabled>答え合わせ</button>
+    <button class="sort-reset-btn" onclick="rs('s14','bank14','ans14','check14')">リセット</button>
+  </div>
+  <div class="feedback" id="q14-fb"></div>
+</div>
+
+<div class="q-card" id="q15">
+  <div class="q-meta"><span class="q-num">Q15</span><span class="q-type-badge badge-sort">並び替え</span></div>
+  <div class="q-text">幕府がキリスト教を禁止した理由を重要度の高い順に並べよ。</div>
+  <div class="sort-label">↓ クリックして並べよう</div>
+  <div class="sort-bank" id="bank15">
+    <div class="sort-chip" onclick="sc('s15','bank15','ans15',this,'A')">日本の植民地化を防ぐため</div>
+    <div class="sort-chip" onclick="sc('s15','bank15','ans15',this,'B')">幕府支配への反抗心を生むため</div>
+    <div class="sort-chip" onclick="sc('s15','bank15','ans15',this,'C')">貿易の利益を守るため</div>
+  </div>
+  <div class="sort-label">↓ 並べた順（クリックで戻す）</div>
+  <div class="sort-answer" id="ans15"></div>
+  <div>
+    <button class="sort-check-btn" id="check15" onclick="cs('q15','s15','ans15',['B','A','C'],'①幕府支配への反抗→②植民地化の防止→③貿易利益の独占')" disabled>答え合わせ</button>
+    <button class="sort-reset-btn" onclick="rs('s15','bank15','ans15','check15')">リセット</button>
+  </div>
+  <div class="feedback" id="q15-fb"></div>
+</div>
+
+<div class="finish-banner" id="finish-banner">
+  <h2>🎉 ドリル完了！</h2>
+  <div class="finish-score" id="finish-score"></div>
+  <div class="finish-msg" id="finish-msg"></div>
+  <button class="finish-btn" onclick="location.reload()">🔄 もう一度</button>
+  <button class="finish-btn" onclick="location.href='edo2_check.html'">過去問チェックへ ▶</button>
+</div>
+
+<script>
+const TOTAL=15; let answered={};
+function upd(){
+  const ok=Object.values(answered).filter(v=>v).length;
+  const done=Object.keys(answered).length;
+  document.getElementById('score-val').textContent=`${ok} / ${TOTAL}`;
+  document.getElementById('progress-bar').style.width=`${done/TOTAL*100}%`;
+  if(done===TOTAL)setTimeout(()=>fin(ok),400);
+}
+function fin(ok){
+  const b=document.getElementById('finish-banner');b.style.display='block';
+  document.getElementById('finish-score').textContent=`${ok} / ${TOTAL} 問正解`;
+  document.getElementById('finish-msg').textContent=ok===TOTAL?'🏆 満点！':ok>=12?'⭐ すばらしい！':ok>=9?'👍 よくできました。':'📖 学習ページに戻って復習しましょう。';
+  b.scrollIntoView({behavior:'smooth'});
+}
+const FB4={
+  q1:'朱印状は将軍の朱い印が押された海外渡航許可証です。「勘合」は室町時代の日明貿易で使った証明書で別のものです。',
+  q2:'天草四郎（益田時貞）は16歳の少年でしたが、3万7千人の大軍のリーダーとして4か月間幕府軍12万人と戦いました。',
+  q3:'スペイン・ポルトガルはカトリックで布教を行いましたが、オランダはプロテスタントで「貿易だけ、布教はしない」と約束したため許可されました。',
+  q4:'対馬藩（宗氏）が朝鮮との外交・貿易の仲介を担当しました。釜山に倭館を設けて取引を行いました。',
+  q5:'オランダ風説書は幕府が毎年オランダに提出させた報告書です。これにより幕府はヨーロッパの最新情勢を独占的に入手しました。後の蘭学の源になりました。',
+  q6:'琉球王国は薩摩藩に征服（1609年）されながら、表向きは独立国として清に朝貢し続けました。薩摩藩はこれを利用して中国との貿易利益を得ました。',
+};
+const FBOX={
+  q7:'○ 正解。東南アジア各地（タイのアユタヤ、カンボジアのプノンペンなど）に日本町が形成されました。鎖国後は急速に衰退しました。',
+  q8:'× 不正解。鎖国は「完全な遮断」ではなく、長崎・対馬・薩摩・松前の4つの窓口を通じた交流は続いていました。幕府が対外関係を独占・管理した体制です。',
+  q9:'○ 正解。出島は長崎港内に作られた扇形の人工島で、1641年にオランダ商館が移されました。オランダ人はここから出ることを禁じられていました。',
+  q10:'× 不正解。朝鮮通信使は「将軍の代替わりごと」に来日しました。毎年ではありません。500〜1000人規模の大行列で江戸まで来ました。',
+  q11:'○ 正解。松前藩がアイヌとの不公平な取引（鮭100本→米が年々減らされるなど）を続けたため、1669年にシャクシャインが大規模な蜂起を起こしました。',
+};
+function a4(btn,qId,ok){
+  if(answered[qId]!==undefined)return;
+  const card=document.getElementById(qId);
+  card.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);
+  const fb=document.getElementById(qId+'-fb');
+  if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FB4[qId]||''}`;answered[qId]=true;}
+  else{btn.classList.add('selected-ng');card.classList.add('answered-ng');card.querySelectorAll('.choice-btn').forEach(b=>{if(FB4[qId]&&b.classList.contains('selected-ng')){}});fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FB4[qId]||''}`;answered[qId]=false;}
+  upd();
+}
+function aOX(btn,qId,ok){
+  if(answered[qId]!==undefined)return;
+  const card=document.getElementById(qId);
+  card.querySelectorAll('.ox-btn').forEach(b=>b.disabled=true);
+  const fb=document.getElementById(qId+'-fb');
+  if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FBOX[qId]||''}`;answered[qId]=true;}
+  else{btn.classList.add('selected-ng');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FBOX[qId]||''}`;answered[qId]=false;}
+  upd();
+}
+const ss={};
+function sc(sid,bankId,ansId,chip,key){
+  if(chip.classList.contains('disabled'))return;
+  chip.classList.add('disabled');
+  const clone=document.createElement('div');clone.className='sort-chip in-answer disabled';clone.textContent=chip.textContent;clone.dataset.key=key;
+  clone.onclick=()=>ret(sid,bankId,ansId,clone,chip);
+  document.getElementById(ansId).appendChild(clone);
+  if(!ss[sid])ss[sid]=[];ss[sid].push(key);
+  const tot=document.getElementById(bankId).querySelectorAll('.sort-chip').length;
+  if(ss[sid].length===tot)document.getElementById('check'+sid.replace('s','')).disabled=false;
+}
+function ret(sid,bankId,ansId,clone,orig){
+  if(ss[sid+'_done'])return;
+  clone.remove();orig.classList.remove('disabled');
+  ss[sid]=ss[sid].filter(k=>k!==clone.dataset.key);
+  document.getElementById('check'+sid.replace('s','')).disabled=true;
+}
+function cs(qId,sid,ansId,correct,exp){
+  const cur=ss[sid]||[];const card=document.getElementById(qId);const fb=document.getElementById(qId+'-fb');
+  const ok=JSON.stringify(cur)===JSON.stringify(correct);ss[sid+'_done']=true;
+  document.getElementById(ansId).querySelectorAll('.sort-chip').forEach(c=>c.onclick=null);
+  if(ok){document.getElementById(ansId).classList.add('correct-zone');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${exp}`;answered[qId]=true;}
+  else{document.getElementById(ansId).classList.add('wrong-zone');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> 正しい順：${exp}`;answered[qId]=false;}
+  document.getElementById('check'+qId.replace('q','')).disabled=true;upd();
+}
+function rs(sid,bankId,ansId,checkId){
+  if(ss[sid+'_done'])return;ss[sid]=[];
+  document.getElementById(ansId).innerHTML='';document.getElementById(ansId).className='sort-answer';
+  document.getElementById(bankId).querySelectorAll('.sort-chip').forEach(c=>c.classList.remove('disabled'));
+  document.getElementById(checkId).disabled=true;
+}
+</script>
+</body>
+</html>

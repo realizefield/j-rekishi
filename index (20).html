@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>GAMBA 中学歴史 目次</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'BIZ UDGothic','Hiragino Kaku Gothic Pro','Meiryo',sans-serif;background:#eef2f7;color:#1a1a2e;min-height:100vh;font-size:15px}
+
+/* ヘッダー */
+.top-header{background:linear-gradient(135deg,#3d2b00 0%,#a0522d 100%);color:#fff;padding:16px 16px 0;text-align:center}
+.top-header h1{font-size:18px;font-weight:700;letter-spacing:.05em}
+.top-header p{font-size:12px;margin-top:3px;opacity:.85}
+.summary-bar{background:rgba(0,0,0,.25);margin-top:12px;padding:9px 14px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:12px;color:#fff}
+.sum-item{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.sum-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.sum-dot-a{background:#4caf50}
+.sum-dot-b{background:#f9a825}
+.sum-dot-c{background:#e53935}
+.sum-dot-n{background:#aaa}
+.sum-count{font-weight:700;font-size:15px;min-width:18px;text-align:center}
+
+/* メインラップ */
+.wrap{max-width:920px;margin:0 auto;padding:16px 12px 48px}
+
+/* 学習の流れ */
+.flow{background:#fff;border-radius:14px;border:1px solid #dde3ee;padding:14px 16px;margin-bottom:20px}
+.flow-title{font-size:14px;font-weight:700;color:#3d2b00;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #a0522d}
+.flow-steps{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.flow-step{background:#fff8e8;border:1px solid #d4b896;border-radius:8px;padding:7px 12px;font-size:12px;color:#3d2b00;font-weight:700;white-space:nowrap}
+.flow-arrow{color:#a0522d;font-size:16px;font-weight:700}
+
+/* 時代ユニット */
+.unit{background:#fff;border-radius:14px;border:1px solid #dde3ee;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden}
+.unit-hd{color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.unit-hd-edo   {background:linear-gradient(90deg,#3d2b00,#7a4a1e)}
+.unit-hd-meiji {background:linear-gradient(90deg,#1B3A6B,#1B5E8B)}
+.unit-hd-ancient{background:linear-gradient(90deg,#1a4a20,#2e7d32)}
+.unit-hd-medieval{background:linear-gradient(90deg,#4a1a1a,#8b2020)}
+.unit-hd-modern{background:linear-gradient(90deg,#1a1a4a,#2a2a8b)}
+.unit-hd-coming{background:linear-gradient(90deg,#555,#888)}
+.unit-num{background:rgba(255,255,255,.2);border-radius:8px;padding:3px 10px;font-size:13px;font-weight:700;white-space:nowrap}
+.unit-title{font-size:16px;font-weight:700;flex:1}
+.unit-badge{font-size:11px;background:rgba(255,255,255,.3);border-radius:10px;padding:2px 8px;white-space:nowrap;font-weight:700}
+.unit-body{padding:14px 16px}
+
+/* セクションカードグリッド */
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:4px}
+.sec-card{border-radius:10px;border:1.5px solid #dde3ee;overflow:hidden;transition:.2s;background:#fff}
+.sec-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1);transform:translateY(-1px)}
+.sec-card a{text-decoration:none;color:inherit;display:block}
+
+/* カードヘッダー */
+.sc-hd{background:#fff8e8;border-bottom:2px solid #a0522d;padding:9px 12px;display:flex;align-items:center;gap:8px}
+.sc-num{min-width:40px;height:24px;background:#3d2b00;color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;padding:0 6px}
+.sc-title{font-size:13px;font-weight:700;color:#3d2b00;flex:1;line-height:1.3}
+.sc-stars{font-size:11px;color:#f9a825;letter-spacing:-1px;flex-shrink:0}
+
+/* カードボディ */
+.sc-body{padding:9px 12px;background:#fff}
+.sc-topics{list-style:none;margin:0;padding:0}
+.sc-topics li{font-size:12px;color:#555;padding:2px 0;border-bottom:1px solid #f0f0f5;line-height:1.5}
+.sc-topics li:last-child{border-bottom:none}
+.sc-topics li::before{content:"・";color:#a0522d}
+.sc-mini-badge{display:inline-block;background:#fff5e8;color:#a0522d;border:1px solid #d4b896;border-radius:8px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px}
+
+/* ボタン行 */
+.sc-btn-row{display:flex;gap:6px;margin-top:8px}
+.sc-btn{flex:1;text-align:center;padding:7px 4px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:.15s;font-family:inherit;border:none;cursor:pointer;display:block}
+.sc-btn-learn{background:#3d2b00;color:#fff}
+.sc-btn-learn:hover{background:#2a1d00}
+.sc-btn-drill{background:#a0522d;color:#fff;border:1.5px solid #7a3d1e}
+.sc-btn-drill:hover{background:#7a3d1e;color:#fff}
+.sc-btn-check{background:#c0392b;color:#fff;border:1.5px solid #8a2820}
+.sc-btn-check:hover{background:#8a2820;color:#fff}
+
+/* A/B/C 評価ボタン */
+.abc-row{display:flex;gap:6px;padding:8px 12px 10px}
+.abc-btn{flex:1;padding:7px 2px;border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;border:2px solid;text-align:center;background:#fff}
+.abc-btn-a{border-color:#2e7d32;color:#fff;background:#43a047}
+.abc-btn-b{border-color:#f57f17;color:#fff;background:#fb8c00}
+.abc-btn-c{border-color:#c62828;color:#fff;background:#e53935}
+.abc-btn-a.sel{background:#1b5e20;color:#fff;border-color:#1b5e20}
+.abc-btn-b.sel{background:#e65100;color:#fff;border-color:#e65100}
+.abc-btn-c.sel{background:#b71c1c;color:#fff;border-color:#b71c1c}
+
+/* カードの状態カラー */
+.sec-card.status-a{border-color:#2e7d32}
+.sec-card.status-a .sc-hd{background:#e8f5e9;border-bottom-color:#2e7d32}
+.sec-card.status-b{border-color:#f9a825}
+.sec-card.status-b .sc-hd{background:#fff9e6;border-bottom-color:#f9a825}
+.sec-card.status-c{border-color:#e53935}
+.sec-card.status-c .sc-hd{background:#fce8e8;border-bottom-color:#e53935}
+
+/* 準備中カード */
+.sec-card-coming{border-radius:10px;border:1.5px dashed #ccc;overflow:hidden;background:#f9f9f9;opacity:.65}
+.sc-hd-coming{background:#f0f0f0;border-bottom:2px solid #ccc;padding:9px 12px;display:flex;align-items:center;gap:8px}
+.sc-num-coming{min-width:40px;height:24px;background:#aaa;color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;padding:0 6px}
+.sc-title-coming{font-size:13px;font-weight:700;color:#999;flex:1;line-height:1.3}
+.coming-label{display:inline-block;background:#eee;color:#999;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;margin:8px 12px 12px}
+
+/* 進捗バー */
+.unit-progress{display:flex;align-items:center;gap:8px;padding:0 16px 12px}
+.unit-prog-bar{flex:1;height:8px;background:#e8d5b0;border-radius:10px;overflow:hidden}
+.unit-prog-fill{height:100%;background:linear-gradient(90deg,#43a047,#a5d6a7);border-radius:10px;transition:width .4s}
+.unit-prog-label{font-size:12px;color:#888;white-space:nowrap;min-width:60px;text-align:right}
+
+canvas{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;display:none}
+</style>
+</head>
+<body>
+<canvas id="cc"></canvas>
+
+<div class="top-header">
+  <h1>🏯 GAMBA 中学歴史 学習システム</h1>
+  <p>熊本県地方公務員試験・一般教養 対策 ― 単元をタップして学習を始めよう ―</p>
+  <div class="summary-bar">
+    <div class="sum-item"><span class="sum-dot sum-dot-a"></span>A OK <span class="sum-count" id="cnt-a">0</span> 単元</div>
+    <div class="sum-item"><span class="sum-dot sum-dot-b"></span>B 要復習 <span class="sum-count" id="cnt-b">0</span> 単元</div>
+    <div class="sum-item"><span class="sum-dot sum-dot-c"></span>C 何度も復習 <span class="sum-count" id="cnt-c">0</span> 単元</div>
+    <div class="sum-item"><span class="sum-dot sum-dot-n"></span>未実施 <span class="sum-count" id="cnt-n">4</span> 単元</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 学習の流れ -->
+  <div class="flow">
+    <div class="flow-title">📖 学習の流れ</div>
+    <div class="flow-steps">
+      <div class="flow-step">① 解説を読む</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">② 穴埋めチャレンジ</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">③ 確認ドリル</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">④ 過去問チェック</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">⑤ A/B/C で自己評価</div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       江戸時代
+  ============================================================ -->
+  <div class="unit">
+    <div class="unit-hd unit-hd-edo">
+      <span class="unit-num">江戸時代</span>
+      <span class="unit-title">江戸幕府の成立と鎖国・産業・文化</span>
+      <span class="unit-badge">🏯 全4単元</span>
+    </div>
+
+    <!-- 進捗バー -->
+    <div class="unit-progress">
+      <div class="unit-prog-bar"><div class="unit-prog-fill" id="prog-edo" style="width:0%"></div></div>
+      <div class="unit-prog-label" id="prog-edo-label">0 / 4 完了</div>
+    </div>
+
+    <div class="unit-body">
+      <div class="sec-grid">
+
+        <!-- 単元①：幕府の成立と支配 -->
+        <div class="sec-card" data-id="edo1">
+          <a href="edo1.html">
+            <div class="sc-hd">
+              <span class="sc-num">単元①</span>
+              <span class="sc-title">幕府の成立と支配</span>
+              <span class="sc-stars">★★★</span>
+            </div>
+            <div class="sc-body">
+              <ul class="sc-topics">
+                <li>関ヶ原の戦い・江戸幕府の成立</li>
+                <li>幕藩体制・大名の区分（親藩・譜代・外様）</li>
+                <li>武家諸法度・参勤交代・農民統制</li>
+              </ul>
+            </div>
+          </a>
+          <div class="sc-body" style="padding-top:0">
+            <div class="sc-btn-row">
+              <a class="sc-btn sc-btn-learn" href="edo1.html">解説<span class="sc-mini-badge">穴埋め</span></a>
+              <a class="sc-btn sc-btn-drill" href="edo1_drill.html">ドリル</a>
+              <a class="sc-btn sc-btn-check" href="edo1_check.html">過去問</a>
+            </div>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('edo1','a',this)">A OK</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('edo1','b',this)">B 要復習</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('edo1','c',this)">C 何度も</button>
+          </div>
+        </div>
+
+        <!-- 単元②：鎖国と外交 -->
+        <div class="sec-card" data-id="edo2">
+          <a href="edo2.html">
+            <div class="sc-hd">
+              <span class="sc-num">単元②</span>
+              <span class="sc-title">鎖国と外交</span>
+              <span class="sc-stars">★★★</span>
+            </div>
+            <div class="sc-body">
+              <ul class="sc-topics">
+                <li>朱印船貿易・キリスト教の禁止</li>
+                <li>島原・天草一揆・鎖国の完成</li>
+                <li>四つの窓口（長崎・対馬・薩摩・松前）</li>
+              </ul>
+            </div>
+          </a>
+          <div class="sc-body" style="padding-top:0">
+            <div class="sc-btn-row">
+              <a class="sc-btn sc-btn-learn" href="edo2.html">解説<span class="sc-mini-badge">穴埋め</span></a>
+              <a class="sc-btn sc-btn-drill" href="edo2_drill.html">ドリル</a>
+              <a class="sc-btn sc-btn-check" href="edo2_check.html">過去問</a>
+            </div>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('edo2','a',this)">A OK</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('edo2','b',this)">B 要復習</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('edo2','c',this)">C 何度も</button>
+          </div>
+        </div>
+
+        <!-- 単元③：産業と身分制度 -->
+        <div class="sec-card" data-id="edo3">
+          <a href="edo3.html">
+            <div class="sc-hd">
+              <span class="sc-num">単元③</span>
+              <span class="sc-title">産業と身分制度</span>
+              <span class="sc-stars">★★☆</span>
+            </div>
+            <div class="sc-body">
+              <ul class="sc-topics">
+                <li>新田開発・備中ぐわ・千歯こき・商品作物</li>
+                <li>三都・蔵屋敷・五街道・西廻り航路</li>
+                <li>武士・百姓・町人の身分制度・五人組</li>
+              </ul>
+            </div>
+          </a>
+          <div class="sc-body" style="padding-top:0">
+            <div class="sc-btn-row">
+              <a class="sc-btn sc-btn-learn" href="edo3.html">解説<span class="sc-mini-badge">穴埋め</span></a>
+              <a class="sc-btn sc-btn-drill" href="edo3_drill.html">ドリル</a>
+              <a class="sc-btn sc-btn-check" href="edo3_check.html">過去問</a>
+            </div>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('edo3','a',this)">A OK</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('edo3','b',this)">B 要復習</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('edo3','c',this)">C 何度も</button>
+          </div>
+        </div>
+
+        <!-- 単元④：元禄文化と改革 -->
+        <div class="sec-card" data-id="edo4">
+          <a href="edo4.html">
+            <div class="sc-hd">
+              <span class="sc-num">単元④</span>
+              <span class="sc-title">元禄文化と幕政の改革</span>
+              <span class="sc-stars">★★☆</span>
+            </div>
+            <div class="sc-body">
+              <ul class="sc-topics">
+                <li>元禄文化（芭蕉・西鶴・近松・菱川師宣）</li>
+                <li>享保の改革（徳川吉宗・目安箱）</li>
+                <li>田沼意次・松平定信（寛政の改革）</li>
+              </ul>
+            </div>
+          </a>
+          <div class="sc-body" style="padding-top:0">
+            <div class="sc-btn-row">
+              <a class="sc-btn sc-btn-learn" href="edo4.html">解説<span class="sc-mini-badge">穴埋め</span></a>
+              <a class="sc-btn sc-btn-drill" href="edo4_drill.html">ドリル</a>
+              <a class="sc-btn sc-btn-check" href="edo4_check.html">過去問</a>
+            </div>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('edo4','a',this)">A OK</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('edo4','b',this)">B 要復習</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('edo4','c',this)">C 何度も</button>
+          </div>
+        </div>
+
+      </div><!-- /sec-grid -->
+    </div><!-- /unit-body -->
+  </div><!-- /unit 江戸時代 -->
+
+
+  <!-- ============================================================
+       今後追加予定の時代（準備中表示）
+  ============================================================ -->
+
+  <!-- 明治時代（準備中） -->
+  <div class="unit">
+    <div class="unit-hd unit-hd-meiji">
+      <span class="unit-num">明治時代</span>
+      <span class="unit-title">明治維新・近代国家の成立</span>
+      <span class="unit-badge">🔜 準備中</span>
+    </div>
+    <div class="unit-body">
+      <div class="sec-grid">
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元①</span><span class="sc-title-coming">明治維新と文明開化</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元②</span><span class="sc-title-coming">大日本帝国憲法・議会の開設</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元③</span><span class="sc-title-coming">日清・日露戦争</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 大正・昭和（準備中） -->
+  <div class="unit">
+    <div class="unit-hd unit-hd-modern">
+      <span class="unit-num">大正・昭和</span>
+      <span class="unit-title">大正デモクラシー・戦争と平和</span>
+      <span class="unit-badge">🔜 準備中</span>
+    </div>
+    <div class="unit-body">
+      <div class="sec-grid">
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元①</span><span class="sc-title-coming">大正デモクラシー</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元②</span><span class="sc-title-coming">第二次世界大戦</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元③</span><span class="sc-title-coming">戦後の日本と現代</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 古代・中世（準備中） -->
+  <div class="unit">
+    <div class="unit-hd unit-hd-ancient">
+      <span class="unit-num">古代・中世</span>
+      <span class="unit-title">縄文〜室町時代</span>
+      <span class="unit-badge">🔜 準備中</span>
+    </div>
+    <div class="unit-body">
+      <div class="sec-grid">
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元①</span><span class="sc-title-coming">縄文・弥生・古墳時代</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元②</span><span class="sc-title-coming">奈良・平安時代</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元③</span><span class="sc-title-coming">鎌倉・室町時代</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 安土桃山（準備中） -->
+  <div class="unit">
+    <div class="unit-hd unit-hd-medieval">
+      <span class="unit-num">安土桃山</span>
+      <span class="unit-title">織田信長・豊臣秀吉と天下統一</span>
+      <span class="unit-badge">🔜 準備中</span>
+    </div>
+    <div class="unit-body">
+      <div class="sec-grid">
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元①</span><span class="sc-title-coming">織田信長の政策</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+        <div class="sec-card-coming">
+          <div class="sc-hd-coming"><span class="sc-num-coming">単元②</span><span class="sc-title-coming">豊臣秀吉と太閤検地</span></div>
+          <span class="coming-label">🔜 準備中</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+var STORAGE_KEY = 'gamba_rekishi_status';
+var status = {};
+var EDO_IDS = ['edo1','edo2','edo3','edo4'];
+var ALL_IDS = ['edo1','edo2','edo3','edo4'];
+
+// localStorage から復元
+try {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) status = JSON.parse(saved);
+} catch(e) { status = {}; }
+
+function applyStoredStatus() {
+  ALL_IDS.forEach(function(id) {
+    var grade = status[id];
+    if (!grade) return;
+    var card = document.querySelector('[data-id="'+id+'"]');
+    if (!card) return;
+    card.classList.add('status-' + grade);
+    var btn = card.querySelector('.abc-btn-' + grade);
+    if (btn) btn.classList.add('sel');
+  });
+}
+
+function saveStatus() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(status)); } catch(e) {}
+}
+
+function setABC(id, grade, btn) {
+  var card = document.querySelector('[data-id="'+id+'"]');
+  if (!card) return;
+  if (status[id] === grade) {
+    delete status[id];
+    card.className = card.className.replace(/ ?status-[abc]/g,'');
+    card.querySelectorAll('.abc-btn').forEach(function(b){b.classList.remove('sel');});
+    saveStatus(); updateSummary(); updateProgress(); return;
+  }
+  status[id] = grade;
+  card.className = card.className.replace(/ ?status-[abc]/g,'');
+  card.classList.add('status-' + grade);
+  card.querySelectorAll('.abc-btn').forEach(function(b){b.classList.remove('sel');});
+  btn.classList.add('sel');
+  saveStatus();
+  if (grade === 'a') confetti();
+  updateSummary(); updateProgress();
+}
+
+function updateSummary() {
+  var ca=0, cb=0, cc=0, cn=0;
+  ALL_IDS.forEach(function(id) {
+    var s = status[id];
+    if (s === 'a') ca++;
+    else if (s === 'b') cb++;
+    else if (s === 'c') cc++;
+    else cn++;
+  });
+  document.getElementById('cnt-a').textContent = ca;
+  document.getElementById('cnt-b').textContent = cb;
+  document.getElementById('cnt-c').textContent = cc;
+  document.getElementById('cnt-n').textContent = cn;
+}
+
+function updateProgress() {
+  // 江戸時代の進捗（A評価のみカウント）
+  var done = EDO_IDS.filter(function(id){ return status[id] === 'a'; }).length;
+  var pct = Math.round(done / EDO_IDS.length * 100);
+  var fill = document.getElementById('prog-edo');
+  var label = document.getElementById('prog-edo-label');
+  if (fill) fill.style.width = pct + '%';
+  if (label) label.textContent = done + ' / ' + EDO_IDS.length + ' 完了';
+}
+
+function confetti() {
+  var cv = document.getElementById('cc');
+  cv.width = window.innerWidth; cv.height = window.innerHeight;
+  cv.style.display = 'block';
+  var ctx = cv.getContext('2d');
+  var cols = ['#f9a825','#a0522d','#3d2b00','#e53935','#2e7d32','#ff6f00','#7b1fa2','#ff4081','#1B3A6B'];
+  var ps = [];
+  for (var k=0; k<130; k++) {
+    ps.push({x:Math.random()*cv.width, y:-20-Math.random()*180, w:7+Math.random()*9, h:3+Math.random()*5,
+      c:cols[Math.floor(Math.random()*cols.length)], s:2+Math.random()*4, a:Math.random()*360,
+      sp:3-Math.random()*6, d:(Math.random()-0.5)*2.5});
+  }
+  var fr=0;
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(function(p){
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a*Math.PI/180);
+      ctx.fillStyle=p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+      p.y+=p.s; p.x+=p.d; p.a+=p.sp;
+    });
+    fr++;
+    if(fr<100) requestAnimationFrame(draw);
+    else { ctx.clearRect(0,0,cv.width,cv.height); cv.style.display='none'; }
+  }
+  draw();
+}
+
+applyStoredStatus();
+updateSummary();
+updateProgress();
+</script>
+</body>
+</html>

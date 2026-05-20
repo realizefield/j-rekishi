@@ -2,161 +2,282 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>歴史学習：江戸時代 ④ 元禄文化と改革</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：江戸時代④ 元禄文化と改革</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 950px; margin: 20px auto; line-height: 1.8; background-color: #f4f7f9; color: #333; }
-  .container { background-color: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-  h1 { text-align: center; color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-  .nav-menu { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .nav-menu a { text-decoration: none; color: #1976d2; padding: 8px 12px; border: 1px solid #1976d2; border-radius: 20px; font-size: 14px; }
-  .nav-menu a.current { background: #1976d2; color: #fff; font-weight: bold; }
-  .question-text { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 15px; font-size: 18px; line-height: 2.2; border: 1px solid #eee; }
-  .blank { display: inline-block; min-width: 110px; border-bottom: 2px solid #666; margin: 0 4px; text-align: center; color: #e67e22; font-weight: bold; cursor: pointer; transition: 0.2s; }
-  .blank.waiting { color: transparent; background-color: #eee; border-radius: 4px; }
-  .blank.correct { background-color: #ccf; border-bottom-color: #339; color: #339; }
-  .word-bank-wrapper { margin-top: 15px; }
-  .word-bank-title { font-weight: bold; margin-bottom: 8px; }
-  .word-bank { border: 1px solid #ccc; border-radius: 8px; padding: 15px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fafafa; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #f5f5f5; cursor: pointer; user-select: none; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; cursor: default; pointer-events: none; }
-  .word-chip.selected { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .controls { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-  button { padding: 10px 18px; border-radius: 8px; border: none; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.2s; }
-  .start-btn { background-color: #1976d2; }
-  .check-btn { background-color: #1976d2; }
-  .reset-btn { background-color: #666; }
-  .time-reset-btn { background-color: #666; }
-  .next-btn { background-color: #90caf9; }
-  .next-btn.active { background-color: #1976d2; }
-  .explain-btn { background-color: #666; }
-  .timer-info { margin-top: 15px; padding: 10px 15px; font-size: 16px; border: 1px solid #1976d2; border-radius: 6px; display: inline-block; background-color: #fff; min-width: 320px; }
-  .explain-box { display: none; margin-top: 15px; padding: 15px; border-left: 5px solid #1976d2; background-color: #f0f4ff; line-height: 1.6; }
-
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:24px;color:#2c1800}
+  h2{margin-top:20px;margin-bottom:8px;font-size:19px;border-left:5px solid #3d2b00;padding-left:10px;color:#2c1800}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#5c3d00;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#3d2800}
+  .nav-menu{display:flex;justify-content:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .nav-menu a{text-decoration:none;color:#5c3d00;padding:8px 12px;border:1px solid #5c3d00;border-radius:20px;font-size:14px}
+  .nav-menu a.current{background:#5c3d00;color:#fff;font-weight:bold}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #3d2b00;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#a0522d;background-color:#fff3e0;box-shadow:0 0 0 2px #ffcc80}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px}
+  .label-1{background:#3d2b00}.label-2{background:#5c1a1a}.label-3{background:#1a3050}.label-4{background:#1a4a20}
+  .blank{display:inline-block;min-width:110px;min-height:26px;border-bottom:2px solid #3d2b00;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#3d2b00;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .key-point{background:#fff8e1;border-left:5px solid #3d2b00;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:15px}
+  .key-point strong{color:#3d2b00}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #8b5e00;cursor:help;color:#2c1800;font-weight:bold;vertical-align:middle}
+  .kw > .pop-box,.blank > .pop-box{
+    display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);
+    width:270px;background:#2c1800;color:#fff;border-radius:10px;
+    padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none;
+  }
+  .kw > .pop-box::after,.blank > .pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover > .pop-box,.blank:hover > .pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .column-toggle{display:flex;align-items:center;gap:8px;background:#fffbe6;border:2px solid #b8860b;border-radius:8px;padding:10px 14px;cursor:pointer;margin-top:14px;color:#5c3d00;font-size:14px;font-weight:bold;width:100%;text-align:left;}
+  .column-toggle:hover{background:#fff3c0}
+  .column-toggle .arrow{transition:transform 0.25s;font-size:12px;flex-shrink:0}
+  .column-toggle.open .arrow{transform:rotate(90deg)}
+  .column-body{display:none;margin-top:6px;padding:14px 18px;background:#fffbe6;border-left:4px solid #b8860b;border-radius:0 8px 8px 8px;font-size:14px;line-height:2.0}
+  .column-body.open{display:block}
+  .col-row{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+  .col-icon{font-size:18px;flex-shrink:0;margin-top:3px}
+  .col-label{font-weight:bold;color:#5c3d00;margin-right:4px;white-space:nowrap}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#3d2b00;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #1a1200}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#a0522d;box-shadow:0 3px 0 #6b3520}
+  button#next-btn:disabled{background-color:#d4a574;box-shadow:none;cursor:default}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #3d2b00;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #3d2b00;background-color:#fff8e1;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>江戸時代</h1>
-  <div class="nav-menu">
-    <a href="edo1.html">① 幕府の成立と支配</a>
-    <a href="edo2.html">② 鎖国と外交</a>
-    <a href="edo3.html">③ 産業と身分制度</a>
-    <a href="edo4.html" class="current">④ 元禄文化と改革</a>
-  </div>
-  <div class="question-text" id="quest">
-    17世紀末〜18世紀初め、5代将軍 <span class="blank" data-ans="徳川綱吉">徳川綱吉</span> の時代に、上方（大阪・京都）の町人を中心とした <span class="blank" data-ans="元禄文化">元禄文化</span> が栄えました。<br><br>
+<a class="back-to-index" href="edo_index.html">← 単元一覧に戻る</a>
+<h1>🎭 江戸時代④ 元禄文化と幕政の改革</h1>
+<div class="nav-menu">
+  <a href="edo1.html">① 幕府の成立と支配</a>
+  <a href="edo2.html">② 鎖国と外交</a>
+  <a href="edo3.html">③ 産業と身分制度</a>
+  <a href="edo4.html" class="current">④ 元禄文化と改革</a>
+</div>
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
 
-    元禄文化の代表的な人物として、俳諧（俳句）の <span class="blank" data-ans="松尾芭蕉">松尾芭蕉</span>、浮世草子（小説）の <span class="blank" data-ans="井原西鶴">井原西鶴</span>、人形浄瑠璃・歌舞伎の脚本家 <span class="blank" data-ans="近松門左衛門">近松門左衛門</span> などが活躍しました。絵画では <span class="blank" data-ans="菱川師宣">菱川師宣</span> が浮世絵を始めました。<br><br>
+<!-- ① 元禄文化 -->
+<div class="section">
+  <span class="section-label label-1">① 元禄文化</span>
+  <h2>上方の町人文化</h2>
+  <p>17世紀末〜18世紀初め、5代将軍
+    <span class="blank" data-id="A">徳川綱吉<span class="pop-box">
+      <span class="pop-name">🐕 徳川綱吉（1646〜1709）</span>
+      <span class="pop-body">5代将軍。儒学（朱子学）を奨励しましたが、「生類憐みの令」で犬を大切にしすぎた将軍として有名です。犬を傷つけた人が重罰を受けました。</span>
+      <span class="pop-memo">💡 将軍の生まれ年が戌年だったことが「犬を大切に」の理由とも言われています。庶民には大迷惑な法令でした。</span>
+    </span></span>
+    の時代に、京都・大阪を中心とする
+    <span class="kw">上方<span class="pop-box">
+      <span class="pop-name">📍 上方（かみがた）</span>
+      <span class="pop-body">京都・大阪周辺のことです。天皇がいる京都は「上（かみ）」として敬われ、この地域を「上方」と呼びました。江戸時代前半は文化の中心地でした。</span>
+      <span class="pop-memo">💡 後の化政文化では江戸が文化の中心になります。文化の重心が「上方→江戸」に移りました。</span>
+    </span></span>
+    で
+    <span class="blank" data-id="B">元禄文化<span class="pop-box">
+      <span class="pop-name">🎭 元禄文化</span>
+      <span class="pop-body">17世紀末〜18世紀初め、上方（京都・大阪）を中心に栄えた文化です。経済力をつけた町人が担い手でした。浮世絵・俳諧・人形浄瑠璃などが発展しました。</span>
+      <span class="pop-memo">💡 「元禄」はこの時代の年号です。「元禄景気」という言葉があるほど、この時代は経済的に豊かでした。</span>
+    </span></span>
+    が栄えました。</p>
+  <p>文学では
+    <span class="blank" data-id="C">松尾芭蕉<span class="pop-box">
+      <span class="pop-name">🌸 松尾芭蕉（1644〜1694）</span>
+      <span class="pop-body">俳諧（俳句）を芸術の域まで高めた人物です。「奥の細道」で東北・北陸を旅し、自然の美しさや人生の無常を詠みました。</span>
+      <span class="pop-memo">💡 「古池や 蛙飛び込む 水の音」が有名です。5・7・5の17音で宇宙を表現する、日本独自の芸術形式です。</span>
+    </span></span>
+    が俳諧（俳句）を大成し、
+    <span class="blank" data-id="D">井原西鶴<span class="pop-box">
+      <span class="pop-name">📖 井原西鶴（1642〜1693）</span>
+      <span class="pop-body">大阪の町人出身の作家です。武士・町人の生活をリアルに描いた「浮世草子」（小説）を書きました。「日本永代蔵」「好色一代男」などが代表作です。</span>
+      <span class="pop-memo">💡 「浮世（うきよ）」とは「今この現世」という意味です。現実の人間の姿をありのままに描く斬新なスタイルでした。</span>
+    </span></span>
+    が浮世草子を、
+    <span class="blank" data-id="E">近松門左衛門<span class="pop-box">
+      <span class="pop-name">🎪 近松門左衛門（1653〜1725）</span>
+      <span class="pop-body">人形浄瑠璃・歌舞伎の脚本家です。「曽根崎心中」など、義理と人情の板挟みに苦しむ男女の姿を描いた作品で人気を集めました。</span>
+      <span class="pop-memo">💡 実際に起きた心中事件をもとにした作品もあります。「リアルな事件をドラマ化する」という現代のワイドショーと同じ発想です。</span>
+    </span></span>
+    が人形浄瑠璃の台本を書きました。絵画では
+    <span class="blank" data-id="F">菱川師宣<span class="pop-box">
+      <span class="pop-name">🖌️ 菱川師宣（1618頃〜1694）</span>
+      <span class="pop-body">浮世絵の祖とされる画家です。「見返り美人図」が代表作で、町人の風俗を生き生きと描きました。浮世絵は後にヨーロッパの印象派（モネなど）にも大きな影響を与えました。</span>
+      <span class="pop-memo">💡 「見返り美人図」の女性が振り向いている理由は諸説あり、今でも謎のままです。</span>
+    </span></span>
+    が浮世絵を大成しました。</p>
+  <div class="key-point">⭐ <strong>元禄文化の人物</strong>：松尾芭蕉（俳諧）／井原西鶴（浮世草子）／近松門左衛門（人形浄瑠璃）／菱川師宣（浮世絵）</div>
+</div>
 
-    18世紀に入ると幕府の財政が苦しくなり、改革が行われました。8代将軍 <span class="blank" data-ans="徳川吉宗">徳川吉宗</span> は <span class="blank" data-ans="享保の改革">享保の改革</span> を行い、倹約令や上米の制などで財政を立て直そうとしました。その後、老中 <span class="blank" data-ans="田沼意次">田沼意次</span> は商人の力を利用して財政を回復しようとしましたが、わいろが横行し失脚しました。さらに老中 <span class="blank" data-ans="松平定信">松平定信</span> は <span class="blank" data-ans="寛政の改革">寛政の改革</span> で風紀を引き締める政策をとりましたが、厳しすぎると批判されました。
+<!-- ② 享保の改革 -->
+<div class="section">
+  <span class="section-label label-2">② 享保の改革</span>
+  <h2>徳川吉宗の政治</h2>
+  <p>8代将軍
+    <span class="blank" data-id="G">徳川吉宗<span class="pop-box">
+      <span class="pop-name">💪 徳川吉宗（1684〜1751）</span>
+      <span class="pop-body">紀伊徳川家出身の8代将軍です。幕府財政の立て直しを目指して「享保の改革」を行いました。庶民の意見を聞くため「目安箱」を設置したことでも有名です。</span>
+      <span class="pop-memo">💡 「暴れん坊将軍」のモデルです。実際に質素倹約を旨として自ら率先した、江戸時代でも特に人気の高い将軍です。</span>
+    </span></span>
+    は
+    <span class="blank" data-id="H">享保の改革<span class="pop-box">
+      <span class="pop-name">📋 享保の改革（1716〜1745年）</span>
+      <span class="pop-body">幕府財政の立て直しを目的とした改革です。年貢率の引き上げ・新田開発の奨励・倹約令・公事方御定書（裁判の基準）の制定などを行いました。</span>
+      <span class="pop-memo">💡 農民への増税（年貢率引き上げ）で収入を増やしましたが、農民一揆も増加しました。</span>
+    </span></span>
+    を行い、幕府財政の立て直しを図りました。庶民の意見を聞くために<span class="kw">目安箱<span class="pop-box">
+      <span class="pop-name">📬 目安箱</span>
+      <span class="pop-body">吉宗が江戸城門前に設置した投書箱です。身分に関係なく意見を提出できました。この意見をもとに小石川養生所（無料の病院）が設立されました。</span>
+      <span class="pop-memo">💡 「意見箱」という民主的な発想が江戸時代にあったのは驚きです。現代のパブリックコメント制度と同じ考え方です。</span>
+    </span></span>
+    を設置しました。</p>
+  <div class="key-point">⭐ <strong>享保の改革</strong>：年貢引き上げ・倹約令・目安箱・公事方御定書→ 幕府財政の一時的な立て直しに成功</div>
+
+  <button class="column-toggle" onclick="toggleCol(this)"><span class="arrow">▶</span>💡 江戸時代の「3大改革」とは何ですか？</button>
+  <div class="column-body">
+    <div class="col-row"><span class="col-icon">1️⃣</span><div><span class="col-label">享保の改革（吉宗・18世紀前半）</span>年貢率引き上げ・倹約・目安箱。「財政難を農民への増税で解決」という発想でした。</div></div>
+    <div class="col-row"><span class="col-icon">2️⃣</span><div><span class="col-label">寛政の改革（松平定信・18世紀末）</span>農村復興・旗本・御家人の借金帳消し・厳しい倹約令。「引き締め」路線でしたが厳しすぎて不評でした。「白河の清きに魚も棲みかねて もとの濁りの田沼恋しき」という狂歌が残っています。</div></div>
+    <div class="col-row"><span class="col-icon">3️⃣</span><div><span class="col-label">天保の改革（水野忠邦・19世紀前半）</span>株仲間の解散・厳しい倹約令。商人の反発を受けて2年で失敗に終わりました。</div></div>
+    <div class="col-row"><span class="col-icon">💡</span><div><span class="col-label">共通点</span>3つの改革はすべて「幕府財政の立て直し」が目的でしたが、いずれも根本的な解決には至りませんでした。江戸幕府の財政問題は解決不能だったのです。</div></div>
   </div>
-  <div class="word-bank-wrapper">
-    <div class="word-bank-title">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
-    <div class="word-bank" id="bank"></div>
+</div>
+
+<!-- ③ 田沼の政治 -->
+<div class="section">
+  <span class="section-label label-3">③ 田沼の政治と寛政の改革</span>
+  <h2>田沼意次と松平定信</h2>
+  <p>10代将軍家治のとき、老中
+    <span class="blank" data-id="I">田沼意次<span class="pop-box">
+      <span class="pop-name">💴 田沼意次（1719〜1788）</span>
+      <span class="pop-body">老中として商業を重視した政治を行いました。商人に株仲間（同業者組合）を結ばせて営業税を取り、貿易拡大・干拓事業なども行いました。</span>
+      <span class="pop-memo">💡 当時は「賄賂政治家」として批判されましたが、現代では「経済感覚に優れた先進的な政治家」と再評価されています。</span>
+    </span></span>
+    は商業を重視し、
+    <span class="kw">株仲間<span class="pop-box">
+      <span class="pop-name">🤝 株仲間</span>
+      <span class="pop-body">幕府が公認した商人・職人の同業者組合です。営業独占権を与える代わりに税を納めさせました。田沼意次が積極的に奨励しました。</span>
+      <span class="pop-memo">💡 現代の「業界団体」に似た組織です。独占を認める代わりに税収を確保するというビジネスライクな発想でした。</span>
+    </span></span>
+    を奨励して幕府収入を増やしました。その後、老中
+    <span class="blank" data-id="J">松平定信<span class="pop-box">
+      <span class="pop-name">📚 松平定信（1758〜1829）</span>
+      <span class="pop-body">白河藩主。田沼意次の失脚後、老中として「寛政の改革」を行いました。農村復興・旗本御家人の借金帳消し・厳しい倹約令などを実施しました。</span>
+      <span class="pop-memo">💡 あまりにも厳しい倹約・引き締め策に、庶民から「白河の清きに魚も棲みかねて もとの濁りの田沼恋しき」と皮肉られました。</span>
+    </span></span>
+    が
+    <span class="kw">寛政の改革<span class="pop-box">
+      <span class="pop-name">📋 寛政の改革（1787〜1793年）</span>
+      <span class="pop-body">松平定信が行った改革です。農村復興・旗本御家人の借金帳消し（棄捐令）・出版・風俗の取り締まりを実施しました。</span>
+      <span class="pop-memo">💡 「あまりにも厳しくて続かなかった」改革です。「清廉すぎる」政治は実際には支持されにくいことを歴史が示しています。</span>
+    </span></span>
+    を実施し、農村復興と引き締めを図りました。</p>
+  <div class="key-point">⭐ <strong>流れ</strong>：田沼意次（商業重視・株仲間奨励）→ 天明の飢饉・打ちこわし → 松平定信（寛政の改革・農村重視・引き締め）</div>
+</div>
+
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button onclick="startChallenge()">チャレンジ開始</button>
+      <button onclick="checkAnswers()">判定</button>
+      <button class="secondary" onclick="location.reload()">やり直す</button>
+      <button class="secondary" onclick="resetTimer()">時間リセット</button>
+      <button id="next-btn" disabled>この単元で完了 ✓</button>
+      <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
+    </div>
+    <div class="timer-info" id="timer-display">経過時間：---</div>
+    <div class="explain-box" id="explain-box">
+      ①元禄文化：芭蕉（俳諧）・西鶴（浮世草子）・近松（人形浄瑠璃）・菱川師宣（浮世絵）<br>
+      ②享保の改革：吉宗が年貢引き上げ・倹約・目安箱・公事方御定書<br>
+      ③田沼意次：株仲間奨励・商業重視 → 寛政の改革：松平定信が農村復興・引き締め
+    </div>
   </div>
-  <div class="controls">
-    <button class="start-btn" onclick="startChallenge()">チャレンジ開始</button>
-    <button class="check-btn" onclick="checkAnswers()">判定</button>
-    <button class="reset-btn" onclick="resetParagraph()">この段落をやり直す</button>
-    <button class="time-reset-btn" onclick="resetTimer()">時間リセット</button>
-    <button class="next-btn" id="next-btn" disabled>江戸時代 完了！</button>
-    <button class="explain-btn" onclick="toggleExplain()">【解説】を見る</button>
-  </div>
-  <div class="timer-info" id="timer">経過時間：---　（まだ記録がありません）</div>
-  <div class="explain-box" id="exp"><b>【解説】</b><br>元禄文化は5代将軍綱吉の時代に上方の町人が担い手となった活気ある文化です。18世紀以降は財政難が続き、享保の改革（吉宗）・田沼時代・寛政の改革（松平定信）と、三大改革が行われましたが、根本的な解決には至りませんでした。</div>
 </div>
 
 <script>
-  let selChip = null, timer = null, startTime = null;
-  const ansWords = ["徳川綱吉", "元禄文化", "松尾芭蕉", "井原西鶴", "近松門左衛門", "菱川師宣", "徳川吉宗", "享保の改革", "田沼意次", "松平定信", "寛政の改革"];
-
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => {
-      b.textContent = "？";
-      b.classList.add('waiting');
-      b.classList.remove('correct');
-      b.onclick = () => fillBlank(b);
+const WORD_TIPS={
+  "徳川綱吉":"5代将軍。朱子学を奨励し、「生類憐みの令」で犬を厚く保護しました。",
+  "元禄文化":"17世紀末〜18世紀初め、上方（京都・大阪）を中心とした町人文化です。",
+  "松尾芭蕉":"「奥の細道」で知られる俳諧（俳句）の大家です。「古池や…」が有名です。",
+  "井原西鶴":"大阪の町人出身の作家。武士・町人の生活を描いた浮世草子を書きました。",
+  "近松門左衛門":"人形浄瑠璃・歌舞伎の脚本家。「曽根崎心中」など義理・人情の作品が人気でした。",
+  "菱川師宣":"浮世絵の祖。「見返り美人図」が代表作で、浮世絵はヨーロッパ美術にも影響を与えました。",
+  "徳川吉宗":"8代将軍。紀伊徳川家出身で「享保の改革」を行い幕府財政を立て直しました。「暴れん坊将軍」のモデルです。",
+  "享保の改革":"吉宗が行った改革。年貢率引き上げ・倹約令・目安箱・公事方御定書の制定などを実施しました。",
+  "田沼意次":"老中として商業を重視。株仲間の奨励・貿易拡大などを行いましたが、賄賂政治とも批判されました。",
+  "松平定信":"老中として寛政の改革を実施。農村復興・倹約令を行いましたが厳しすぎて短命に終わりました。",
+};
+const answers={
+  "A":"徳川綱吉","B":"元禄文化","C":"松尾芭蕉","D":"井原西鶴",
+  "E":"近松門左衛門","F":"菱川師宣",
+  "G":"徳川吉宗","H":"享保の改革",
+  "I":"田沼意次","J":"松平定信"
+};
+let startTime,timerId,selectedChip=null;
+function renderBank(){
+  const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";
+  [...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{
+    const chip=document.createElement('div');chip.className='word-chip';
+    const label=document.createElement('span');label.textContent=word;chip.appendChild(label);
+    const tip=WORD_TIPS[word];
+    if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}
+    chip.addEventListener('click',()=>{
+      if(chip.classList.contains('used'))return;
+      document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));
+      selectedChip=chip;chip.classList.add('selected-chip');
     });
-    const bank = document.getElementById('bank');
-    bank.innerHTML = "";
-    const shuffled = [...ansWords].sort(() => Math.random() - 0.5);
-    shuffled.forEach(w => {
-      const chip = document.createElement("div");
-      chip.className = "word-chip";
-      chip.textContent = w;
-      chip.onclick = () => {
-        if (chip.classList.contains('used')) return;
-        if (selChip) selChip.classList.remove('selected');
-        selChip = chip;
-        chip.classList.add('selected');
-      };
-      bank.appendChild(chip);
-    });
-    startTime = Date.now();
-    if (timer) clearInterval(timer);
-    timer = setInterval(() => {
-      const s = Math.floor((Date.now() - startTime) / 1000);
-      document.getElementById('timer').textContent = `経過時間：${s}秒`;
-    }, 1000);
-    selChip = null;
-  }
-
-  function fillBlank(b) {
-    if (!selChip) return;
-    if (b.textContent !== "？") {
-      const oldVal = b.textContent;
-      const chips = document.querySelectorAll('.word-chip');
-      for (let c of chips) {
-        if (c.textContent === oldVal && c.classList.contains('used')) {
-          c.classList.remove('used');
-          break;
-        }
-      }
+    bank.appendChild(chip);
+  });
+}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{
+  blank.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(selectedChip){
+      const old=getBlankText(blank);
+      if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});
+      setBlankText(blank,getChipWord(selectedChip));
+      selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;
     }
-    b.textContent = selChip.textContent;
-    b.classList.remove('waiting');
-    selChip.classList.add('used');
-    selChip.classList.remove('selected');
-    selChip = null;
-  }
-
-  function checkAnswers() {
-    let ok = true;
-    document.querySelectorAll('.blank').forEach(b => {
-      if (b.textContent === b.getAttribute('data-ans')) {
-        b.classList.add('correct');
-      } else {
-        ok = false;
-        b.classList.remove('correct');
-      }
-    });
-    if (ok) {
-      clearInterval(timer);
-      document.getElementById('next-btn').disabled = false;
-      document.getElementById('next-btn').classList.add('active');
-      alert("全問正解！江戸時代の文化と改革をマスターしました。");
-    } else {
-      alert("間違いがあります。もう一度見直してみましょう。");
-    }
-  }
-
-  function resetParagraph() { location.reload(); }
-  function resetTimer() { clearInterval(timer); document.getElementById('timer').textContent = "経過時間：---"; }
-  function toggleExplain() { const e = document.getElementById('exp'); e.style.display = e.style.display === 'block' ? 'none' : 'block'; }
+  });
+});
+function toggleCol(btn){btn.classList.toggle('open');btn.nextElementSibling.classList.toggle('open');}
+function startChallenge(){
+  document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});
+  renderBank();selectedChip=null;startTime=Date.now();
+  if(timerId)clearInterval(timerId);
+  timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);
+}
+function checkAnswers(){
+  let ok=true;
+  document.querySelectorAll('.blank').forEach(b=>{
+    if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');
+    else{ok=false;b.classList.remove('correct');}
+  });
+  if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！江戸時代の文化と改革をマスターしました。");}
+  else alert("間違いがあります。もう一度見直してみましょう。");
+}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
 </script>
-
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['edo4'] = prog['edo4'] || {};
-      prog['edo4'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
 </body>
 </html>

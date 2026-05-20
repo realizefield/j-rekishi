@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：江戸時代④ 過去問チェック</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:120px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:24px;color:#2c1800}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#5c3d00;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .nav-menu{display:flex;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+  .nav-menu a{text-decoration:none;color:#5c3d00;padding:8px 12px;border:1px solid #5c3d00;border-radius:20px;font-size:14px}
+  .nav-menu a.current{background:#5c3d00;color:#fff;font-weight:bold}
+  .score-bar{background:#fff;border:2px solid #3d2b00;border-radius:10px;padding:12px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .score-label{font-weight:bold;color:#3d2b00;font-size:15px}.score-val{font-size:22px;font-weight:bold;color:#a0522d}
+  .progress-wrap{flex:1;min-width:160px;background:#eee;border-radius:20px;height:12px;overflow:hidden}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#a0522d,#d4831a);border-radius:20px;transition:width 0.4s}
+  .reset-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer}
+  .section-header{display:flex;align-items:center;gap:10px;margin:28px 0 12px}
+  .section-badge{background:#3d2b00;color:#fff;border-radius:20px;padding:4px 16px;font-size:13px;font-weight:bold}
+  .section-title{font-size:17px;font-weight:bold;color:#2c1800}
+  .q-card{background:#fff;border-radius:10px;border:2px solid #ddd;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s}
+  .q-card.answered-ok{border-color:#27ae60}.q-card.answered-ng{border-color:#e74c3c}
+  .q-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .q-num{background:#3d2b00;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:bold}
+  .q-pref{background:#e8d5b0;color:#5c3d00;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:bold}
+  .q-type-badge{border-radius:6px;padding:2px 9px;font-size:11px;font-weight:bold}
+  .badge-4{background:#1a6fa8;color:#fff}.badge-ox{background:#8e44ad;color:#fff}.badge-write{background:#c0392b;color:#fff}
+  .freq-s{background:#c0392b;color:#fff;border-radius:8px;padding:1px 7px;font-size:11px;font-weight:bold}
+  .freq-a{background:#e67e22;color:#fff;border-radius:8px;padding:1px 7px;font-size:11px;font-weight:bold}
+  .q-text{font-size:16px;line-height:2;margin-bottom:14px;color:#222}
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:600px){.choices{grid-template-columns:1fr}}
+  .choice-btn{background:#f5f0e8;border:2px solid #c9b89a;border-radius:8px;padding:10px 14px;font-size:14px;cursor:pointer;text-align:left;transition:0.15s;line-height:1.6}
+  .choice-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .choice-btn:disabled{cursor:default}
+  .choice-btn.selected-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35;font-weight:bold}
+  .choice-btn.selected-ng{background:#fadbd8;border-color:#e74c3c;color:#7b241c;font-weight:bold}
+  .ox-wrap{display:flex;gap:16px;margin-top:4px}
+  .ox-btn{flex:1;padding:14px;border-radius:10px;border:2px solid #c9b89a;background:#f5f0e8;font-size:28px;cursor:pointer;transition:0.15s;text-align:center}
+  .ox-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .ox-btn:disabled{cursor:default}
+  .ox-btn.selected-ok{background:#d5f5e3;border-color:#27ae60}
+  .ox-btn.selected-ng{background:#fadbd8;border-color:#e74c3c}
+  .write-input{width:100%;box-sizing:border-box;padding:10px 14px;border:2px solid #c9b89a;border-radius:8px;font-size:15px;font-family:"Meiryo",sans-serif;min-height:52px;resize:vertical}
+  .write-input:focus{outline:none;border-color:#a0522d}
+  .write-input:disabled{background:#f5f5f5}
+  .write-check-btn{margin-top:8px;background:#3d2b00;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:14px;font-weight:bold;cursor:pointer}
+  .feedback{display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:14px;line-height:1.85}
+  .feedback.ok{background:#eafaf1;border-left:4px solid #27ae60;color:#1a5c35}
+  .feedback.ng{background:#fdf3f0;border-left:4px solid #e74c3c;color:#7b241c}
+  .feedback.show{display:block}
+  .finish-banner{display:none;background:linear-gradient(135deg,#3d2b00,#a0522d);color:#fff;border-radius:12px;padding:28px;text-align:center;margin-top:28px}
+  .finish-banner h2{margin:0 0 8px;font-size:22px}
+  .finish-score{font-size:42px;font-weight:bold;color:#ffd700;margin:8px 0}
+  .finish-msg{font-size:15px;margin-bottom:16px}
+  .finish-btn{background:#fff;color:#3d2b00;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:bold;cursor:pointer;margin:4px}
+  .finish-btn:hover{background:#fff3e0}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="edo_index.html">← 単元一覧に戻る</a>
+<h1>🎭 江戸時代④ 過去問チェック</h1>
+<div class="nav-menu">
+  <a href="edo4.html">④ 元禄文化と改革（学習）</a>
+  <a href="edo4_drill.html">④ 確認ドリル</a>
+  <a href="edo4_check.html" class="current">④ 過去問チェック</a>
+</div>
+<div class="score-bar">
+  <span class="score-label">正解数：</span>
+  <span class="score-val" id="score-val">0 / 17</span>
+  <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  <button class="reset-btn" onclick="location.reload()">🔄 やり直す</button>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 1</span><span class="section-title">元禄文化</span></div>
+<div class="q-card" id="q1"><div class="q-meta"><span class="q-num">Q1</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">岐阜県</span><span class="freq-a">○</span></div>
+  <div class="q-text">17世紀末〜18世紀初め、京都・大阪を中心に経済力をもった町人を担い手とする文化が栄えた。この文化を何というか。</div>
+  <div><input class="write-input" id="w1" placeholder="答えを入力してください"><br><button class="write-check-btn" onclick="cw('q1','w1',['元禄文化','元禄'],'元禄文化。「元禄」という年号からこの名前がついています。上方の町人文化で、浮世絵・俳諧・人形浄瑠璃などが発展しました。')">答え合わせ</button></div>
+  <div class="feedback" id="q1-fb"></div>
+</div>
+<div class="q-card" id="q2"><div class="q-meta"><span class="q-num">Q2</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">奈良県</span><span class="freq-a">○</span></div>
+  <div class="q-text">元禄文化の特色を、中心となった地域に触れながら簡潔に書け。</div>
+  <div><textarea class="write-input" id="w2" rows="2" placeholder="答えを入力してください"></textarea><br><button class="write-check-btn" onclick="cw('q2','w2',['上方','町人'],'上方（京都・大阪）を中心に、経済力を持った町人を担い手とする文化です。')">答え合わせ</button></div>
+  <div class="feedback" id="q2-fb"></div>
+</div>
+<div class="q-card" id="q3"><div class="q-meta"><span class="q-num">Q3</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">長崎県</span><span class="freq-a">○</span></div>
+  <div class="q-text">「閑かさや岩にしみ入る蝉の声」は「奥の細道」を著し俳諧を芸術の域まで高めた人物の句である。この人物の名を答えよ。</div>
+  <div><input class="write-input" id="w3" placeholder="答えを入力してください"><br><button class="write-check-btn" onclick="cw('q3','w3',['松尾芭蕉','芭蕉'],'松尾芭蕉。「古池や蛙飛び込む水の音」も有名です。連歌から分かれた俳諧に新しい作風を取り入れました。')">答え合わせ</button></div>
+  <div class="feedback" id="q3-fb"></div>
+</div>
+<div class="q-card" id="q4"><div class="q-meta"><span class="q-num">Q4</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">富山県・徳島県</span><span class="freq-a">○</span></div>
+  <div class="q-text">①人形浄瑠璃の台本作者として義理と人情の世界を描いた人物は誰か。②大阪の町人で当時の世相や人々の暮らしを浮世草子という小説に描いた人物は誰か。</div>
+  <div><input class="write-input" id="w4a" placeholder="①の答え" style="margin-bottom:6px"><input class="write-input" id="w4b" placeholder="②の答え"><br><button class="write-check-btn" onclick="cw2('q4','w4a','w4b',['近松'],['井原西鶴','西鶴'],'①近松門左衛門：「曽根崎心中」などで義理と人情を描きました。②井原西鶴：「日本永代蔵」などの浮世草子を書いた大阪の作家です。')">答え合わせ</button></div>
+  <div class="feedback" id="q4-fb"></div>
+</div>
+<div class="q-card" id="q5"><div class="q-meta"><span class="q-num">Q5</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">大分県</span><span class="freq-a">○</span></div>
+  <div class="q-text">美人画や風景画など町人の風俗を題材とし、後にヨーロッパ絵画にも影響を与えた絵画のジャンルを何というか。</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q5',false)">大和絵</button>
+    <button class="choice-btn" onclick="a4(this,'q5',true)">浮世絵</button>
+    <button class="choice-btn" onclick="a4(this,'q5',false)">水墨画</button>
+    <button class="choice-btn" onclick="a4(this,'q5',false)">装飾画</button>
+  </div>
+  <div class="feedback" id="q5-fb"></div>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 2</span><span class="section-title">享保の改革・田沼の政治</span></div>
+<div class="q-card" id="q6"><div class="q-meta"><span class="q-num">Q6</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">千葉県改</span><span class="freq-a">○</span></div>
+  <div class="q-text">①徳川吉宗が行った改革を何というか。②吉宗が庶民の意見を聞くために設置した箱を何というか。</div>
+  <div><input class="write-input" id="w6a" placeholder="①の答え" style="margin-bottom:6px"><input class="write-input" id="w6b" placeholder="②の答え"><br><button class="write-check-btn" onclick="cw2('q6','w6a','w6b',['享保'],['目安箱'],'①享保の改革②目安箱。目安箱への意見をもとに小石川養生所（無料の病院）が設立されました。現代のパブリックコメント制度と同じ発想です。')">答え合わせ</button></div>
+  <div class="feedback" id="q6-fb"></div>
+</div>
+<div class="q-card" id="q7"><div class="q-meta"><span class="q-num">Q7</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">愛知県</span><span class="freq-a">○</span></div>
+  <div class="q-text">「徳川綱吉は、質を落とした金貨・銀貨を大量に発行することで幕府の財政難を切り抜けようとした。また、（X）」。Xに当てはまるものを選べ。</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q7',false)">新田の開発をすすめ年貢率を引き上げるとともに公事方御定書を制定した</button>
+    <button class="choice-btn" onclick="a4(this,'q7',false)">農民を故郷に帰すなど農村の立て直しを目指し旗本・御家人の借金を帳消しにした</button>
+    <button class="choice-btn" onclick="a4(this,'q7',false)">商工業者が株仲間を結ぶことをすすめ長崎での貿易を拡大したがわいろがさかんになった</button>
+    <button class="choice-btn" onclick="a4(this,'q7',true)">儒学をさかんにして政治の引き締めを行う一方、生類憐みの令という動物愛護令を出した</button>
+  </div>
+  <div class="feedback" id="q7-fb"></div>
+</div>
+<div class="q-card" id="q8"><div class="q-meta"><span class="q-num">Q8</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">福井県</span><span class="freq-a">○</span></div>
+  <div class="q-text">江戸幕府が朱子学を中心に儒学を奨励した理由として正しいものはどれか。</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q8',false)">西洋の科学技術を取り入れるため</button>
+    <button class="choice-btn" onclick="a4(this,'q8',true)">身分秩序を重視する学問であったから</button>
+    <button class="choice-btn" onclick="a4(this,'q8',false)">農民の生産性を上げるため</button>
+    <button class="choice-btn" onclick="a4(this,'q8',false)">朝廷の権威を高めるため</button>
+  </div>
+  <div class="feedback" id="q8-fb"></div>
+</div>
+<div class="q-card" id="q9"><div class="q-meta"><span class="q-num">Q9</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">岐阜県改</span><span class="freq-a">○</span></div>
+  <div class="q-text">徳川家光は参勤交代の制度を定めた。この制度が各藩に与えた影響を、「財政」という語を使って簡潔に書け。</div>
+  <div><textarea class="write-input" id="w9" rows="2" placeholder="答えを入力してください"></textarea><br><button class="write-check-btn" onclick="cw('q9','w9',['財政','負担'],'参勤交代による旅費や江戸での経費が藩の財政にとって大きな負担となりました。')">答え合わせ</button></div>
+  <div class="feedback" id="q9-fb"></div>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 3</span><span class="section-title">寛政の改革・総合</span></div>
+<div class="q-card" id="q10"><div class="q-meta"><span class="q-num">Q10</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">愛媛県</span><span class="freq-a">○</span></div>
+  <div class="q-text">低くなっていた貨幣の質を元に戻した人物を次から選べ。（徳川綱吉／新井白石／徳川吉宗／田沼意次）</div>
+  <div><input class="write-input" id="w10" placeholder="答えを入力してください"><br><button class="write-check-btn" onclick="cw('q10','w10',['新井白石','白石'],'新井白石。6代将軍・家宣に仕えた朱子学者で「正徳の治」を行いました。綱吉が落とした貨幣の質を元に戻して物価の安定を図りました。')">答え合わせ</button></div>
+  <div class="feedback" id="q10-fb"></div>
+</div>
+<div class="q-card" id="q11"><div class="q-meta"><span class="q-num">Q11</span><span class="q-type-badge badge-ox">○×</span><span class="q-pref">補充問題</span></div>
+  <div class="q-text">田沼意次は商業を重視し株仲間を奨励したが、わいろ政治とも批判された。一方、現代では経済感覚に優れた先進的な政治家として再評価されている。</div>
+  <div class="ox-wrap"><button class="ox-btn" onclick="aOX(this,'q11',true)">○</button><button class="ox-btn" onclick="aOX(this,'q11',false)">×</button></div>
+  <div class="feedback" id="q11-fb"></div>
+</div>
+<div class="q-card" id="q12"><div class="q-meta"><span class="q-num">Q12</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">愛媛県</span><span class="freq-a">○</span></div>
+  <div class="q-text">享保の改革を行ったのは何代将軍か。</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q12',false)">5代将軍（徳川綱吉）</button>
+    <button class="choice-btn" onclick="a4(this,'q12',false)">6代将軍（徳川家宣）</button>
+    <button class="choice-btn" onclick="a4(this,'q12',false)">7代将軍（徳川家継）</button>
+    <button class="choice-btn" onclick="a4(this,'q12',true)">8代将軍（徳川吉宗）</button>
+  </div>
+  <div class="feedback" id="q12-fb"></div>
+</div>
+<div class="q-card" id="q13"><div class="q-meta"><span class="q-num">Q13</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">福井県改</span><span class="freq-a">○</span></div>
+  <div class="q-text">松尾芭蕉は、和歌の上の句と下の句を別の人が次々によむ（①）から分かれた（②）に新しい作風を取り入れた。①②に入る語をそれぞれ答えよ。</div>
+  <div><input class="write-input" id="w13a" placeholder="①の答え" style="margin-bottom:6px"><input class="write-input" id="w13b" placeholder="②の答え"><br><button class="write-check-btn" onclick="cw2('q13','w13a','w13b',['連歌'],['俳諧','俳句'],'①連歌②俳諧（俳句）。連歌から発展した俳諧に芭蕉が新しい芸術的な作風を取り入れ、「俳聖」と呼ばれるまでになりました。')">答え合わせ</button></div>
+  <div class="feedback" id="q13-fb"></div>
+</div>
+<div class="q-card" id="q14"><div class="q-meta"><span class="q-num">Q14</span><span class="q-type-badge badge-ox">○×</span><span class="q-pref">補充問題</span></div>
+  <div class="q-text">江戸時代の3大改革（享保・寛政・天保）はいずれも幕府財政の根本的な解決には至らず、すべて短命に終わった。</div>
+  <div class="ox-wrap"><button class="ox-btn" onclick="aOX(this,'q14',true)">○</button><button class="ox-btn" onclick="aOX(this,'q14',false)">×</button></div>
+  <div class="feedback" id="q14-fb"></div>
+</div>
+<div class="q-card" id="q15"><div class="q-meta"><span class="q-num">Q15</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">宮城県</span><span class="freq-a">○</span></div>
+  <div class="q-text">江戸幕府は社会を安定させようと儒教を重んじた。その中でも身分秩序を特に重視した（X）学が重んじられた。Xに適語を入れよ。</div>
+  <div><input class="write-input" id="w15" placeholder="答えを入力してください"><br><button class="write-check-btn" onclick="cw('q15','w15',['朱子'],'朱子（朱子学）。上下関係・身分秩序を重視する学問で、幕府の支配体制に都合がよかったため奨励されました。')">答え合わせ</button></div>
+  <div class="feedback" id="q15-fb"></div>
+</div>
+<div class="q-card" id="q16"><div class="q-meta"><span class="q-num">Q16</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">愛媛県改</span><span class="freq-a">○</span></div>
+  <div class="q-text">寛政の改革を行った老中は誰か。</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q16',false)">新井白石</button>
+    <button class="choice-btn" onclick="a4(this,'q16',false)">田沼意次</button>
+    <button class="choice-btn" onclick="a4(this,'q16',true)">松平定信</button>
+    <button class="choice-btn" onclick="a4(this,'q16',false)">水野忠邦</button>
+  </div>
+  <div class="feedback" id="q16-fb"></div>
+</div>
+<div class="q-card" id="q17"><div class="q-meta"><span class="q-num">Q17</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">補充問題</span></div>
+  <div class="q-text">元禄文化の担い手として正しい人物と作品の組み合わせを一つ答えよ。（例：〇〇→〇〇）</div>
+  <div><textarea class="write-input" id="w17" rows="2" placeholder="例：松尾芭蕉→奥の細道"></textarea><br><button class="write-check-btn" onclick="cw('q17','w17',['松尾芭蕉','芭蕉','井原西鶴','西鶴','近松','菱川'],'正解例：松尾芭蕉→奥の細道（俳諧）／井原西鶴→日本永代蔵（浮世草子）／近松門左衛門→曽根崎心中（人形浄瑠璃）／菱川師宣→見返り美人図（浮世絵）')">答え合わせ</button></div>
+  <div class="feedback" id="q17-fb"></div>
+</div>
+
+<div class="finish-banner" id="finish-banner">
+  <h2>🎉 過去問チェック完了！</h2>
+  <div class="finish-score" id="finish-score"></div>
+  <div class="finish-msg" id="finish-msg"></div>
+  <button class="finish-btn" onclick="location.reload()">🔄 もう一度</button>
+  <button class="finish-btn" onclick="location.href='index.html'">単元一覧へ戻る</button>
+</div>
+
+<script>
+const TOTAL=17; let answered={};
+function upd(){const ok=Object.values(answered).filter(v=>v).length;const done=Object.keys(answered).length;document.getElementById('score-val').textContent=`${ok} / ${TOTAL}`;document.getElementById('progress-bar').style.width=`${done/TOTAL*100}%`;if(done===TOTAL)setTimeout(()=>fin(ok),400);}
+function fin(ok){const b=document.getElementById('finish-banner');b.style.display='block';document.getElementById('finish-score').textContent=`${ok} / ${TOTAL} 問正解`;document.getElementById('finish-msg').textContent=ok===TOTAL?'🏆 満点！':ok>=14?'⭐ すばらしい！':ok>=10?'👍 よくできました。':'📖 学習ページで復習しましょう。';b.scrollIntoView({behavior:'smooth'});}
+const FB4={q5:'浮世絵は町人の風俗を描いたジャンルです。後にモネ・ゴッホなどヨーロッパの印象派に大きな影響を与えました。',q7:'アは吉宗の享保の改革、イは定信の寛政の改革、ウは田沼意次の政治の記述です。',q8:'朱子学は上下関係・身分秩序を重視する学問で、幕府の支配体制を正当化するのに都合がよかったのです。',q12:'徳川吉宗は8代将軍で御三家（紀伊徳川家）の出身です。享保の改革（1716〜1745）を行いました。',q16:'松平定信（白河藩主）が寛政の改革（1787〜1793）を行いました。水野忠邦は天保の改革（1841〜）です。'};
+const FBOX={q11:'○ 正解。田沼意次は当時「賄賂政治家」と批判されましたが、現代では「商業振興・経済政策に優れた先進的な政治家」として再評価されています。',q14:'○ 正解。享保（1745年終了）・寛政（1793年終了）・天保（1843年終了）の3つはいずれも根本的な解決に至りませんでした。'};
+function a4(btn,qId,ok){if(answered[qId]!==undefined)return;const card=document.getElementById(qId);card.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);const fb=document.getElementById(qId+'-fb');if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FB4[qId]||''}`;answered[qId]=true;}else{btn.classList.add('selected-ng');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FB4[qId]||''}`;answered[qId]=false;}upd();}
+function aOX(btn,qId,ok){if(answered[qId]!==undefined)return;const card=document.getElementById(qId);card.querySelectorAll('.ox-btn').forEach(b=>b.disabled=true);const fb=document.getElementById(qId+'-fb');if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FBOX[qId]||''}`;answered[qId]=true;}else{btn.classList.add('selected-ng');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FBOX[qId]||''}`;answered[qId]=false;}upd();}
+function cw(qId,inputId,kws,exp){if(answered[qId]!==undefined)return;const el=document.getElementById(inputId);const val=el.value.trim();if(!val){alert('答えを入力してください。');return;}el.disabled=true;el.parentElement.querySelector('button').disabled=true;const ok=kws.some(k=>val.includes(k));const card=document.getElementById(qId);const fb=document.getElementById(qId+'-fb');if(ok){card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${exp}`;answered[qId]=true;}else{card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${exp}`;answered[qId]=false;}upd();}
+function cw2(qId,idA,idB,kwsA,kwsB,exp){if(answered[qId]!==undefined)return;const a=document.getElementById(idA),b=document.getElementById(idB);if(!a.value.trim()||!b.value.trim()){alert('両方入力してください。');return;}a.disabled=true;b.disabled=true;a.parentElement.querySelector('button').disabled=true;const ok=kwsA.some(k=>a.value.includes(k))&&kwsB.some(k=>b.value.includes(k));const card=document.getElementById(qId);const fb=document.getElementById(qId+'-fb');if(ok){card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${exp}`;answered[qId]=true;}else{card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${exp}`;answered[qId]=false;}upd();}
+</script>
+</body>
+</html>

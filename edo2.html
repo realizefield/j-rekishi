@@ -2,159 +2,267 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>歴史学習：江戸時代 ② 鎖国と外交</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：江戸時代② 鎖国と外交</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 950px; margin: 20px auto; line-height: 1.8; background-color: #f4f7f9; color: #333; }
-  .container { background-color: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-  h1 { text-align: center; color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-  .nav-menu { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .nav-menu a { text-decoration: none; color: #1976d2; padding: 8px 12px; border: 1px solid #1976d2; border-radius: 20px; font-size: 14px; }
-  .nav-menu a.current { background: #1976d2; color: #fff; font-weight: bold; }
-  .question-text { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 15px; font-size: 18px; line-height: 2.2; border: 1px solid #eee; }
-  .blank { display: inline-block; min-width: 110px; border-bottom: 2px solid #666; margin: 0 4px; text-align: center; color: #e67e22; font-weight: bold; cursor: pointer; transition: 0.2s; }
-  .blank.waiting { color: transparent; background-color: #eee; border-radius: 4px; }
-  .blank.correct { background-color: #ccf; border-bottom-color: #339; color: #339; }
-  .word-bank-wrapper { margin-top: 15px; }
-  .word-bank-title { font-weight: bold; margin-bottom: 8px; }
-  .word-bank { border: 1px solid #ccc; border-radius: 8px; padding: 15px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fafafa; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #f5f5f5; cursor: pointer; user-select: none; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; cursor: default; pointer-events: none; }
-  .word-chip.selected { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .controls { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-  button { padding: 10px 18px; border-radius: 8px; border: none; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.2s; }
-  .start-btn { background-color: #1976d2; }
-  .check-btn { background-color: #1976d2; }
-  .reset-btn { background-color: #666; }
-  .time-reset-btn { background-color: #666; }
-  .next-btn { background-color: #90caf9; }
-  .next-btn.active { background-color: #1976d2; }
-  .explain-btn { background-color: #666; }
-  .timer-info { margin-top: 15px; padding: 10px 15px; font-size: 16px; border: 1px solid #1976d2; border-radius: 6px; display: inline-block; background-color: #fff; min-width: 320px; }
-  .explain-box { display: none; margin-top: 15px; padding: 15px; border-left: 5px solid #1976d2; background-color: #f0f4ff; line-height: 1.6; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:24px;color:#2c1800}
+  h2{margin-top:20px;margin-bottom:8px;font-size:19px;border-left:5px solid #3d2b00;padding-left:10px;color:#2c1800}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#5c3d00;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#3d2800}
+  .nav-menu{display:flex;justify-content:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .nav-menu a{text-decoration:none;color:#5c3d00;padding:8px 12px;border:1px solid #5c3d00;border-radius:20px;font-size:14px}
+  .nav-menu a.current{background:#5c3d00;color:#fff;font-weight:bold}
 
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #3d2b00;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#a0522d;background-color:#fff3e0;box-shadow:0 0 0 2px #ffcc80}
 
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px}
+  .label-1{background:#3d2b00}.label-2{background:#5c1a1a}.label-3{background:#1a3050}
+  .blank{display:inline-block;min-width:110px;min-height:26px;border-bottom:2px solid #3d2b00;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#3d2b00;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .key-point{background:#fff8e1;border-left:5px solid #3d2b00;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:15px}
+  .key-point strong{color:#3d2b00}
+
+  /* ホバーポップ */
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #8b5e00;cursor:help;color:#2c1800;font-weight:bold;vertical-align:middle}
+  .kw > .pop-box, .blank > .pop-box{
+    display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);
+    width:270px;background:#2c1800;color:#fff;border-radius:10px;
+    padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none;
+  }
+  .kw > .pop-box::after, .blank > .pop-box::after{
+    content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+    border:7px solid transparent;border-top-color:#2c1800;
+  }
+  .kw:hover > .pop-box, .blank:hover > .pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+
+  .column-toggle{display:flex;align-items:center;gap:8px;background:#fffbe6;border:2px solid #b8860b;border-radius:8px;padding:10px 14px;cursor:pointer;margin-top:14px;color:#5c3d00;font-size:14px;font-weight:bold;width:100%;text-align:left;}
+  .column-toggle:hover{background:#fff3c0}
+  .column-toggle .arrow{transition:transform 0.25s;font-size:12px;flex-shrink:0}
+  .column-toggle.open .arrow{transform:rotate(90deg)}
+  .column-body{display:none;margin-top:6px;padding:14px 18px;background:#fffbe6;border-left:4px solid #b8860b;border-radius:0 8px 8px 8px;font-size:14px;line-height:2.0}
+  .column-body.open{display:block}
+  .col-row{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+  .col-icon{font-size:18px;flex-shrink:0;margin-top:3px}
+  .col-label{font-weight:bold;color:#5c3d00;margin-right:4px;white-space:nowrap}
+
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#3d2b00;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #1a1200}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#a0522d;box-shadow:0 3px 0 #6b3520}
+  button#next-btn:disabled{background-color:#d4a574;box-shadow:none;cursor:default}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #3d2b00;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #3d2b00;background-color:#fff8e1;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>江戸時代</h1>
-  <div class="nav-menu">
-    <a href="edo1.html">① 幕府の成立と支配</a>
-    <a href="edo2.html" class="current">② 鎖国と外交</a>
-    <a href="edo3.html">③ 産業と身分制度</a>
-    <a href="edo4.html">④ 元禄文化と改革</a>
+
+<a class="back-to-index" href="edo_index.html">← 単元一覧に戻る</a>
+<h1>🏯 江戸時代② 鎖国と外交</h1>
+
+<div class="nav-menu">
+  <a href="edo1.html">① 幕府の成立と支配</a>
+  <a href="edo2.html" class="current">② 鎖国と外交</a>
+  <a href="edo3.html">③ 産業と身分制度</a>
+  <a href="edo4.html">④ 元禄文化と改革</a>
+</div>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ① 朱印船貿易と禁教令 -->
+<div class="section">
+  <span class="section-label label-1">① 朱印船貿易と禁教令</span>
+  <h2>海外貿易からキリスト教禁止へ</h2>
+  <p>徳川家康は東南アジア諸国に日本船の渡航を認める
+    <span class="blank" data-id="A">朱印状<span class="pop-box">
+      <span class="pop-name">📜 朱印状</span>
+      <span class="pop-body">将軍の朱い印鑑（朱印）が押された海外渡航の許可証です。これを持つ船を「朱印船」と呼び、東南アジアとの貿易が盛んに行われました。</span>
+      <span class="pop-memo">💡 当時の日本は積極的に海外と交易していたのです。鎖国前の話です。</span>
+    </span></span>
+    を与え、<span class="kw">朱印船貿易<span class="pop-box">
+      <span class="pop-name">⛵ 朱印船貿易</span>
+      <span class="pop-body">17世紀初め、東南アジア各地（タイ・ベトナムなど）と行われた貿易です。中国産の生糸を輸入し、銀を輸出しました。東南アジアには「日本町」も生まれました。</span>
+      <span class="pop-memo">💡 鎖国後、日本町は急速に衰退しました。</span>
+    </span></span>
+    を奨励しました。しかしキリスト教の広まりを恐れた幕府は、次第に禁教政策を強めていきます。</p>
+  <div class="key-point">⭐ <strong>背景</strong>：貿易は奨励しつつも、キリスト教が幕府支配への反抗心につながることを恐れて禁教へ転換しました。</div>
+
+  <button class="column-toggle" onclick="toggleCol(this)"><span class="arrow">▶</span>💡 なぜキリスト教をそれほど怖れたのですか？</button>
+  <div class="column-body">
+    <div class="col-row"><span class="col-icon">❓</span><div><span class="col-label">理由</span>キリスト教では「神がすべての人間の上に立つ」と教えます。これは「将軍が頂点」という幕府の支配体制と真っ向から対立します。農民や武士が入信すると「神の命令が将軍の命令より上」になってしまいます。</div></div>
+    <div class="col-row"><span class="col-icon">🌍</span><div><span class="col-label">外国の脅威</span>スペイン・ポルトガルは「まず宣教師を送り、キリスト教を広め、次に軍隊で植民地にする」という手口で世界中を支配していました。幕府はこれを知っていたのです。</div></div>
+    <div class="col-row"><span class="col-icon">🌊</span><div><span class="col-label">影響</span>禁教後も「隠れキリシタン」として約250年間、信仰が密かに受け継がれました。</div></div>
   </div>
-  <div class="question-text" id="quest">
-    徳川家康は、東南アジア諸国に日本船の渡航を認める <span class="blank" data-ans="朱印状">朱印状</span> を与え、 **朱印船貿易** を奨励しました。しかし、キリスト教の広まりを恐れた幕府は、次第に禁教政策を強めていきます。<br><br>
-    1637年、九州のキリシタンらが重い年貢に反対して <span class="blank" data-ans="島原・天草一揆">島原・天草一揆</span> を起こすと、幕府は禁教をさらに徹底しました。1639年にはポルトガル船の来航を禁止し、1641年にはオランダ商館を長崎の <span class="blank" data-ans="出島">出島</span> に移しました。これにより、日本人の海外渡航や帰国を禁じ、外国との窓口を制限する <span class="blank" data-ans="鎖国">鎖国</span> の体制が完成しました。<br><br>
-    鎖国下でも、幕府は **オランダ** と中国（ **清** ）とは長崎で貿易を続けました。また、朝鮮とは対馬藩を介して、将軍の代わりごとに <span class="blank" data-ans="朝鮮通信使">朝鮮通信使</span> が来日しました。琉球王国（沖縄）は薩摩藩を通じて服属させ、蝦夷地（北海道）の **アイヌ** 人とは松前藩が交易を行いました。
+</div>
+
+<!-- ② 島原・天草一揆と鎖国の完成 -->
+<div class="section">
+  <span class="section-label label-2">② 島原・天草一揆と鎖国の完成</span>
+  <h2>鎖国体制の確立</h2>
+  <p>1637年、九州のキリシタンらが重い年貢に反対して
+    <span class="blank" data-id="B">島原・天草一揆<span class="pop-box">
+      <span class="pop-name">⚔️ 島原・天草一揆（1637〜38年）</span>
+      <span class="pop-body">長崎・熊本のキリシタン農民約3万7千人が蜂起しました。16歳の天草四郎を大将に原城に籠城し、幕府軍12万人と4か月間戦いましたが鎮圧されました。</span>
+      <span class="pop-memo">💡 この一揆が鎖国完成の直接のきっかけになりました。幕府はキリスト教の危険性を改めて思い知りました。</span>
+    </span></span>
+    を起こすと、幕府は禁教をさらに徹底しました。1639年にはポルトガル船の来航を禁止し、1641年にはオランダ商館を長崎の
+    <span class="blank" data-id="C">出島<span class="pop-box">
+      <span class="pop-name">🏝️ 出島</span>
+      <span class="pop-body">長崎港内に作られた扇形の人工島です。オランダ商館が移され、オランダ人はここから出ることを禁じられました。幕府が貿易と情報を完全管理しました。</span>
+      <span class="pop-memo">💡 オランダは毎年「オランダ風説書」でヨーロッパの最新情報を報告する義務がありました。これが後の蘭学の源です。</span>
+    </span></span>
+    に移しました。これにより
+    <span class="blank" data-id="D">鎖国<span class="pop-box">
+      <span class="pop-name">🔒 鎖国</span>
+      <span class="pop-body">日本人の海外渡航・帰国を禁じ、外国との交流を4か所の窓口に限定した体制です。約200年間続きました。</span>
+      <span class="pop-memo">💡 「完全な鎖国」ではありませんでした。4つの窓口（長崎・対馬・薩摩・松前）は開いたままでした。</span>
+    </span></span>
+    の体制が完成しました。</p>
+  <div class="key-point">⭐ <strong>流れ</strong>：島原・天草一揆（1637）→ ポルトガル船禁止（1639）→ 出島にオランダ商館移転（1641）→ 鎖国完成</div>
+
+  <button class="column-toggle" onclick="toggleCol(this)"><span class="arrow">▶</span>💡 鎖国の功罪とは何ですか？</button>
+  <div class="column-body">
+    <div class="col-row"><span class="col-icon">⭕</span><div><span class="col-label">良かった点</span>外国の軍事的脅威を遮断し、約200年の平和が続きました。独自の日本文化（元禄文化・化政文化）が花開きました。</div></div>
+    <div class="col-row"><span class="col-icon">❌</span><div><span class="col-label">問題点</span>ヨーロッパの産業革命・軍事技術の発展に完全に乗り遅れました。幕末にペリーの黒船（1853年）が来たとき、圧倒的な軍事力の差が露わになり日本は大混乱に陥りました。</div></div>
+    <div class="col-row"><span class="col-icon">💡</span><div><span class="col-label">実は鎖国≠完全に閉じた</span>幕府が「すべての対外交渉を管理・独占した」のが鎖国の本質です。4つの窓口を通じた交流は続いていました。</div></div>
   </div>
-  <div class="word-bank-wrapper">
-    <div class="word-bank-title">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
-    <div class="word-bank" id="bank"></div>
+</div>
+
+<!-- ③ 鎖国下の四つの窓口 -->
+<div class="section">
+  <span class="section-label label-3">③ 鎖国下の四つの窓口</span>
+  <h2>限定された外交関係</h2>
+  <p>鎖国下でも幕府は<span class="kw">オランダ・清（中国）<span class="pop-box">
+      <span class="pop-name">🇳🇱 オランダ・清との貿易（長崎）</span>
+      <span class="pop-body">オランダはプロテスタントで「布教をしない」と約束したため、唯一ヨーロッパとの貿易を許可されました。生糸・砂糖を輸入し、銅・銀を輸出しました。</span>
+      <span class="pop-memo">💡 スペイン・ポルトガルが禁止されたのに、オランダが許されたのは「宗教を持ち込まない」約束をしたからです。</span>
+    </span></span>
+    とは長崎で貿易を続けました。また、朝鮮とは<span class="kw">対馬藩<span class="pop-box">
+      <span class="pop-name">🇰🇷 対馬藩（朝鮮との窓口）</span>
+      <span class="pop-body">対馬藩（宗氏）が仲介役となり朝鮮との貿易・外交を担当しました。釜山に倭館が設置され、銀・銅を輸出し、生糸・朝鮮人参などを輸入しました。</span>
+      <span class="pop-memo">💡 対馬藩はこの独占貿易で潤いました。島の農業だけでは生活できないため、貿易は生命線でした。</span>
+    </span></span>
+    を介して、将軍の代替わりごとに
+    <span class="blank" data-id="E">朝鮮通信使<span class="pop-box">
+      <span class="pop-name">🚶 朝鮮通信使</span>
+      <span class="pop-body">将軍の代替わりごとに朝鮮から派遣された外交使節団です。500〜1000人規模の大行列で江戸まで来ました。「通信」は「信義を通じる」という意味です。</span>
+      <span class="pop-memo">💡 文化交流にも大きな役割を果たし、朝鮮の学問・芸術が日本に伝わりました。</span>
+    </span></span>
+    が来日しました。</p>
+  <ul style="margin:10px 0 12px 24px;line-height:2.8">
+    <li>長崎：<span class="kw">オランダ・清<span class="pop-box"><span class="pop-name">🇳🇱🇨🇳 長崎</span><span class="pop-body">唯一ヨーロッパ（オランダ）との貿易が許された窓口です。出島にオランダ商館、唐人屋敷に清の商人が置かれました。</span><span class="pop-memo">💡 幕府はここで海外情報を独占的に入手しました。</span></span></span>（直接貿易）</li>
+    <li>対馬藩：<span class="kw">朝鮮<span class="pop-box"><span class="pop-name">🇰🇷 対馬（朝鮮との窓口）</span><span class="pop-body">対馬藩が仲介し、将軍の代替わりごとに朝鮮通信使が来日しました。</span><span class="pop-memo">💡 朝鮮通信使は将軍の権威を高める「見せ物」的役割もありました。</span></span></span>（朝鮮通信使の来日）</li>
+    <li>薩摩藩：<span class="kw">琉球王国<span class="pop-box"><span class="pop-name">🏝️ 琉球王国（薩摩の支配下）</span><span class="pop-body">1609年に薩摩藩に征服されました。表向きは独立国として清に朝貢しながら、実質は薩摩の支配下でした。</span><span class="pop-memo">💡 薩摩は琉球を通じた中国貿易で経済力を保ちました。これが幕末の倒幕運動の財政基盤の一つになりました。</span></span></span>（服属・貿易）</li>
+    <li>松前藩：<span class="kw">アイヌ<span class="pop-box"><span class="pop-name">🐻 アイヌ（蝦夷地）</span><span class="pop-body">松前藩がアイヌとの交易を独占しました。鮭・昆布・毛皮などを交換しましたが、不公平な取引が続きました。</span><span class="pop-memo">💡 1669年にアイヌの首長シャクシャインが大規模に蜂起しましたが鎮圧されました。以後、支配はさらに強まりました。</span></span></span>（蝦夷地との交易）</li>
+  </ul>
+  <div class="key-point">⭐ <strong>四つの窓口</strong>：長崎（オランダ・清）／対馬（朝鮮）／薩摩（琉球）／松前（アイヌ）</div>
+
+  <button class="column-toggle" onclick="toggleCol(this)"><span class="arrow">▶</span>💡 「四つの窓口」は何のためにあったのですか？</button>
+  <div class="column-body">
+    <div class="col-row"><span class="col-icon">🔒</span><div><span class="col-label">管理・独占</span>幕府が対外交渉をすべて独占するためです。大名が勝手に外国と取引して財力や武器を得ることを防ぎました。</div></div>
+    <div class="col-row"><span class="col-icon">📰</span><div><span class="col-label">情報収集</span>オランダから「オランダ風説書」を毎年提出させ、ヨーロッパの最新情勢を幕府だけが知ることができました。これが後の蘭学（西洋の学問）の発展につながりました。</div></div>
+    <div class="col-row"><span class="col-icon">💰</span><div><span class="col-label">利益の独占</span>貿易の利益はすべて幕府や特定の藩（対馬・薩摩・松前）に入りました。大名が独自に貿易して豊かになることを防ぎました。</div></div>
   </div>
-  <div class="controls">
-    <button class="start-btn" onclick="startChallenge()">チャレンジ開始</button>
-    <button class="check-btn" onclick="checkAnswers()">判定</button>
-    <button class="reset-btn" onclick="resetParagraph()">この段落をやり直す</button>
-    <button class="time-reset-btn" onclick="resetTimer()">時間リセット</button>
-    <button class="next-btn" id="next-btn" disabled>次の段落へ進む ▶</button>
-    <button class="explain-btn" onclick="toggleExplain()">【解説】を見る</button>
+</div>
+
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button onclick="startChallenge()">チャレンジ開始</button>
+      <button onclick="checkAnswers()">判定</button>
+      <button class="secondary" onclick="location.reload()">やり直す</button>
+      <button class="secondary" onclick="resetTimer()">時間リセット</button>
+      <button id="next-btn" onclick="location.href='edo3.html'" disabled>次の単元へ ▶</button>
+      <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
+    </div>
+    <div class="timer-info" id="timer-display">経過時間：---</div>
+    <div class="explain-box" id="explain-box">
+      ①キリスト教禁止：貿易奨励→キリスト教の危険性を警戒→禁教へ転換<br>
+      ②鎖国完成：島原・天草一揆（1637）→ポルトガル船禁止（1639）→出島に移転（1641）<br>
+      ③四つの窓口：長崎（オランダ・清）／対馬（朝鮮）／薩摩（琉球）／松前（アイヌ）
+    </div>
   </div>
-  <div class="timer-info" id="timer">経過時間：---　（まだ記録がありません）</div>
-  <div class="explain-box" id="exp"><b>【解説】</b><br>当初、幕府は朱印船貿易などで外交を広げていましたが、キリスト教の浸透を警戒して制限に転じました。島原・天草一揆の後、出島への窓口限定やポルトガル船の禁止により「鎖国」が完成しました。しかし、長崎、対馬、薩摩、松前の「四つの窓口」を通じて、外国との関係は維持されていました。</div>
 </div>
 
 <script>
-  let selChip = null, timer = null, startTime = null;
-  const ansWords = ["朱印状", "島原・天草一揆", "出島", "鎖国", "朝鮮通信使"];
+const WORD_TIPS={
+  "朱印状":"将軍の朱印が押された海外渡航許可証です。これを持つ船が朱印船貿易を展開しました。",
+  "島原・天草一揆":"1637〜38年に九州で起きたキリシタン・農民の大反乱です。16歳の天草四郎を大将に約3万7千人が参加しました。鎮圧後に鎖国が完成しました。",
+  "出島":"長崎に作られた扇形の人工島です。オランダ商館が置かれ、幕府が貿易と情報を管理しました。",
+  "鎖国":"日本人の海外渡航禁止・外国との交流を4か所の窓口に限定した体制です。約200年続きました。",
+  "朝鮮通信使":"将軍の代替わりごとに来日した朝鮮の外交使節団です。500〜1000人規模で江戸まで来ました。",
+};
+const answers={"A":"朱印状","B":"島原・天草一揆","C":"出島","D":"鎖国","E":"朝鮮通信使"};
 
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => {
-      b.textContent = "？";
-      b.classList.add('waiting');
-      b.classList.remove('correct');
-      b.onclick = () => fillBlank(b);
+let startTime, timerId, selectedChip=null;
+function renderBank(){
+  const bank=document.getElementById('word-bank');
+  bank.style.display="flex"; bank.innerHTML="";
+  [...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{
+    const chip=document.createElement('div'); chip.className='word-chip';
+    const label=document.createElement('span'); label.textContent=word; chip.appendChild(label);
+    const tip=WORD_TIPS[word];
+    if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}
+    chip.addEventListener('click',()=>{
+      if(chip.classList.contains('used'))return;
+      document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));
+      selectedChip=chip; chip.classList.add('selected-chip');
     });
-    const bank = document.getElementById('bank');
-    bank.innerHTML = "";
-    const shuffled = [...ansWords].sort(() => Math.random() - 0.5);
-    shuffled.forEach(w => {
-      const chip = document.createElement("div");
-      chip.className = "word-chip";
-      chip.textContent = w;
-      chip.onclick = () => {
-        if (chip.classList.contains('used')) return;
-        if (selChip) selChip.classList.remove('selected');
-        selChip = chip;
-        chip.classList.add('selected');
-      };
-      bank.appendChild(chip);
-    });
-    startTime = Date.now();
-    if (timer) clearInterval(timer);
-    timer = setInterval(() => {
-      const s = Math.floor((Date.now() - startTime) / 1000);
-      document.getElementById('timer').textContent = `経過時間：${s}秒`;
-    }, 1000);
-    selChip = null;
-  }
-
-  function fillBlank(b) {
-    if (!selChip) return;
-    if (b.textContent !== "？") {
-      const oldVal = b.textContent;
-      const chips = document.querySelectorAll('.word-chip');
-      for (let c of chips) {
-        if (c.textContent === oldVal && c.classList.contains('used')) {
-          c.classList.remove('used');
-          break;
-        }
-      }
+    bank.appendChild(chip);
+  });
+}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{
+  blank.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(selectedChip){
+      const old=getBlankText(blank);
+      if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});
+      setBlankText(blank,getChipWord(selectedChip));
+      selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip=null;
     }
-    b.textContent = selChip.textContent;
-    b.classList.remove('waiting');
-    selChip.classList.add('used');
-    selChip.classList.remove('selected');
-    selChip = null;
-  }
-
-  function checkAnswers() {
-    let ok = true;
-    document.querySelectorAll('.blank').forEach(b => {
-      if (b.textContent === b.getAttribute('data-ans')) {
-        b.classList.add('correct');
-      } else {
-        ok = false;
-        b.classList.remove('correct');
-      }
-    });
-    if (ok) {
-      clearInterval(timer);
-      document.getElementById('next-btn').disabled = false;
-      document.getElementById('next-btn').classList.add('active');
-      alert("全問正解！鎖国と江戸の外交をマスターしました。");
-    } else {
-      alert("間違いがあります。");
-    }
-  }
-
-  function resetParagraph() { location.reload(); }
-  function resetTimer() { clearInterval(timer); document.getElementById('timer').textContent = "経過時間：---"; }
-  function toggleExplain() { const e = document.getElementById('exp'); e.style.display = e.style.display === 'block' ? 'none' : 'block'; }
+  });
+});
+function toggleCol(btn){btn.classList.toggle('open');btn.nextElementSibling.classList.toggle('open');}
+function startChallenge(){
+  document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});
+  renderBank(); selectedChip=null; startTime=Date.now();
+  if(timerId)clearInterval(timerId);
+  timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);
+}
+function checkAnswers(){
+  let ok=true;
+  document.querySelectorAll('.blank').forEach(b=>{
+    if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');
+    else{ok=false;b.classList.remove('correct');}
+  });
+  if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！鎖国と江戸の外交をマスターしました。");}
+  else alert("間違いがあります。もう一度見直してみましょう。");
+}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
 </script>
-
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['edo2'] = prog['edo2'] || {};
-      prog['edo2'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
 </body>
 </html>

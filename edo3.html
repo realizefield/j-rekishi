@@ -2,161 +2,284 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>歴史学習：江戸時代 ③ 産業と身分制度</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：江戸時代③ 産業と身分制度</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 950px; margin: 20px auto; line-height: 1.8; background-color: #f4f7f9; color: #333; }
-  .container { background-color: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-  h1 { text-align: center; color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-  .nav-menu { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .nav-menu a { text-decoration: none; color: #1976d2; padding: 8px 12px; border: 1px solid #1976d2; border-radius: 20px; font-size: 14px; }
-  .nav-menu a.current { background: #1976d2; color: #fff; font-weight: bold; }
-  .question-text { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 15px; font-size: 18px; line-height: 2.2; border: 1px solid #eee; }
-  .blank { display: inline-block; min-width: 110px; border-bottom: 2px solid #666; margin: 0 4px; text-align: center; color: #e67e22; font-weight: bold; cursor: pointer; transition: 0.2s; }
-  .blank.waiting { color: transparent; background-color: #eee; border-radius: 4px; }
-  .blank.correct { background-color: #ccf; border-bottom-color: #339; color: #339; }
-  .word-bank-wrapper { margin-top: 15px; }
-  .word-bank-title { font-weight: bold; margin-bottom: 8px; }
-  .word-bank { border: 1px solid #ccc; border-radius: 8px; padding: 15px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fafafa; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #f5f5f5; cursor: pointer; user-select: none; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; cursor: default; pointer-events: none; }
-  .word-chip.selected { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .controls { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-  button { padding: 10px 18px; border-radius: 8px; border: none; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.2s; }
-  .start-btn { background-color: #1976d2; }
-  .check-btn { background-color: #1976d2; }
-  .reset-btn { background-color: #666; }
-  .time-reset-btn { background-color: #666; }
-  .next-btn { background-color: #90caf9; }
-  .next-btn.active { background-color: #1976d2; }
-  .explain-btn { background-color: #666; }
-  .timer-info { margin-top: 15px; padding: 10px 15px; font-size: 16px; border: 1px solid #1976d2; border-radius: 6px; display: inline-block; background-color: #fff; min-width: 320px; }
-  .explain-box { display: none; margin-top: 15px; padding: 15px; border-left: 5px solid #1976d2; background-color: #f0f4ff; line-height: 1.6; }
-
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:24px;color:#2c1800}
+  h2{margin-top:20px;margin-bottom:8px;font-size:19px;border-left:5px solid #3d2b00;padding-left:10px;color:#2c1800}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#5c3d00;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#3d2800}
+  .nav-menu{display:flex;justify-content:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .nav-menu a{text-decoration:none;color:#5c3d00;padding:8px 12px;border:1px solid #5c3d00;border-radius:20px;font-size:14px}
+  .nav-menu a.current{background:#5c3d00;color:#fff;font-weight:bold}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #3d2b00;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#a0522d;background-color:#fff3e0;box-shadow:0 0 0 2px #ffcc80}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px}
+  .label-1{background:#3d2b00}.label-2{background:#5c1a1a}.label-3{background:#1a4a20}.label-4{background:#1a3050}
+  .blank{display:inline-block;min-width:110px;min-height:26px;border-bottom:2px solid #3d2b00;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#3d2b00;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .key-point{background:#fff8e1;border-left:5px solid #3d2b00;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:15px}
+  .key-point strong{color:#3d2b00}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #8b5e00;cursor:help;color:#2c1800;font-weight:bold;vertical-align:middle}
+  .kw > .pop-box, .blank > .pop-box{
+    display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);
+    width:270px;background:#2c1800;color:#fff;border-radius:10px;
+    padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none;
+  }
+  .kw > .pop-box::after, .blank > .pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover > .pop-box, .blank:hover > .pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .column-toggle{display:flex;align-items:center;gap:8px;background:#fffbe6;border:2px solid #b8860b;border-radius:8px;padding:10px 14px;cursor:pointer;margin-top:14px;color:#5c3d00;font-size:14px;font-weight:bold;width:100%;text-align:left;}
+  .column-toggle:hover{background:#fff3c0}
+  .column-toggle .arrow{transition:transform 0.25s;font-size:12px;flex-shrink:0}
+  .column-toggle.open .arrow{transform:rotate(90deg)}
+  .column-body{display:none;margin-top:6px;padding:14px 18px;background:#fffbe6;border-left:4px solid #b8860b;border-radius:0 8px 8px 8px;font-size:14px;line-height:2.0}
+  .column-body.open{display:block}
+  .col-row{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+  .col-icon{font-size:18px;flex-shrink:0;margin-top:3px}
+  .col-label{font-weight:bold;color:#5c3d00;margin-right:4px;white-space:nowrap}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#3d2b00;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #1a1200}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#a0522d;box-shadow:0 3px 0 #6b3520}
+  button#next-btn:disabled{background-color:#d4a574;box-shadow:none;cursor:default}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #3d2b00;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #3d2b00;background-color:#fff8e1;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>江戸時代</h1>
-  <div class="nav-menu">
-    <a href="edo1.html">① 幕府の成立と支配</a>
-    <a href="edo2.html">② 鎖国と外交</a>
-    <a href="edo3.html" class="current">③ 産業と身分制度</a>
-    <a href="edo4.html">④ 元禄文化と改革</a>
-  </div>
-  <div class="question-text" id="quest">
-    江戸時代、農業では <span class="blank" data-ans="備中ぐわ">備中ぐわ</span> や <span class="blank" data-ans="千歯こき">千歯こき</span> などの農具が改良され、生産量が増えました。また <span class="blank" data-ans="西廻り航路">西廻り航路</span> ・ <span class="blank" data-ans="東廻り航路">東廻り航路</span> などの海上交通が整備され、各地の産物を大坂や江戸へ運ぶ流通が発達しました。<br><br>
+<a class="back-to-index" href="edo_index.html">← 単元一覧に戻る</a>
+<h1>🌾 江戸時代③ 産業と身分制度</h1>
+<div class="nav-menu">
+  <a href="edo1.html">① 幕府の成立と支配</a>
+  <a href="edo2.html">② 鎖国と外交</a>
+  <a href="edo3.html" class="current">③ 産業と身分制度</a>
+  <a href="edo4.html">④ 元禄文化と改革</a>
+</div>
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
 
-    大坂は「<span class="blank" data-ans="天下の台所">天下の台所</span>」と呼ばれ、全国の物資が集まる経済の中心地になりました。各地に <span class="blank" data-ans="蔵屋敷">蔵屋敷</span> が置かれ、大名が年貢米や特産物を販売しました。<br><br>
+<!-- ① 農業の発達 -->
+<div class="section">
+  <span class="section-label label-1">① 農業の発達</span>
+  <h2>新田開発と農具の改良</h2>
+  <p>幕府・藩は年貢収入を増やすために
+    <span class="blank" data-id="A">新田開発<span class="pop-box">
+      <span class="pop-name">🌾 新田開発</span>
+      <span class="pop-body">荒れ地を開墾して新しい田畑を作ることです。大規模な用水路を引き、有明海・児島湾などの干拓も行われました。豊臣秀吉のころから100年間で耕地面積は約2倍になりました。</span>
+      <span class="pop-memo">💡 「年貢を増やしたい幕府」と「もっと田畑を広げたい農民」の利害が一致して進みました。</span>
+    </span></span>
+    を積極的に行いました。また、土を深く耕せる
+    <span class="blank" data-id="B">備中ぐわ<span class="pop-box">
+      <span class="pop-name">🔧 備中ぐわ</span>
+      <span class="pop-body">刃が複数に分かれた深耕用の農具です。それまでの鍬より深く土を掘り起こせるため、収穫量が大幅に増えました。</span>
+      <span class="pop-memo">💡 江戸時代の農業革命ともいえる道具です。「深く耕す＝空気が入る＝よく育つ」という原理です。</span>
+    </span></span>
+    や、脱穀を効率化する
+    <span class="blank" data-id="C">千歯こき<span class="pop-box">
+      <span class="pop-name">⚙️ 千歯こき</span>
+      <span class="pop-body">たくさんの歯（くし状の刃）の間に稲穂を通してもみを取る脱穀用農具です。それまでの手作業に比べて何倍もの速さで脱穀できました。</span>
+      <span class="pop-memo">💡 「千の歯」という名前の通り、作業効率が劇的に上がりました。農村の生産性向上に大きく貢献しました。</span>
+    </span></span>
+    などの新農具が普及しました。</p>
+  <p>また、売ることを目的とした
+    <span class="blank" data-id="D">商品作物<span class="pop-box">
+      <span class="pop-name">💰 商品作物</span>
+      <span class="pop-body">米以外の、売るために作る農作物です。綿（木綿の原料）・菜種（油の原料）・藍（染料）・紅花（染料）などが代表例です。</span>
+      <span class="pop-memo">💡 農村にもお金（貨幣）が浸透し始め、農民が「売って稼ぐ」ようになった証拠です。</span>
+    </span></span>
+    の栽培も広まり、農村に貨幣経済が浸透しました。</p>
+  <div class="key-point">⭐ <strong>農業の発達</strong>：新田開発（土地を広げる）＋備中ぐわ・千歯こき（効率アップ）→ 生産量が大幅に増加</div>
+</div>
 
-    江戸時代の身分制度は、上から <span class="blank" data-ans="士農工商">士農工商</span> に分けられました。武士が支配階級で、農民・職人・商人がその下に位置しました。農民は人口の約8割を占めていましたが、重い年貢を課せられ、さらに <span class="blank" data-ans="えた・ひにん">えた・ひにん</span> と呼ばれる身分の人々は差別を受けました。また、武士の女性は <span class="blank" data-ans="大奥">大奥</span> など城内の奥向きで生活しました。
+<!-- ② 商業・都市の発展 -->
+<div class="section">
+  <span class="section-label label-2">② 商業・都市の発展</span>
+  <h2>三都と交通路の整備</h2>
+  <p>江戸・大阪・京都の
+    <span class="kw">三都<span class="pop-box">
+      <span class="pop-name">🏙️ 三都</span>
+      <span class="pop-body">江戸（将軍のおひざもと・人口約100万）、大阪（天下の台所・商業の中心）、京都（朝廷・文化の中心）の3都市です。</span>
+      <span class="pop-memo">💡 江戸は当時世界最大級の都市でした。現代の東京の前身です。</span>
+    </span></span>
+    が繁栄しました。特に大阪は各藩が
+    <span class="blank" data-id="E">蔵屋敷<span class="pop-box">
+      <span class="pop-name">🏪 蔵屋敷</span>
+      <span class="pop-body">大名が大阪に設けた年貢米・特産物の倉庫兼販売所です。全国の物資が大阪に集まり「天下の台所」と呼ばれました。</span>
+      <span class="pop-memo">💡 参勤交代の費用を稼ぐため、大名は蔵屋敷で年貢米を売らざるを得ませんでした。大名の苦労が偲ばれます。</span>
+    </span></span>
+    を置いて
+    <span class="kw">天下の台所<span class="pop-box">
+      <span class="pop-name">🍳 天下の台所（大阪）</span>
+      <span class="pop-body">全国の商業・金融の中心地として栄えた大阪の別名です。各藩の蔵屋敷が集まり、年貢米や特産物の売買が盛んに行われました。</span>
+      <span class="pop-memo">💡 「台所」とは「日本全体の食料・物資を管理する場所」という意味です。現代でも大阪が「食の街」なのはこの名残かもしれません。</span>
+    </span></span>
+    と呼ばれました。交通では
+    <span class="blank" data-id="F">五街道<span class="pop-box">
+      <span class="pop-name">🛤️ 五街道</span>
+      <span class="pop-body">江戸を起点に整備された東海道・中山道・甲州道中・奥州道中・日光道中の5つの主要道路です。関所が設置され、沿道には宿場町が発展しました。</span>
+      <span class="pop-memo">💡 参勤交代の大名行列がこの道を通ったため、宿場町は大いに賑わいました。</span>
+    </span></span>
+    が整備され、沿道に宿場町が発展しました。また
+    <span class="blank" data-id="G">西廻り航路<span class="pop-box">
+      <span class="pop-name">⛵ 西廻り航路</span>
+      <span class="pop-body">東北・北陸の米を日本海沿岸→下関→瀬戸内海→大阪へ運ぶ航路です。17世紀後半に河村瑞賢が整備しました。</span>
+      <span class="pop-memo">💡 東廻り航路（太平洋側→江戸）と合わせて、全国の物資輸送ネットワークが完成しました。</span>
+    </span></span>
+    ・東廻り航路が開かれ、海上輸送も発展しました。</p>
+  <div class="key-point">⭐ <strong>交通の発展</strong>：五街道（陸路）＋西廻り・東廻り航路（海路）→ 全国的な物流ネットワークが完成</div>
+</div>
+
+<!-- ③ 身分制度 -->
+<div class="section">
+  <span class="section-label label-3">③ 身分制度</span>
+  <h2>武士・百姓・町人と身分の固定</h2>
+  <p>江戸時代の社会は大きく
+    <span class="blank" data-id="H">武士・百姓・町人<span class="pop-box">
+      <span class="pop-name">⚖️ 江戸時代の身分</span>
+      <span class="pop-body">江戸時代の主な身分は武士・百姓（農民）・町人（商人・職人）です。人口の約85%が百姓でした。かつて「士農工商」という序列があったと教えられてきましたが、実際にはそのような制度はなかったとされています。</span>
+      <span class="pop-memo">💡 「士農工商」は江戸時代に存在した身分序列ではなく、儒教の考え方を示す言葉でした。現在の教科書では使われていません。</span>
+    </span></span>
+    に分けられ、生まれた身分・職業・居住地は原則として変えられませんでした。また
+    <span class="blank" data-id="I">えた・ひにん<span class="pop-box">
+      <span class="pop-name">⚠️ えた・ひにん身分</span>
+      <span class="pop-body">幕府が設けた身分で、居住地・職業・服装などを厳しく制限され、深刻な差別を受けました。皮革加工・警備などの職に就く人々が多く、一般の百姓・町人とは別の扱いを受けました。</span>
+      <span class="pop-memo">💡 この差別は明治以降も続き、現代の部落差別問題につながっています。幕府が社会統制のために作り出した制度的差別でした。</span>
+    </span></span>
+    と呼ばれる身分が設けられ、厳しい差別を受けました。</p>
+  <div class="key-point">⭐ <strong>身分制度の目的</strong>：身分を固定して社会を安定させ、反乱を防ぎました。えた・ひにん身分は幕府が意図的に設けた制度的差別でした。</div>
+
+  <button class="column-toggle" onclick="toggleCol(this)"><span class="arrow">▶</span>💡「士農工商」はなかった？ 教科書から消えた理由</button>
+  <div class="column-body">
+    <div class="col-row"><span class="col-icon">❓</span><div><span class="col-label">なぜ消えた？</span>「士農工商」は儒教の古典に出てくる言葉で、「武士・農民・職人・商人という順番の身分制度が江戸時代に存在した」というのは誤りだとわかりました。実際の江戸時代には、そのような厳格な序列制度はありませんでした。</div></div>
+    <div class="col-row"><span class="col-icon">📌</span><div><span class="col-label">実際の身分</span>武士・百姓・町人という区分はありましたが、「農民が職人より上」「商人が最下位」という序列ではなく、それぞれ別の役割を持つ身分でした。町人の中でも商人は豊かになり、大名にお金を貸す豪商も生まれました。</div></div>
+    <div class="col-row"><span class="col-icon">🌊</span><div><span class="col-label">影響</span>豊かになった商人・町人が元禄文化（浮世絵・歌舞伎など）の担い手になりました。経済力が文化を生み出した好例です。</div></div>
   </div>
-  <div class="word-bank-wrapper">
-    <div class="word-bank-title">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
-    <div class="word-bank" id="bank"></div>
+</div>
+
+<!-- ④ 農村の統制 -->
+<div class="section">
+  <span class="section-label label-4">④ 農村の統制</span>
+  <h2>五人組と村の仕組み</h2>
+  <p>幕府は農民を確実に管理するために
+    <span class="blank" data-id="J">五人組<span class="pop-box">
+      <span class="pop-name">👥 五人組</span>
+      <span class="pop-body">5戸前後を1組として年貢の納入・犯罪の防止などについて連帯責任を負わせた制度です。1人が年貢を払えなければ、組全員で補う義務がありました。</span>
+      <span class="pop-memo">💡 「組の誰かが逃げたら残りが迷惑する」という仕組みで、農民同士が互いに監視し合う状況を意図的に作りました。</span>
+    </span></span>
+    の制度を作り、農民に連帯責任を負わせました。村では有力な農民（
+    <span class="kw">本百姓<span class="pop-box">
+      <span class="pop-name">🌾 本百姓</span>
+      <span class="pop-body">土地を持つ農民です。名主（庄屋）・組頭・百姓代などの村役人はこの中から選ばれました。</span>
+      <span class="pop-memo">💡 土地を持てない「水のみ百姓」は、有力農民の田畑を小作して生計を立てていました。農村内にも格差がありました。</span>
+    </span></span>
+    ）が村役人として年貢の取りまとめを行いました。</p>
+  <div class="key-point">⭐ <strong>農村統制</strong>：五人組（連帯責任）＋村役人（本百姓が担当）→ 幕府は農民を間接的に管理</div>
+</div>
+
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button onclick="startChallenge()">チャレンジ開始</button>
+      <button onclick="checkAnswers()">判定</button>
+      <button class="secondary" onclick="location.reload()">やり直す</button>
+      <button class="secondary" onclick="resetTimer()">時間リセット</button>
+      <button id="next-btn" onclick="location.href='edo4.html'" disabled>次の単元へ ▶</button>
+      <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
+    </div>
+    <div class="timer-info" id="timer-display">経過時間：---</div>
+    <div class="explain-box" id="explain-box">
+      ①農業：新田開発・備中ぐわ・千歯こき・商品作物の普及<br>
+      ②商業：三都（江戸・大阪・京都）の繁栄／蔵屋敷・五街道・西廻り航路<br>
+      ③身分：武士・百姓・町人の区分＋えた・ひにん身分（「士農工商」という序列制度は実際にはなかったとされています）<br>
+      ④農村：五人組（連帯責任）・本百姓が村役人
+    </div>
   </div>
-  <div class="controls">
-    <button class="start-btn" onclick="startChallenge()">チャレンジ開始</button>
-    <button class="check-btn" onclick="checkAnswers()">判定</button>
-    <button class="reset-btn" onclick="resetParagraph()">この段落をやり直す</button>
-    <button class="time-reset-btn" onclick="resetTimer()">時間リセット</button>
-    <button class="next-btn" id="next-btn" onclick="location.href='edo4.html'" disabled>次の段落へ進む ▶</button>
-    <button class="explain-btn" onclick="toggleExplain()">【解説】を見る</button>
-  </div>
-  <div class="timer-info" id="timer">経過時間：---　（まだ記録がありません）</div>
-  <div class="explain-box" id="exp"><b>【解説】</b><br>江戸時代は農業技術や交通網の発達で経済が成長しました。大坂が「天下の台所」として物流の中心になり、商業も発展しました。一方で士農工商という身分制度のもと、農民は重い年貢を課せられ、えた・ひにんと呼ばれる人々は厳しい差別を受けました。</div>
 </div>
 
 <script>
-  let selChip = null, timer = null, startTime = null;
-  const ansWords = ["備中ぐわ", "千歯こき", "西廻り航路", "東廻り航路", "天下の台所", "蔵屋敷", "士農工商", "えた・ひにん", "大奥"];
-
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => {
-      b.textContent = "？";
-      b.classList.add('waiting');
-      b.classList.remove('correct');
-      b.onclick = () => fillBlank(b);
+const WORD_TIPS={
+  "新田開発":"荒れ地を開墾して新しい田畑を作ることです。100年で耕地面積が約2倍になりました。",
+  "備中ぐわ":"深く耕せる農具です。収穫量の増加に大きく貢献しました。",
+  "千歯こき":"脱穀（もみを稲穂から取る作業）を効率化した農具です。作業速度が劇的に上がりました。",
+  "商品作物":"売るために作る農作物です。綿・菜種・藍・紅花などが代表例です。農村に貨幣経済が浸透しました。",
+  "蔵屋敷":"各藩が大阪に設けた年貢米・特産物の倉庫兼販売所です。大阪が「天下の台所」と呼ばれた理由です。",
+  "五街道":"江戸を起点とした東海道・中山道など5つの主要道路です。沿道に宿場町が発展しました。",
+  "西廻り航路":"東北・北陸の米を日本海→瀬戸内海経由で大阪に運ぶ航路です。全国の物流網が完成しました。",
+  "武士・百姓・町人":"江戸時代の主な身分です。人口の約85%が百姓でした。かつて「士農工商」という序列と教えられてきましたが、そのような制度は実際にはなかったとされています。",
+  "えた・ひにん":"農民より低い身分として設けられた人々で、厳しい差別を受けました。",
+  "五人組":"5戸を1組として年貢納入・犯罪防止の連帯責任を負わせた制度です。農民同士が監視し合う仕組みでした。",
+};
+const answers={
+  "A":"新田開発","B":"備中ぐわ","C":"千歯こき","D":"商品作物",
+  "E":"蔵屋敷","F":"五街道","G":"西廻り航路",
+  "H":"武士・百姓・町人","I":"えた・ひにん","J":"五人組"
+};
+let startTime,timerId,selectedChip=null;
+function renderBank(){
+  const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";
+  [...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{
+    const chip=document.createElement('div');chip.className='word-chip';
+    const label=document.createElement('span');label.textContent=word;chip.appendChild(label);
+    const tip=WORD_TIPS[word];
+    if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}
+    chip.addEventListener('click',()=>{
+      if(chip.classList.contains('used'))return;
+      document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));
+      selectedChip=chip;chip.classList.add('selected-chip');
     });
-    const bank = document.getElementById('bank');
-    bank.innerHTML = "";
-    const shuffled = [...ansWords].sort(() => Math.random() - 0.5);
-    shuffled.forEach(w => {
-      const chip = document.createElement("div");
-      chip.className = "word-chip";
-      chip.textContent = w;
-      chip.onclick = () => {
-        if (chip.classList.contains('used')) return;
-        if (selChip) selChip.classList.remove('selected');
-        selChip = chip;
-        chip.classList.add('selected');
-      };
-      bank.appendChild(chip);
-    });
-    startTime = Date.now();
-    if (timer) clearInterval(timer);
-    timer = setInterval(() => {
-      const s = Math.floor((Date.now() - startTime) / 1000);
-      document.getElementById('timer').textContent = `経過時間：${s}秒`;
-    }, 1000);
-    selChip = null;
-  }
-
-  function fillBlank(b) {
-    if (!selChip) return;
-    if (b.textContent !== "？") {
-      const oldVal = b.textContent;
-      const chips = document.querySelectorAll('.word-chip');
-      for (let c of chips) {
-        if (c.textContent === oldVal && c.classList.contains('used')) {
-          c.classList.remove('used');
-          break;
-        }
-      }
+    bank.appendChild(chip);
+  });
+}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{
+  blank.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(selectedChip){
+      const old=getBlankText(blank);
+      if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});
+      setBlankText(blank,getChipWord(selectedChip));
+      selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;
     }
-    b.textContent = selChip.textContent;
-    b.classList.remove('waiting');
-    selChip.classList.add('used');
-    selChip.classList.remove('selected');
-    selChip = null;
-  }
-
-  function checkAnswers() {
-    let ok = true;
-    document.querySelectorAll('.blank').forEach(b => {
-      if (b.textContent === b.getAttribute('data-ans')) {
-        b.classList.add('correct');
-      } else {
-        ok = false;
-        b.classList.remove('correct');
-      }
-    });
-    if (ok) {
-      clearInterval(timer);
-      document.getElementById('next-btn').disabled = false;
-      document.getElementById('next-btn').classList.add('active');
-      alert("全問正解！江戸の産業と社会をマスターしました。");
-    } else {
-      alert("間違いがあります。もう一度見直してみましょう。");
-    }
-  }
-
-  function resetParagraph() { location.reload(); }
-  function resetTimer() { clearInterval(timer); document.getElementById('timer').textContent = "経過時間：---"; }
-  function toggleExplain() { const e = document.getElementById('exp'); e.style.display = e.style.display === 'block' ? 'none' : 'block'; }
+  });
+});
+function toggleCol(btn){btn.classList.toggle('open');btn.nextElementSibling.classList.toggle('open');}
+function startChallenge(){
+  document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});
+  renderBank();selectedChip=null;startTime=Date.now();
+  if(timerId)clearInterval(timerId);
+  timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);
+}
+function checkAnswers(){
+  let ok=true;
+  document.querySelectorAll('.blank').forEach(b=>{
+    if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');
+    else{ok=false;b.classList.remove('correct');}
+  });
+  if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！産業と身分制度をマスターしました。");}
+  else alert("間違いがあります。もう一度見直してみましょう。");
+}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
 </script>
-
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['edo3'] = prog['edo3'] || {};
-      prog['edo3'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
 </body>
 </html>

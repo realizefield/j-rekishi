@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：江戸時代① 確認ドリル</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:120px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:24px;color:#2c1800}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#5c3d00;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#3d2800}
+  .nav-menu{display:flex;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+  .nav-menu a{text-decoration:none;color:#5c3d00;padding:8px 12px;border:1px solid #5c3d00;border-radius:20px;font-size:14px}
+  .nav-menu a.current{background:#5c3d00;color:#fff;font-weight:bold}
+
+  /* スコアバー */
+  .score-bar{background:#fff;border:2px solid #3d2b00;border-radius:10px;padding:12px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .score-label{font-weight:bold;color:#3d2b00;font-size:15px}
+  .score-val{font-size:22px;font-weight:bold;color:#a0522d}
+  .progress-wrap{flex:1;min-width:160px;background:#eee;border-radius:20px;height:12px;overflow:hidden}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#a0522d,#d4831a);border-radius:20px;transition:width 0.4s}
+  .reset-all-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer}
+  .reset-all-btn:hover{background:#495057}
+
+  /* セクション見出し */
+  .section-header{display:flex;align-items:center;gap:10px;margin:28px 0 12px}
+  .section-badge{background:#3d2b00;color:#fff;border-radius:20px;padding:4px 16px;font-size:13px;font-weight:bold}
+  .section-title{font-size:18px;font-weight:bold;color:#2c1800}
+
+  /* 問題カード共通 */
+  .q-card{background:#fff;border-radius:10px;border:2px solid #ddd;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s}
+  .q-card.answered-ok{border-color:#27ae60}
+  .q-card.answered-ng{border-color:#e74c3c}
+  .q-num{display:inline-block;background:#3d2b00;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:bold;margin-bottom:8px}
+  .q-type-badge{display:inline-block;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:bold;margin-left:6px;vertical-align:middle}
+  .badge-4{background:#1a6fa8;color:#fff}
+  .badge-ox{background:#8e44ad;color:#fff}
+  .badge-sort{background:#c0392b;color:#fff}
+  .q-text{font-size:16px;line-height:1.9;margin-bottom:14px;font-weight:bold}
+  .q-text em{font-style:normal;border-bottom:2px solid #a0522d;color:#a0522d}
+
+  /* フィードバック */
+  .feedback{display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:14px;line-height:1.8}
+  .feedback.ok{background:#eafaf1;border-left:4px solid #27ae60;color:#1a5c35}
+  .feedback.ng{background:#fdf3f0;border-left:4px solid #e74c3c;color:#7b241c}
+  .feedback.show{display:block}
+  .feedback .ans-label{font-weight:bold;margin-right:4px}
+
+  /* 4択 */
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+  @media(max-width:600px){.choices{grid-template-columns:1fr}}
+  .choice-btn{background:#f5f0e8;border:2px solid #c9b89a;border-radius:8px;padding:10px 14px;font-size:14px;cursor:pointer;text-align:left;transition:0.15s;line-height:1.6}
+  .choice-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .choice-btn:disabled{cursor:default}
+  .choice-btn.selected-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35;font-weight:bold}
+  .choice-btn.selected-ng{background:#fadbd8;border-color:#e74c3c;color:#7b241c;font-weight:bold}
+  .choice-btn.reveal-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35}
+
+  /* ○× */
+  .ox-wrap{display:flex;gap:16px;margin-top:4px}
+  .ox-btn{flex:1;padding:14px;border-radius:10px;border:2px solid #c9b89a;background:#f5f0e8;font-size:28px;cursor:pointer;transition:0.15s;text-align:center}
+  .ox-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .ox-btn:disabled{cursor:default}
+  .ox-btn.selected-ok{background:#d5f5e3;border-color:#27ae60}
+  .ox-btn.selected-ng{background:#fadbd8;border-color:#e74c3c}
+
+  /* 並び替え */
+  .sort-area{margin-top:8px}
+  .sort-label{font-size:13px;color:#666;margin-bottom:6px}
+  .sort-bank{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#f5f0e8;border-radius:8px;border:1px solid #c9b89a;min-height:52px;margin-bottom:8px}
+  .sort-answer{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#fff;border-radius:8px;border:2px dashed #a0522d;min-height:52px;align-items:center}
+  .sort-answer.correct-zone{border-color:#27ae60;background:#eafaf1}
+  .sort-answer.wrong-zone{border-color:#e74c3c;background:#fdf3f0}
+  .sort-chip{padding:8px 14px;border-radius:20px;border:2px solid #a0522d;background:#fff3e0;cursor:pointer;font-size:14px;font-weight:bold;color:#5c3d00;user-select:none;transition:0.15s}
+  .sort-chip:hover{background:#ffe0b2;border-color:#7b3f00}
+  .sort-chip.in-answer{background:#fff3e0}
+  .sort-chip.disabled{cursor:default;opacity:0.85}
+  .sort-check-btn{background:#3d2b00;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:14px;font-weight:bold;cursor:pointer;margin-top:4px}
+  .sort-check-btn:disabled{background:#c9b89a;cursor:default}
+  .sort-reset-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:14px;cursor:pointer;margin-top:4px;margin-left:8px}
+
+  /* 完了バナー */
+  .finish-banner{display:none;background:linear-gradient(135deg,#3d2b00,#a0522d);color:#fff;border-radius:12px;padding:24px;text-align:center;margin-top:24px}
+  .finish-banner h2{margin:0 0 8px;font-size:22px}
+  .finish-banner p{margin:0 0 16px;font-size:15px}
+  .finish-banner .score-big{font-size:40px;font-weight:bold;color:#ffd700}
+  .finish-btn{background:#fff;color:#3d2b00;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:bold;cursor:pointer;margin:4px}
+  .finish-btn:hover{background:#fff3e0}
+</style>
+</head>
+<body>
+
+<a class="back-to-index" href="edo_index.html">← 単元一覧に戻る</a>
+<h1>🏯 江戸時代① 確認ドリル</h1>
+
+<div class="nav-menu">
+  <a href="edo1.html">① 幕府の成立と支配（学習）</a>
+  <a href="edo1_drill.html" class="current">① 確認ドリル</a>
+  <a href="edo2.html">② 鎖国と外交</a>
+</div>
+
+<!-- スコアバー -->
+<div class="score-bar">
+  <span class="score-label">正解数：</span>
+  <span class="score-val" id="score-val">0 / 15</span>
+  <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  <button class="reset-all-btn" onclick="resetAll()">🔄 最初からやり直す</button>
+</div>
+
+<!-- ===== セクション1：4択問題 ===== -->
+<div class="section-header">
+  <span class="section-badge">Part 1</span>
+  <span class="section-title">4択問題</span>
+</div>
+
+<!-- Q1 -->
+<div class="q-card" id="q1">
+  <span class="q-num">Q1</span><span class="q-type-badge badge-4">4択</span>
+  <div class="q-text">徳川家康が征夷大将軍に任命されたのはいつか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer4(this,'q1',false)">1600年</button>
+    <button class="choice-btn" onclick="answer4(this,'q1',true)">1603年</button>
+    <button class="choice-btn" onclick="answer4(this,'q1',false)">1615年</button>
+    <button class="choice-btn" onclick="answer4(this,'q1',false)">1635年</button>
+  </div>
+  <div class="feedback" id="q1-fb"></div>
+</div>
+
+<!-- Q2 -->
+<div class="q-card" id="q2">
+  <span class="q-num">Q2</span><span class="q-type-badge badge-4">4択</span>
+  <div class="q-text">将軍の直轄領（直接支配する土地）を何というか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer4(this,'q2',false)">親藩</button>
+    <button class="choice-btn" onclick="answer4(this,'q2',false)">藩領</button>
+    <button class="choice-btn" onclick="answer4(this,'q2',true)">幕領（天領）</button>
+    <button class="choice-btn" onclick="answer4(this,'q2',false)">外様</button>
+  </div>
+  <div class="feedback" id="q2-fb"></div>
+</div>
+
+<!-- Q3 -->
+<div class="q-card" id="q3">
+  <span class="q-num">Q3</span><span class="q-type-badge badge-4">4択</span>
+  <div class="q-text">老中など幕府の重要役職に就くことができた大名はどれか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer4(this,'q3',false)">外様大名</button>
+    <button class="choice-btn" onclick="answer4(this,'q3',true)">譜代大名</button>
+    <button class="choice-btn" onclick="answer4(this,'q3',false)">親藩</button>
+    <button class="choice-btn" onclick="answer4(this,'q3',false)">すべての大名</button>
+  </div>
+  <div class="feedback" id="q3-fb"></div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card" id="q4">
+  <span class="q-num">Q4</span><span class="q-type-badge badge-4">4択</span>
+  <div class="q-text">参勤交代を義務化した将軍は誰か？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer4(this,'q4',false)">徳川家康</button>
+    <button class="choice-btn" onclick="answer4(this,'q4',false)">徳川秀忠</button>
+    <button class="choice-btn" onclick="answer4(this,'q4',true)">徳川家光</button>
+    <button class="choice-btn" onclick="answer4(this,'q4',false)">徳川吉宗</button>
+  </div>
+  <div class="feedback" id="q4-fb"></div>
+</div>
+
+<!-- Q5 -->
+<div class="q-card" id="q5">
+  <span class="q-num">Q5</span><span class="q-type-badge badge-4">4択</span>
+  <div class="q-text">武家諸法度で禁じられた行為として正しいものはどれか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer4(this,'q5',false)">大名が江戸に屋敷を持つこと</button>
+    <button class="choice-btn" onclick="answer4(this,'q5',true)">大名が城を無断で修理すること</button>
+    <button class="choice-btn" onclick="answer4(this,'q5',false)">大名が領地で年貢を集めること</button>
+    <button class="choice-btn" onclick="answer4(this,'q5',false)">大名が幕府の儀式に参加すること</button>
+  </div>
+  <div class="feedback" id="q5-fb"></div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card" id="q6">
+  <span class="q-num">Q6</span><span class="q-type-badge badge-4">4択</span>
+  <div class="q-text">尾張・紀伊・水戸の「御三家」はどの大名の分類に当たるか？</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="answer4(this,'q6',false)">譜代大名</button>
+    <button class="choice-btn" onclick="answer4(this,'q6',false)">外様大名</button>
+    <button class="choice-btn" onclick="answer4(this,'q6',true)">親藩</button>
+    <button class="choice-btn" onclick="answer4(this,'q6',false)">旗本</button>
+  </div>
+  <div class="feedback" id="q6-fb"></div>
+</div>
+
+<!-- ===== セクション2：○×問題 ===== -->
+<div class="section-header">
+  <span class="section-badge">Part 2</span>
+  <span class="section-title">○×問題</span>
+</div>
+
+<!-- Q7 -->
+<div class="q-card" id="q7">
+  <span class="q-num">Q7</span><span class="q-type-badge badge-ox">○×</span>
+  <div class="q-text">関ヶ原の戦いは1600年に起き、<em>東軍（徳川家康）</em>が勝利した。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="answerOX(this,'q7',true)">○</button>
+    <button class="ox-btn" onclick="answerOX(this,'q7',false)">×</button>
+  </div>
+  <div class="feedback" id="q7-fb"></div>
+</div>
+
+<!-- Q8 -->
+<div class="q-card" id="q8">
+  <span class="q-num">Q8</span><span class="q-type-badge badge-ox">○×</span>
+  <div class="q-text">外様大名は関ヶ原の戦い以前から徳川氏に従っていた大名のことである。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="answerOX(this,'q8',false)">○</button>
+    <button class="ox-btn" onclick="answerOX(this,'q8',true)">×</button>
+  </div>
+  <div class="feedback" id="q8-fb"></div>
+</div>
+
+<!-- Q9 -->
+<div class="q-card" id="q9">
+  <span class="q-num">Q9</span><span class="q-type-badge badge-ox">○×</span>
+  <div class="q-text">参勤交代では、大名の妻子は人質として<em>江戸に常住</em>することが義務づけられた。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="answerOX(this,'q9',true)">○</button>
+    <button class="ox-btn" onclick="answerOX(this,'q9',false)">×</button>
+  </div>
+  <div class="feedback" id="q9-fb"></div>
+</div>
+
+<!-- Q10 -->
+<div class="q-card" id="q10">
+  <span class="q-num">Q10</span><span class="q-type-badge badge-ox">○×</span>
+  <div class="q-text">慶安のお触書は、天皇・公家の行動を制限するために出された法令である。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="answerOX(this,'q10',false)">○</button>
+    <button class="ox-btn" onclick="answerOX(this,'q10',true)">×</button>
+  </div>
+  <div class="feedback" id="q10-fb"></div>
+</div>
+
+<!-- Q11 -->
+<div class="q-card" id="q11">
+  <span class="q-num">Q11</span><span class="q-type-badge badge-ox">○×</span>
+  <div class="q-text">幕藩体制とは、将軍（幕府）が全国を直接統治し、大名には何も任せない中央集権体制である。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="answerOX(this,'q11',false)">○</button>
+    <button class="ox-btn" onclick="answerOX(this,'q11',true)">×</button>
+  </div>
+  <div class="feedback" id="q11-fb"></div>
+</div>
+
+<!-- ===== セクション3：並び替え問題 ===== -->
+<div class="section-header">
+  <span class="section-badge">Part 3</span>
+  <span class="section-title">並び替え問題</span>
+</div>
+
+<!-- Q12 -->
+<div class="q-card" id="q12">
+  <span class="q-num">Q12</span><span class="q-type-badge badge-sort">並び替え</span>
+  <div class="q-text">江戸幕府成立の流れを正しい順に並べよ。</div>
+  <div class="sort-area" id="sort12">
+    <div class="sort-label">↓ 語句をクリックして下の枠に順番に並べよう</div>
+    <div class="sort-bank" id="bank12">
+      <div class="sort-chip" onclick="sortClick('sort12','bank12','ans12',this,'A')">征夷大将軍に任命</div>
+      <div class="sort-chip" onclick="sortClick('sort12','bank12','ans12',this,'B')">江戸幕府を開く</div>
+      <div class="sort-chip" onclick="sortClick('sort12','bank12','ans12',this,'C')">関ヶ原の戦いで勝利</div>
+    </div>
+    <div class="sort-label">↓ 並べた順番（クリックで戻せます）</div>
+    <div class="sort-answer" id="ans12"></div>
+    <div>
+      <button class="sort-check-btn" id="check12" onclick="checkSort('q12','sort12','ans12',['C','A','B'],'①関ヶ原の戦いで勝利（1600）→ ②征夷大将軍に任命（1603）→ ③江戸幕府を開く')" disabled>答え合わせ</button>
+      <button class="sort-reset-btn" onclick="resetSort('sort12','bank12','ans12','check12')">リセット</button>
+    </div>
+  </div>
+  <div class="feedback" id="q12-fb"></div>
+</div>
+
+<!-- Q13 -->
+<div class="q-card" id="q13">
+  <span class="q-num">Q13</span><span class="q-type-badge badge-sort">並び替え</span>
+  <div class="q-text">大名の分類を、幕府から見た「信頼が高い順」に並べよ。</div>
+  <div class="sort-area" id="sort13">
+    <div class="sort-label">↓ 語句をクリックして下の枠に順番に並べよう</div>
+    <div class="sort-bank" id="bank13">
+      <div class="sort-chip" onclick="sortClick('sort13','bank13','ans13',this,'A')">外様大名</div>
+      <div class="sort-chip" onclick="sortClick('sort13','bank13','ans13',this,'B')">親藩</div>
+      <div class="sort-chip" onclick="sortClick('sort13','bank13','ans13',this,'C')">譜代大名</div>
+    </div>
+    <div class="sort-label">↓ 並べた順番（クリックで戻せます）</div>
+    <div class="sort-answer" id="ans13"></div>
+    <div>
+      <button class="sort-check-btn" id="check13" onclick="checkSort('q13','sort13','ans13',['B','C','A'],'親藩（徳川一族）→ 譜代大名（関ヶ原前からの家臣）→ 外様大名（関ヶ原後に従った）の順に信頼が高い。')" disabled>答え合わせ</button>
+      <button class="sort-reset-btn" onclick="resetSort('sort13','bank13','ans13','check13')">リセット</button>
+    </div>
+  </div>
+  <div class="feedback" id="q13-fb"></div>
+</div>
+
+<!-- Q14 -->
+<div class="q-card" id="q14">
+  <span class="q-num">Q14</span><span class="q-type-badge badge-sort">並び替え</span>
+  <div class="q-text">幕府が各身分を統制した法令を、大名→朝廷→農民の順に並べよ。</div>
+  <div class="sort-area" id="sort14">
+    <div class="sort-label">↓ 語句をクリックして下の枠に順番に並べよう</div>
+    <div class="sort-bank" id="bank14">
+      <div class="sort-chip" onclick="sortClick('sort14','bank14','ans14',this,'A')">禁中並公家諸法度</div>
+      <div class="sort-chip" onclick="sortClick('sort14','bank14','ans14',this,'B')">武家諸法度</div>
+      <div class="sort-chip" onclick="sortClick('sort14','bank14','ans14',this,'C')">慶安のお触書</div>
+    </div>
+    <div class="sort-label">↓ 並べた順番（クリックで戻せます）</div>
+    <div class="sort-answer" id="ans14"></div>
+    <div>
+      <button class="sort-check-btn" id="check14" onclick="checkSort('q14','sort14','ans14',['B','A','C'],'武家諸法度（大名）→ 禁中並公家諸法度（朝廷）→ 慶安のお触書（農民）')" disabled>答え合わせ</button>
+      <button class="sort-reset-btn" onclick="resetSort('sort14','bank14','ans14','check14')">リセット</button>
+    </div>
+  </div>
+  <div class="feedback" id="q14-fb"></div>
+</div>
+
+<!-- Q15 -->
+<div class="q-card" id="q15">
+  <span class="q-num">Q15</span><span class="q-type-badge badge-sort">並び替え</span>
+  <div class="q-text">参勤交代の目的として幕府が狙った効果を、重要度の高い順に並べよ。</div>
+  <div class="sort-area" id="sort15">
+    <div class="sort-label">↓ 語句をクリックして下の枠に順番に並べよう</div>
+    <div class="sort-bank" id="bank15">
+      <div class="sort-chip" onclick="sortClick('sort15','bank15','ans15',this,'A')">宿場町・街道の発展</div>
+      <div class="sort-chip" onclick="sortClick('sort15','bank15','ans15',this,'B')">大名の財力消耗</div>
+      <div class="sort-chip" onclick="sortClick('sort15','bank15','ans15',this,'C')">妻子を人質にする</div>
+    </div>
+    <div class="sort-label">↓ 並べた順番（クリックで戻せます）</div>
+    <div class="sort-answer" id="ans15"></div>
+    <div>
+      <button class="sort-check-btn" id="check15" onclick="checkSort('q15','sort15','ans15',['C','B','A'],'①妻子を人質（心理的抑止）→ ②財力の消耗（経済的弱体化）→ ③宿場町の発展（意図せぬ副産物）')" disabled>答え合わせ</button>
+      <button class="sort-reset-btn" onclick="resetSort('sort15','bank15','ans15','check15')">リセット</button>
+    </div>
+  </div>
+  <div class="feedback" id="q15-fb"></div>
+</div>
+
+<!-- 完了バナー -->
+<div class="finish-banner" id="finish-banner">
+  <h2>🎉 ドリル完了！</h2>
+  <div class="score-big" id="finish-score"></div>
+  <p id="finish-msg"></p>
+  <button class="finish-btn" onclick="resetAll()">🔄 もう一度挑戦する</button>
+  <button class="finish-btn" onclick="location.href='edo2.html'">次の単元へ ▶</button>
+</div>
+
+<script>
+/* ===== スコア管理 ===== */
+let totalQ = 15;
+let answered = {}; // {qId: true/false}
+
+function updateScore(){
+  const correct = Object.values(answered).filter(v=>v).length;
+  const done = Object.keys(answered).length;
+  document.getElementById('score-val').textContent = `${correct} / ${totalQ}`;
+  document.getElementById('progress-bar').style.width = `${(done/totalQ)*100}%`;
+  if(done === totalQ){
+    setTimeout(()=>showFinish(correct),400);
+  }
+}
+
+function showFinish(correct){
+  const banner = document.getElementById('finish-banner');
+  banner.style.display = 'block';
+  document.getElementById('finish-score').textContent = `${correct} / ${totalQ} 問正解`;
+  let msg = '';
+  if(correct === totalQ) msg = '🏆 満点！完璧な理解です！';
+  else if(correct >= 12) msg = '⭐ すばらしい！あと少しで満点！';
+  else if(correct >= 9) msg = '👍 よくできました。間違えた問題を確認しよう。';
+  else msg = '📖 もう一度学習ページに戻って復習しよう！';
+  document.getElementById('finish-msg').textContent = msg;
+  banner.scrollIntoView({behavior:'smooth'});
+}
+
+/* ===== 4択 ===== */
+function answer4(btn, qId, isCorrect){
+  if(answered[qId] !== undefined) return;
+  const card = document.getElementById(qId);
+  const allBtns = card.querySelectorAll('.choice-btn');
+  allBtns.forEach(b=>b.disabled=true);
+
+  const fb = document.getElementById(qId+'-fb');
+  if(isCorrect){
+    btn.classList.add('selected-ok');
+    card.classList.add('answered-ok');
+    fb.className='feedback ok show';
+    fb.innerHTML='<span class="ans-label">✅ 正解！</span>'+getFeedback4(qId,true);
+    answered[qId]=true;
+  }else{
+    btn.classList.add('selected-ng');
+    card.classList.add('answered-ng');
+    // 正解を緑表示
+    const correctBtns = {
+      q1:'1603年', q2:'幕領（天領）', q3:'譜代大名', q4:'徳川家光',
+      q5:'大名が城を無断で修理すること', q6:'親藩'
+    };
+    allBtns.forEach(b=>{if(b.textContent===correctBtns[qId])b.classList.add('reveal-ok');});
+    fb.className='feedback ng show';
+    fb.innerHTML='<span class="ans-label">❌ 不正解</span>'+getFeedback4(qId,false);
+    answered[qId]=false;
+  }
+  updateScore();
+}
+
+function getFeedback4(qId, ok){
+  const map={
+    q1:'1603年に征夷大将軍に任命され、江戸幕府を開きました。関ヶ原の戦いは1600年、大坂の陣は1615年です。',
+    q2:'将軍が直接支配する土地を幕領（天領）といいます。主要都市・金山・銀山などを含み、幕府の財政基盤でした。',
+    q3:'譜代大名は関ヶ原以前からの家臣で、最も信頼され老中などの要職に就けました。外様大名は就けませんでした。',
+    q4:'三代将軍・徳川家光が1635年に参勤交代を義務化しました。武家諸法度を定めたのは二代将軍・秀忠です。',
+    q5:'武家諸法度では「城の無断修理」「無許可の婚姻」「大名間の無断交渉」などが禁じられました。',
+    q6:'親藩は徳川氏の一族の大名。御三家（尾張・紀伊・水戸）は将軍の後継ぎを出す格式がありました。',
+  };
+  return `<br>${map[qId]||''}`;
+}
+
+/* ===== ○× ===== */
+function answerOX(btn, qId, isCorrect){
+  if(answered[qId] !== undefined) return;
+  const card = document.getElementById(qId);
+  card.querySelectorAll('.ox-btn').forEach(b=>b.disabled=true);
+  const fb = document.getElementById(qId+'-fb');
+  if(isCorrect){
+    btn.classList.add('selected-ok');
+    card.classList.add('answered-ok');
+    fb.className='feedback ok show';
+    fb.innerHTML='<span class="ans-label">✅ 正解！</span>'+getOXFeedback(qId);
+    answered[qId]=true;
+  }else{
+    btn.classList.add('selected-ng');
+    card.classList.add('answered-ng');
+    fb.className='feedback ng show';
+    fb.innerHTML='<span class="ans-label">❌ 不正解</span>'+getOXFeedback(qId);
+    answered[qId]=false;
+  }
+  updateScore();
+}
+
+function getOXFeedback(qId){
+  const map={
+    q7:'○ 正解。1600年の関ヶ原の戦いで東軍（家康）が西軍（石田三成）を破り、全国の実権を握りました。',
+    q8:'× 不正解。「以前から従っていた」のは譜代大名です。外様大名は関ヶ原の戦い「以後」に従った大名です。',
+    q9:'○ 正解。参勤交代では大名本人は1年おきに往復しましたが、妻子は人質として江戸に常住させられました。',
+    q10:'× 不正解。慶安のお触書は農民の衣食住を制限した法令です。朝廷・公家を制限したのは「禁中並公家諸法度」です。',
+    q11:'× 不正解。幕藩体制は「将軍（幕府）＋大名（藩）の二重構造」です。大名が領地を統治し、幕府がその上に立つ仕組みです。',
+  };
+  return `<br>${map[qId]||''}`;
+}
+
+/* ===== 並び替え ===== */
+// chipData: {sortId: [{el, id}]}
+const sortState = {};
+
+function sortClick(sortId, bankId, ansId, chip, chipKey){
+  if(chip.classList.contains('disabled')) return;
+  // bankからansへ移動
+  const ans = document.getElementById(ansId);
+  chip.classList.add('disabled');
+  const clone = document.createElement('div');
+  clone.className = 'sort-chip in-answer disabled';
+  clone.textContent = chip.textContent;
+  clone.dataset.key = chipKey;
+  clone.onclick = ()=>returnChip(sortId, bankId, ansId, clone, chip);
+  ans.appendChild(clone);
+
+  if(!sortState[sortId]) sortState[sortId]=[];
+  sortState[sortId].push(chipKey);
+
+  // 全部入ったら答え合わせボタン有効化
+  const totalChips = document.getElementById(bankId).querySelectorAll('.sort-chip').length;
+  if(sortState[sortId].length === totalChips){
+    document.getElementById('check'+sortId.replace('sort','')).disabled = false;
+  }
+}
+
+function returnChip(sortId, bankId, ansId, clone, original){
+  if(sortState[sortId+'_done']) return; // 答え合わせ後は戻せない
+  clone.remove();
+  original.classList.remove('disabled');
+  sortState[sortId] = sortState[sortId].filter(k=>k!==clone.dataset.key);
+  const qNum = sortId.replace('sort','');
+  document.getElementById('check'+qNum).disabled = true;
+}
+
+function checkSort(qId, sortId, ansId, correctOrder, explanation){
+  const current = sortState[sortId] || [];
+  const card = document.getElementById(qId);
+  const fb = document.getElementById(qId+'-fb');
+  const isOk = JSON.stringify(current)===JSON.stringify(correctOrder);
+  sortState[sortId+'_done']=true;
+
+  // ansゾーンのクリップを固定（戻せなくする）
+  document.getElementById(ansId).querySelectorAll('.sort-chip').forEach(c=>{c.onclick=null;});
+
+  if(isOk){
+    document.getElementById(ansId).classList.add('correct-zone');
+    card.classList.add('answered-ok');
+    fb.className='feedback ok show';
+    fb.innerHTML=`<span class="ans-label">✅ 正解！</span><br>${explanation}`;
+    answered[qId]=true;
+  }else{
+    document.getElementById(ansId).classList.add('wrong-zone');
+    card.classList.add('answered-ng');
+    fb.className='feedback ng show';
+    fb.innerHTML=`<span class="ans-label">❌ 不正解</span><br>正しい順番：${explanation}`;
+    answered[qId]=false;
+  }
+  document.getElementById('check'+qId.replace('q','')).disabled=true;
+  updateScore();
+}
+
+function resetSort(sortId, bankId, ansId, checkBtnId){
+  if(sortState[sortId+'_done']) return;
+  sortState[sortId]=[];
+  document.getElementById(ansId).innerHTML='';
+  document.getElementById(ansId).className='sort-answer';
+  document.getElementById(bankId).querySelectorAll('.sort-chip').forEach(c=>c.classList.remove('disabled'));
+  document.getElementById(checkBtnId).disabled=true;
+}
+
+/* ===== 全リセット ===== */
+function resetAll(){
+  location.reload();
+}
+</script>
+</body>
+</html>

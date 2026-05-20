@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：江戸時代② 過去問チェック</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:120px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:24px;color:#2c1800}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#5c3d00;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .nav-menu{display:flex;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+  .nav-menu a{text-decoration:none;color:#5c3d00;padding:8px 12px;border:1px solid #5c3d00;border-radius:20px;font-size:14px}
+  .nav-menu a.current{background:#5c3d00;color:#fff;font-weight:bold}
+  .score-bar{background:#fff;border:2px solid #3d2b00;border-radius:10px;padding:12px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .score-label{font-weight:bold;color:#3d2b00;font-size:15px}
+  .score-val{font-size:22px;font-weight:bold;color:#a0522d}
+  .progress-wrap{flex:1;min-width:160px;background:#eee;border-radius:20px;height:12px;overflow:hidden}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#a0522d,#d4831a);border-radius:20px;transition:width 0.4s}
+  .reset-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer}
+  .section-header{display:flex;align-items:center;gap:10px;margin:28px 0 12px}
+  .section-badge{background:#3d2b00;color:#fff;border-radius:20px;padding:4px 16px;font-size:13px;font-weight:bold}
+  .section-title{font-size:17px;font-weight:bold;color:#2c1800}
+  .q-card{background:#fff;border-radius:10px;border:2px solid #ddd;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s}
+  .q-card.answered-ok{border-color:#27ae60}.q-card.answered-ng{border-color:#e74c3c}
+  .q-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .q-num{background:#3d2b00;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:bold}
+  .q-pref{background:#e8d5b0;color:#5c3d00;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:bold}
+  .q-type-badge{border-radius:6px;padding:2px 9px;font-size:11px;font-weight:bold}
+  .badge-4{background:#1a6fa8;color:#fff}.badge-ox{background:#8e44ad;color:#fff}.badge-write{background:#c0392b;color:#fff}
+  .freq-s{background:#c0392b;color:#fff;border-radius:8px;padding:1px 7px;font-size:11px;font-weight:bold}
+  .freq-a{background:#e67e22;color:#fff;border-radius:8px;padding:1px 7px;font-size:11px;font-weight:bold}
+  .q-text{font-size:16px;line-height:2;margin-bottom:14px;color:#222}
+  .q-text em{font-style:normal;text-decoration:underline;color:#5c3d00}
+  .source-box{background:#fff8e1;border-left:4px solid #b8860b;padding:10px 14px;border-radius:0 8px 8px 0;font-size:14px;margin:8px 0 12px;line-height:1.8}
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:600px){.choices{grid-template-columns:1fr}}
+  .choice-btn{background:#f5f0e8;border:2px solid #c9b89a;border-radius:8px;padding:10px 14px;font-size:14px;cursor:pointer;text-align:left;transition:0.15s;line-height:1.6}
+  .choice-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .choice-btn:disabled{cursor:default}
+  .choice-btn.selected-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35;font-weight:bold}
+  .choice-btn.selected-ng{background:#fadbd8;border-color:#e74c3c;color:#7b241c;font-weight:bold}
+  .choice-btn.reveal-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35}
+  .ox-wrap{display:flex;gap:16px;margin-top:4px}
+  .ox-btn{flex:1;padding:14px;border-radius:10px;border:2px solid #c9b89a;background:#f5f0e8;font-size:28px;cursor:pointer;transition:0.15s;text-align:center}
+  .ox-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .ox-btn:disabled{cursor:default}
+  .ox-btn.selected-ok{background:#d5f5e3;border-color:#27ae60}
+  .ox-btn.selected-ng{background:#fadbd8;border-color:#e74c3c}
+  .write-wrap{margin-top:6px}
+  .write-input{width:100%;box-sizing:border-box;padding:10px 14px;border:2px solid #c9b89a;border-radius:8px;font-size:15px;font-family:"Meiryo",sans-serif;min-height:52px;resize:vertical}
+  .write-input:focus{outline:none;border-color:#a0522d}
+  .write-input:disabled{background:#f5f5f5}
+  .write-check-btn{margin-top:8px;background:#3d2b00;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:14px;font-weight:bold;cursor:pointer}
+  .feedback{display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:14px;line-height:1.85}
+  .feedback.ok{background:#eafaf1;border-left:4px solid #27ae60;color:#1a5c35}
+  .feedback.ng{background:#fdf3f0;border-left:4px solid #e74c3c;color:#7b241c}
+  .feedback.show{display:block}
+  .finish-banner{display:none;background:linear-gradient(135deg,#3d2b00,#a0522d);color:#fff;border-radius:12px;padding:28px;text-align:center;margin-top:28px}
+  .finish-banner h2{margin:0 0 8px;font-size:22px}
+  .finish-score{font-size:42px;font-weight:bold;color:#ffd700;margin:8px 0}
+  .finish-msg{font-size:15px;margin-bottom:16px}
+  .finish-btn{background:#fff;color:#3d2b00;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:bold;cursor:pointer;margin:4px}
+  .finish-btn:hover{background:#fff3e0}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="edo_index.html">← 単元一覧に戻る</a>
+<h1>🔒 江戸時代② 過去問チェック</h1>
+<div class="nav-menu">
+  <a href="edo2.html">② 鎖国と外交（学習）</a>
+  <a href="edo2_drill.html">② 確認ドリル</a>
+  <a href="edo2_check.html" class="current">② 過去問チェック</a>
+</div>
+<div class="score-bar">
+  <span class="score-label">正解数：</span>
+  <span class="score-val" id="score-val">0 / 18</span>
+  <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  <button class="reset-btn" onclick="location.reload()">🔄 やり直す</button>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 1</span><span class="section-title">朱印船貿易・禁教令</span></div>
+
+<div class="q-card" id="q1">
+  <div class="q-meta"><span class="q-num">Q1</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">鹿児島県改</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">①大名や大商人に海外渡航を許可する右の文書を何というか。②貿易の発展にともない東南アジア各地に形成された日本人の居住地を何というか。</div>
+  <div class="write-wrap">
+    <input class="write-input" id="w1a" placeholder="①の答え" style="margin-bottom:6px">
+    <input class="write-input" id="w1b" placeholder="②の答え">
+    <br><button class="write-check-btn" onclick="cw2('q1','w1a','w1b',['朱印状'],['日本町'],'①朱印状：将軍の朱い印が押された海外渡航許可証。②日本町：東南アジア各地に形成。タイのアユタヤに住んだ山田長政が有名です。')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q1-fb"></div>
+</div>
+
+<div class="q-card" id="q2">
+  <div class="q-meta"><span class="q-num">Q2</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">鳥取県</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">はじめ幕府はキリスト教を黙認していたが、のちに禁教令を出した。その理由として正しいものはどれか。</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q2',true)">キリスト教を信仰する民衆が、幕府に反抗する勢力となることを恐れたため</button>
+    <button class="choice-btn" onclick="a4(this,'q2',false)">アヘン戦争の結果から、諸外国の力を恐れたため</button>
+    <button class="choice-btn" onclick="a4(this,'q2',false)">朱印船貿易で多くの日本人が海外移住するのをくい止めるため</button>
+    <button class="choice-btn" onclick="a4(this,'q2',false)">島原・天草一揆で打撃を受けたため</button>
+  </div>
+  <div class="feedback" id="q2-fb"></div>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 2</span><span class="section-title">島原・天草一揆と鎖国</span></div>
+
+<div class="q-card" id="q3">
+  <div class="q-meta"><span class="q-num">Q3</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">奈良県</span><span class="freq-s">◎最頻出</span></div>
+  <div class="q-text">島原・天草一揆には2つの要因があった。1つは領主による重い年貢の取り立てだが、もう1つの要因は何か。簡潔に書け。</div>
+  <div class="write-wrap">
+    <input class="write-input" id="w3" placeholder="答えを入力してください">
+    <br><button class="write-check-btn" onclick="cw('q3','w3',['キリスト','弾圧'],'キリスト教徒（キリシタン）への弾圧です。重い年貢＋宗教的弾圧という二重の苦しみが蜂起の原因でした。')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q3-fb"></div>
+</div>
+
+<div class="q-card" id="q4">
+  <div class="q-meta"><span class="q-num">Q4</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">宮崎県</span><span class="freq-s">◎最頻出</span></div>
+  <div class="q-text">次の年表の見出しとして（　X　）に当てはまる語を漢字2文字で書け。<br>
+  <span class="source-box">（X）への歩み<br>1616年 ヨーロッパ船の来航地を長崎・平戸に制限<br>1624年 スペイン船の来航禁止<br>1639年 ポルトガル船の来航禁止<br>1641年 平戸のオランダ商館を長崎に移す</span></div>
+  <div class="write-wrap">
+    <input class="write-input" id="w4" placeholder="漢字2文字で">
+    <br><button class="write-check-btn" onclick="cw('q4','w4',['鎖国'],'鎖国。1639年のポルトガル船禁止・1641年のオランダ商館出島移転で体制が完成しました。')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q4-fb"></div>
+</div>
+
+<div class="q-card" id="q5">
+  <div class="q-meta"><span class="q-num">Q5</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">秋田県</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">江戸幕府が鎖国を行った理由として、あてはまらないものを1つ選べ。</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q5',false)">キリスト教徒の勢力拡大を防ぐため</button>
+    <button class="choice-btn" onclick="a4(this,'q5',false)">外国との関係や情報を統制するため</button>
+    <button class="choice-btn" onclick="a4(this,'q5',true)">産業革命が始まったヨーロッパからの工業製品の輸入を制限するため</button>
+    <button class="choice-btn" onclick="a4(this,'q5',false)">西国大名が外国貿易で経済力を強め、幕府に対抗することを防ぐため</button>
+  </div>
+  <div class="feedback" id="q5-fb"></div>
+</div>
+
+<div class="q-card" id="q6">
+  <div class="q-meta"><span class="q-num">Q6</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">福井県</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">幕府はオランダには貿易を許したが、ポルトガルやスペインには来航を禁止した。対応が異なった理由を説明した次の文のXに適する内容を書け。<br>オランダは（　X　）を行わず、ポルトガルやスペインは（X）を行ったから。</div>
+  <div class="write-wrap">
+    <input class="write-input" id="w6" placeholder="答えを入力してください">
+    <br><button class="write-check-btn" onclick="cw('q6','w6',['キリスト','布教'],'キリスト教の布教です。ポルトガル・スペインはカトリックで布教を行いましたが、オランダはプロテスタントで布教を行わないと約束したため貿易を許されました。')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q6-fb"></div>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 3</span><span class="section-title">鎖国下の四つの窓口</span></div>
+
+<div class="q-card" id="q7">
+  <div class="q-meta"><span class="q-num">Q7</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">徳島県</span><span class="freq-s">◎最頻出</span></div>
+  <div class="q-text">幕府が長崎だけで貿易を行った相手国の正しい組み合わせはどれか。</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q7',false)">中国と朝鮮</button>
+    <button class="choice-btn" onclick="a4(this,'q7',false)">朝鮮とポルトガル</button>
+    <button class="choice-btn" onclick="a4(this,'q7',false)">ポルトガルとオランダ</button>
+    <button class="choice-btn" onclick="a4(this,'q7',true)">オランダと中国（清）</button>
+  </div>
+  <div class="feedback" id="q7-fb"></div>
+</div>
+
+<div class="q-card" id="q8">
+  <div class="q-meta"><span class="q-num">Q8</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">三重県</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">①オランダ商館が置かれた長崎の人工島を何というか。②幕府がオランダから毎年提出させた世界情勢の報告書を何というか。</div>
+  <div class="write-wrap">
+    <input class="write-input" id="w8a" placeholder="①の答え" style="margin-bottom:6px">
+    <input class="write-input" id="w8b" placeholder="②の答え">
+    <br><button class="write-check-btn" onclick="cw2('q8','w8a','w8b',['出島'],['オランダ風説書','風説書'],'①出島：長崎港内の扇形の人工島。②オランダ風説書：幕府がヨーロッパ情報を独占的に入手するための報告書。後の蘭学の源になりました。')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q8-fb"></div>
+</div>
+
+<div class="q-card" id="q9">
+  <div class="q-meta"><span class="q-num">Q9</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">三重県</span><span class="freq-s">◎最頻出</span></div>
+  <div class="q-text">江戸時代、将軍の代替わりごとに朝鮮から来日した外交使節団を何というか。</div>
+  <div class="write-wrap">
+    <input class="write-input" id="w9" placeholder="答えを入力してください">
+    <br><button class="write-check-btn" onclick="cw('q9','w9',['朝鮮通信使','通信使'],'朝鮮通信使。500〜1000人規模の大行列で江戸まで来ました。「通信」は「信義を通じる」という意味で、文化交流にも大きな役割を果たしました。')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q9-fb"></div>
+</div>
+
+<div class="q-card" id="q10">
+  <div class="q-meta"><span class="q-num">Q10</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">青森県</span><span class="freq-s">◎最頻出</span></div>
+  <div class="q-text">江戸時代における琉球の状況として適切なものはどれか。</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q10',false)">琉球は独立した王国として薩摩藩と対等な貿易をしていた</button>
+    <button class="choice-btn" onclick="a4(this,'q10',false)">琉球は薩摩藩に服属しながら清とは対等な貿易をしていた</button>
+    <button class="choice-btn" onclick="a4(this,'q10',true)">琉球は薩摩藩に事実上支配されながら清にも貢ぎ物をおくっていた</button>
+    <button class="choice-btn" onclick="a4(this,'q10',false)">琉球は清に貢ぎ物をおくりながら薩摩藩とは対等に貿易をしていた</button>
+  </div>
+  <div class="feedback" id="q10-fb"></div>
+</div>
+
+<div class="q-card" id="q11">
+  <div class="q-meta"><span class="q-num">Q11</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">福島県改</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">①北海道は江戸時代に何と呼ばれていたか。②アイヌとの交易を独占した藩はどこか。③1669年にアイヌ蜂起を指導した人物は誰か。</div>
+  <div class="write-wrap">
+    <input class="write-input" id="w11a" placeholder="①" style="margin-bottom:4px">
+    <input class="write-input" id="w11b" placeholder="②" style="margin-bottom:4px">
+    <input class="write-input" id="w11c" placeholder="③">
+    <br><button class="write-check-btn" onclick="cw3('q11','w11a','w11b','w11c',['蝦夷'],['松前'],['シャクシャイン'],'①蝦夷地②松前藩③シャクシャイン。松前藩の不公平な取引に反発したアイヌが蜂起しましたが、幕府の援助を受けた松前藩に鎮圧されました。')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q11-fb"></div>
+</div>
+
+<div class="section-header"><span class="section-badge">Part 4</span><span class="section-title">総合・○×・並び替え</span></div>
+
+<div class="q-card" id="q12">
+  <div class="q-meta"><span class="q-num">Q12</span><span class="q-type-badge badge-ox">○×</span><span class="q-pref">兵庫県</span></div>
+  <div class="q-text">手紙などを運ぶ飛脚が街道を盛んに行き来した。また、木綿や酒などが菱垣廻船や樽廻船で<em>江戸から大阪へ</em>大量に送られた。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q12',false)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q12',true)">×</button>
+  </div>
+  <div class="feedback" id="q12-fb"></div>
+</div>
+
+<div class="q-card" id="q13">
+  <div class="q-meta"><span class="q-num">Q13</span><span class="q-type-badge badge-ox">○×</span><span class="q-pref">補充問題</span></div>
+  <div class="q-text">鎖国中、幕府が対馬藩を通じて国交を結んでいたのは朝鮮である。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q13',true)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q13',false)">×</button>
+  </div>
+  <div class="feedback" id="q13-fb"></div>
+</div>
+
+<div class="q-card" id="q14">
+  <div class="q-meta"><span class="q-num">Q14</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">山口県</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">鎖国下の四つの窓口（①長崎、②対馬藩、③薩摩藩、④松前藩）と、それぞれに関係の深い語の正しい組み合わせを書け。<br>
+  <span style="font-size:13px;color:#666">（語群：シャクシャイン／琉球王国／オランダ／朝鮮通信使）</span></div>
+  <div class="write-wrap">
+    <textarea class="write-input" id="w14" rows="3" placeholder="例：①〇〇、②〇〇、③〇〇、④〇〇"></textarea>
+    <br><button class="write-check-btn" onclick="cw('q14','w14',['オランダ','朝鮮','琉球','シャクシャイン'],'①長崎→オランダ、②対馬藩→朝鮮通信使、③薩摩藩→琉球王国、④松前藩→シャクシャイン（アイヌ）')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q14-fb"></div>
+</div>
+
+<div class="q-card" id="q15">
+  <div class="q-meta"><span class="q-num">Q15</span><span class="q-type-badge badge-4">4択</span><span class="q-pref">三重県</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">次のA〜Dを古い順に並べたものとして正しいものはどれか。<br>A 徳川家光は日本人の海外渡航と帰国を禁止した<br>B 平戸のオランダ商館を長崎に移す<br>C 徳川家康は幕領でキリスト教を禁止した<br>D 島原・天草のキリスト教徒の農民などが一揆を起こした</div>
+  <div class="choices">
+    <button class="choice-btn" onclick="a4(this,'q15',false)">A→C→D→B</button>
+    <button class="choice-btn" onclick="a4(this,'q15',false)">C→D→A→B</button>
+    <button class="choice-btn" onclick="a4(this,'q15',true)">C→A→D→B</button>
+    <button class="choice-btn" onclick="a4(this,'q15',false)">D→C→A→B</button>
+  </div>
+  <div class="feedback" id="q15-fb"></div>
+</div>
+
+<div class="q-card" id="q16">
+  <div class="q-meta"><span class="q-num">Q16</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">熊本県</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">江戸時代の琉球王国は、薩摩藩や中国とそれぞれどんな関係にあったか、説明せよ。</div>
+  <div class="write-wrap">
+    <textarea class="write-input" id="w16" rows="3" placeholder="答えを入力してください"></textarea>
+    <br><button class="write-check-btn" onclick="cw('q16','w16',['服属','朝貢'],'琉球王国は薩摩藩に服属（征服）されていた。一方、中国（清）に朝貢して貿易も行っていた。薩摩藩はこの両属関係を利用して中国貿易の利益を得ました。')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q16-fb"></div>
+</div>
+
+<div class="q-card" id="q17">
+  <div class="q-meta"><span class="q-num">Q17</span><span class="q-type-badge badge-write">記述</span><span class="q-pref">富山県</span><span class="freq-a">○頻出</span></div>
+  <div class="q-text">幕府は当初キリスト教を黙認していた。その理由を<em>経済的な面</em>から説明せよ。</div>
+  <div class="write-wrap">
+    <input class="write-input" id="w17" placeholder="答えを入力してください">
+    <br><button class="write-check-btn" onclick="cw('q17','w17',['貿易','利益'],'貿易によって莫大な利益を得ることができたためです。キリスト教を禁止するとポルトガル・スペインとの貿易も禁止になってしまうため、当初は黙認していました。')">答え合わせ</button>
+  </div>
+  <div class="feedback" id="q17-fb"></div>
+</div>
+
+<div class="q-card" id="q18">
+  <div class="q-meta"><span class="q-num">Q18</span><span class="q-type-badge badge-ox">○×</span><span class="q-pref">補充問題</span></div>
+  <div class="q-text">鎖国下でも幕府はオランダ風説書によってヨーロッパの情報を入手し続け、これが後の蘭学の発展につながった。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q18',true)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q18',false)">×</button>
+  </div>
+  <div class="feedback" id="q18-fb"></div>
+</div>
+
+<div class="finish-banner" id="finish-banner">
+  <h2>🎉 過去問チェック完了！</h2>
+  <div class="finish-score" id="finish-score"></div>
+  <div class="finish-msg" id="finish-msg"></div>
+  <button class="finish-btn" onclick="location.reload()">🔄 もう一度</button>
+  <button class="finish-btn" onclick="location.href='edo3.html'">次の単元へ ▶</button>
+</div>
+
+<script>
+const TOTAL=18; let answered={};
+function upd(){
+  const ok=Object.values(answered).filter(v=>v).length;
+  const done=Object.keys(answered).length;
+  document.getElementById('score-val').textContent=`${ok} / ${TOTAL}`;
+  document.getElementById('progress-bar').style.width=`${done/TOTAL*100}%`;
+  if(done===TOTAL)setTimeout(()=>fin(ok),400);
+}
+function fin(ok){
+  const b=document.getElementById('finish-banner');b.style.display='block';
+  document.getElementById('finish-score').textContent=`${ok} / ${TOTAL} 問正解`;
+  document.getElementById('finish-msg').textContent=ok===TOTAL?'🏆 満点！':ok>=15?'⭐ すばらしい！':ok>=11?'👍 よくできました。':'📖 学習ページで復習しましょう。';
+  b.scrollIntoView({behavior:'smooth'});
+}
+const FB4={
+  q2:'キリスト教が広まると「神が最上位」という教えが幕府支配と対立します。アヘン戦争はまだ起きていない時代です（1840年）。',
+  q5:'産業革命は18世紀のことで、鎖国完成（1641年）より後の出来事です。したがってウは理由になりません。',
+  q7:'鎖国下の長崎で貿易が許されたのはオランダ（出島）と中国・清（唐人屋敷）の2か国だけです。',
+  q10:'琉球は薩摩藩に事実上支配されながら、表向きは独立国として清に朝貢し続けました。「両属」と呼ばれます。',
+  q15:'C禁教令（1612年）→A海外渡航禁止（1635年）→D島原・天草一揆（1637年）→Bオランダ商館出島移転（1641年）',
+};
+const FBOX={
+  q12:'× 不正解。菱垣廻船・樽廻船は「大阪から江戸へ」運びました。大阪が生産・集積地で、江戸が消費地でした。',
+  q13:'○ 正解。対馬藩（宗氏）が仲介し、将軍の代替わりごとに朝鮮通信使が来日しました。',
+  q18:'○ 正解。オランダ風説書で入手したヨーロッパ情報が蘭学の基盤となり、杉田玄白の「解体新書」（1774年）など科学的成果につながりました。',
+};
+function a4(btn,qId,ok){
+  if(answered[qId]!==undefined)return;
+  const card=document.getElementById(qId);card.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);
+  const fb=document.getElementById(qId+'-fb');
+  if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FB4[qId]||''}`;answered[qId]=true;}
+  else{btn.classList.add('selected-ng');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FB4[qId]||''}`;answered[qId]=false;}
+  upd();
+}
+function aOX(btn,qId,ok){
+  if(answered[qId]!==undefined)return;
+  const card=document.getElementById(qId);card.querySelectorAll('.ox-btn').forEach(b=>b.disabled=true);
+  const fb=document.getElementById(qId+'-fb');
+  if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FBOX[qId]||''}`;answered[qId]=true;}
+  else{btn.classList.add('selected-ng');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FBOX[qId]||''}`;answered[qId]=false;}
+  upd();
+}
+function cw(qId,inputId,kws,exp){
+  if(answered[qId]!==undefined)return;
+  const el=document.getElementById(inputId);const val=el.value.trim();
+  if(!val){alert('答えを入力してください。');return;}
+  el.disabled=true;el.parentElement.querySelector('button').disabled=true;
+  const ok=kws.some(k=>val.includes(k));
+  const card=document.getElementById(qId);const fb=document.getElementById(qId+'-fb');
+  if(ok){card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${exp}`;answered[qId]=true;}
+  else{card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${exp}`;answered[qId]=false;}
+  upd();
+}
+function cw2(qId,idA,idB,kwsA,kwsB,exp){
+  if(answered[qId]!==undefined)return;
+  const a=document.getElementById(idA),b=document.getElementById(idB);
+  if(!a.value.trim()||!b.value.trim()){alert('両方入力してください。');return;}
+  a.disabled=true;b.disabled=true;a.parentElement.querySelector('button').disabled=true;
+  const ok=kwsA.some(k=>a.value.includes(k))&&kwsB.some(k=>b.value.includes(k));
+  const card=document.getElementById(qId);const fb=document.getElementById(qId+'-fb');
+  if(ok){card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${exp}`;answered[qId]=true;}
+  else{card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${exp}`;answered[qId]=false;}
+  upd();
+}
+function cw3(qId,idA,idB,idC,kwsA,kwsB,kwsC,exp){
+  if(answered[qId]!==undefined)return;
+  const a=document.getElementById(idA),b=document.getElementById(idB),c=document.getElementById(idC);
+  if(!a.value.trim()||!b.value.trim()||!c.value.trim()){alert('すべて入力してください。');return;}
+  a.disabled=true;b.disabled=true;c.disabled=true;a.parentElement.querySelector('button').disabled=true;
+  const ok=kwsA.some(k=>a.value.includes(k))&&kwsB.some(k=>b.value.includes(k))&&kwsC.some(k=>c.value.includes(k));
+  const card=document.getElementById(qId);const fb=document.getElementById(qId+'-fb');
+  if(ok){card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${exp}`;answered[qId]=true;}
+  else{card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${exp}`;answered[qId]=false;}
+  upd();
+}
+</script>
+</body>
+</html>

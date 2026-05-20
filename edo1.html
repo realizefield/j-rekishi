@@ -2,159 +2,378 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>歴史学習：江戸時代 ① 幕府の成立と支配</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：江戸時代① 幕府の成立と支配</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 950px; margin: 20px auto; line-height: 1.8; background-color: #f4f7f9; color: #333; }
-  .container { background-color: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-  h1 { text-align: center; color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-  .nav-menu { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .nav-menu a { text-decoration: none; color: #1976d2; padding: 8px 12px; border: 1px solid #1976d2; border-radius: 20px; font-size: 14px; }
-  .nav-menu a.current { background: #1976d2; color: #fff; font-weight: bold; }
-  .question-text { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 15px; font-size: 18px; line-height: 2.2; border: 1px solid #eee; }
-  .blank { display: inline-block; min-width: 110px; border-bottom: 2px solid #666; margin: 0 4px; text-align: center; color: #e67e22; font-weight: bold; cursor: pointer; transition: 0.2s; }
-  .blank.waiting { color: transparent; background-color: #eee; border-radius: 4px; }
-  .blank.correct { background-color: #ccf; border-bottom-color: #339; color: #339; }
-  .word-bank-wrapper { margin-top: 15px; }
-  .word-bank-title { font-weight: bold; margin-bottom: 8px; }
-  .word-bank { border: 1px solid #ccc; border-radius: 8px; padding: 15px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fafafa; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #f5f5f5; cursor: pointer; user-select: none; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; cursor: default; pointer-events: none; }
-  .word-chip.selected { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .controls { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-  button { padding: 10px 18px; border-radius: 8px; border: none; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.2s; }
-  .start-btn { background-color: #1976d2; }
-  .check-btn { background-color: #1976d2; }
-  .reset-btn { background-color: #666; }
-  .time-reset-btn { background-color: #666; }
-  .next-btn { background-color: #90caf9; }
-  .next-btn.active { background-color: #1976d2; }
-  .explain-btn { background-color: #666; }
-  .timer-info { margin-top: 15px; padding: 10px 15px; font-size: 16px; border: 1px solid #1976d2; border-radius: 6px; display: inline-block; background-color: #fff; min-width: 320px; }
-  .explain-box { display: none; margin-top: 15px; padding: 15px; border-left: 5px solid #1976d2; background-color: #f0f4ff; line-height: 1.6; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:24px;color:#2c1800}
+  h2{margin-top:20px;margin-bottom:8px;font-size:19px;border-left:5px solid #3d2b00;padding-left:10px;color:#2c1800}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#5c3d00;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#3d2800}
+  .nav-menu{display:flex;justify-content:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .nav-menu a{text-decoration:none;color:#5c3d00;padding:8px 12px;border:1px solid #5c3d00;border-radius:20px;font-size:14px}
+  .nav-menu a.current{background:#5c3d00;color:#fff;font-weight:bold}
 
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
+  /* 語群 */
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #3d2b00;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#a0522d;background-color:#fff3e0;box-shadow:0 0 0 2px #ffcc80}
 
+  /* セクション */
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px}
+  .label-1{background:#3d2b00}.label-2{background:#5c1a1a}.label-3{background:#2d4a00}
+  .blank{display:inline-block;min-width:110px;min-height:26px;border-bottom:2px solid #3d2b00;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#3d2b00;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .key-point{background:#fff8e1;border-left:5px solid #3d2b00;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:15px}
+  .key-point strong{color:#3d2b00}
+
+  /* ========== ホバーポップ共通 ========== */
+  /* .kw = 固定語句（太字破線下線） */
+  .kw{
+    display:inline-block;position:relative;
+    border-bottom:2px dashed #8b5e00;cursor:help;
+    color:#2c1800;font-weight:bold;vertical-align:middle;
+  }
+  /* .blank にも同じポップを付ける */
+  .kw > .pop-box,
+  .blank > .pop-box{
+    display:none;
+    position:absolute;
+    bottom:calc(100% + 10px);
+    left:50%;transform:translateX(-50%);
+    width:270px;
+    background:#2c1800;color:#fff;
+    border-radius:10px;
+    padding:12px 15px;
+    font-size:13px;line-height:1.8;
+    font-weight:normal;text-align:left;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);
+    z-index:500;
+    pointer-events:none;
+    white-space:normal;
+  }
+  .kw > .pop-box::after,
+  .blank > .pop-box::after{
+    content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+    border:7px solid transparent;border-top-color:#2c1800;
+  }
+  /* ホバーで表示 */
+  .kw:hover > .pop-box,
+  .blank:hover > .pop-box{display:block}
+
+  /* ポップ内パーツ */
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-icon{font-size:11px;margin-right:4px}
+  .pop-why{color:#ffcc80;font-weight:bold;font-size:11px;display:block;margin-bottom:2px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+
+  /* 語群チップポップ */
+  .chip-pop{
+    display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+    width:200px;background:#2c1800;color:#fff;border-radius:8px;
+    padding:8px 12px;font-size:12px;line-height:1.7;
+    z-index:300;pointer-events:none;text-align:left;
+    box-shadow:0 4px 14px rgba(0,0,0,0.4)
+  }
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+
+  /* コラム */
+  .column-toggle{
+    display:flex;align-items:center;gap:8px;background:#fffbe6;
+    border:2px solid #b8860b;border-radius:8px;padding:10px 14px;
+    cursor:pointer;margin-top:14px;color:#5c3d00;font-size:14px;font-weight:bold;width:100%;text-align:left;
+  }
+  .column-toggle:hover{background:#fff3c0}
+  .column-toggle .arrow{transition:transform 0.25s;font-size:12px;flex-shrink:0}
+  .column-toggle.open .arrow{transform:rotate(90deg)}
+  .column-body{display:none;margin-top:6px;padding:14px 18px;background:#fffbe6;border-left:4px solid #b8860b;border-radius:0 8px 8px 8px;font-size:14px;line-height:2.0}
+  .column-body.open{display:block}
+  .col-row{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+  .col-icon{font-size:18px;flex-shrink:0;margin-top:3px}
+  .col-label{font-weight:bold;color:#5c3d00;margin-right:4px;white-space:nowrap}
+
+  /* フッター */
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#3d2b00;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #1a1200}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#a0522d;box-shadow:0 3px 0 #6b3520}
+  button#next-btn:disabled{background-color:#d4a574;box-shadow:none;cursor:default}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #3d2b00;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #3d2b00;background-color:#fff8e1;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>江戸時代</h1>
-  <div class="nav-menu">
-    <a href="edo1.html" class="current">① 幕府の成立と支配</a>
-    <a href="edo2.html">② 鎖国と外交</a>
-    <a href="edo3.html">③ 産業と身分制度</a>
-    <a href="edo4.html">④ 元禄文化と改革</a>
+
+<a class="back-to-index" href="edo_index.html">← 単元一覧に戻る</a>
+<h1>🏯 江戸時代① 幕府の成立と支配</h1>
+
+<div class="nav-menu">
+  <a href="edo1.html" class="current">① 幕府の成立と支配</a>
+  <a href="edo2.html">② 鎖国と外交</a>
+  <a href="edo3.html">③ 産業と身分制度</a>
+  <a href="edo4.html">④ 元禄文化と改革</a>
+</div>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ① 江戸幕府の成立 -->
+<div class="section">
+  <span class="section-label label-1">① 江戸幕府の成立</span>
+  <h2>徳川家康と幕府の開設</h2>
+  <p>1600年、<span class="kw">関ヶ原の戦い<span class="pop-box">
+      <span class="pop-name">⚔️ 関ヶ原の戦い（1600年）</span>
+      <span class="pop-body">豊臣秀吉の死後、後継ぎ争いから起きた天下分け目の大戦です。東軍（家康）が西軍（石田三成）を1日で破り、家康が全国の実権を握りました。</span>
+      <span class="pop-memo">💡 この勝利がなければ江戸幕府は生まれませんでした。</span>
+    </span></span>
+    で勝利した
+    <span class="blank" data-id="A">徳川家康<span class="pop-box">
+      <span class="pop-name">👘 徳川家康（1543〜1616）</span>
+      <span class="pop-body">三河（愛知県）出身。幼少期は今川氏の人質という苦労人です。「鳴くまで待とう」の言葉通り、じっくり機会を待ち続け、関ヶ原で天下を手にしました。</span>
+      <span class="pop-memo">💡 63歳で将軍になり、すぐ息子に譲りました。「徳川家が代々将軍」という既成事実を作るためです。</span>
+    </span></span>
+    は、1603年に
+    <span class="blank" data-id="B">征夷大将軍<span class="pop-box">
+      <span class="pop-name">🎖️ 征夷大将軍</span>
+      <span class="pop-body">天皇から授けられる武家の最高位です。「これがなければ幕府は開けない」という権威の証明書のようなものです。</span>
+      <span class="pop-memo">💡 家康はすぐ息子に譲り「徳川の世襲」を天下に示しました。豊臣家が再び将軍になる道を封じたのです。</span>
+    </span></span>
+    に任命され、江戸に幕府を開きました。</p>
+  <div class="key-point">⭐ <strong>流れ</strong>：関ヶ原（1600）→ 征夷大将軍（1603）→ 江戸幕府の成立</div>
+
+  <button class="column-toggle" onclick="toggleCol(this)"><span class="arrow">▶</span>💡 なぜ家康はすぐ将軍を息子に譲ったのですか？</button>
+  <div class="column-body">
+    <div class="col-row"><span class="col-icon">❓</span><div><span class="col-label">理由</span>「征夷大将軍＝徳川家の世襲」を天下に示すためです。豊臣秀吉は将軍にはなれず、自分の代限りで終わりました。家康はその轍を踏まないよう、わずか2年で息子の秀忠に将軍職を譲りました。</div></div>
+    <div class="col-row"><span class="col-icon">🔴</span><div><span class="col-label">結果</span>豊臣家は二度と将軍になれなくなりました。大坂の陣（1615年）で豊臣家を滅ぼし、徳川一強の時代が確定しました。</div></div>
+    <div class="col-row"><span class="col-icon">🌊</span><div><span class="col-label">影響</span>約260年間、将軍は必ず徳川家から出ることになりました。これが江戸時代の安定の根幹でした。</div></div>
   </div>
-  <div class="question-text" id="quest">
-    1600年、石田三成らの軍を破った **関ヶ原の戦い** で勝利した <span class="blank" data-ans="徳川家康">徳川家康</span> は、1603年に <span class="blank" data-ans="征夷大将軍">征夷大将軍</span> に任命され、江戸に幕府をひらきました。<br><br>
-    幕府は、将軍の直轄領である <span class="blank" data-ans="幕領">幕領</span> (天領)を全国に配置し、各地の大名には領地を与えて統治させました。この仕組みを **幕藩体制** といいます。大名は、徳川氏の一族である <span class="blank" data-ans="親藩">親藩</span> 、関ヶ原の戦い以前から徳川氏に従っていた <span class="blank" data-ans="譜代大名">譜代大名</span> 、戦い以後に従った <span class="blank" data-ans="外様大名">外様大名</span> に分けられました。<br><br>
-    二代将軍徳川秀忠のとき、大名を統制するために <span class="blank" data-ans="武家諸法度">武家諸法度</span> を定め、城の修理を制限しました。また、三代将軍 <span class="blank" data-ans="徳川家光">徳川家光</span> のとき、大名に1年おきに江戸と領地を往復させる <span class="blank" data-ans="参勤交代">参勤交代</span> を義務づけました。朝廷に対しても **禁中並公家諸法度** を出して、天皇や公家の行動を厳しく制限しました。さらに、農民に対しては、生活を細かく制限する <span class="blank" data-ans="慶安のお触書">慶安のお触書</span> を出しました。
+</div>
+
+<!-- ② 幕藩体制と大名の区分 -->
+<div class="section">
+  <span class="section-label label-2">② 幕藩体制と大名の区分</span>
+  <h2>幕藩体制のしくみ</h2>
+  <p>幕府は、将軍の直轄領である
+    <span class="blank" data-id="C">幕領<span class="pop-box">
+      <span class="pop-name">🏙️ 幕領（天領）</span>
+      <span class="pop-body">将軍が直接支配する土地です。江戸・京都・大坂の主要都市や佐渡金山などの鉱山が含まれ、全国約400万石に及びました。</span>
+      <span class="pop-memo">💡 幕府はここから収入を得ていたので、どの大名が反乱を起こしても財政的に揺るぎませんでした。</span>
+    </span></span>
+    （天領）を全国に配置し、各地の大名には領地を与えて統治させました。この仕組みを
+    <span class="kw">幕藩体制<span class="pop-box">
+      <span class="pop-name">🏯 幕藩体制</span>
+      <span class="pop-body">将軍（幕府）が頂点に立ち、大名（藩）が領地を統治する二重構造です。全国をすべて幕府だけで管理するのは不可能なので、大名に任せながら上から統制しました。</span>
+      <span class="pop-memo">💡 約260年続いた安定の仕組みですが、各藩が独立性を保ったため、幕末には藩ごとにバラバラな動きが起きました。</span>
+    </span></span>
+    といいます。</p>
+  <p>大名は3種類に分けられました：</p>
+  <ul style="margin:0 0 12px 24px;line-height:2.8">
+    <li>
+      <span class="blank" data-id="D">親藩<span class="pop-box">
+        <span class="pop-name">🔴 親藩</span>
+        <span class="pop-body">徳川一族の大名です。尾張・紀伊・水戸の「御三家」が代表で、将軍の後継ぎを出す格式がありました。</span>
+        <span class="pop-memo">💡 8代将軍・徳川吉宗は紀伊徳川家出身です。将軍に男子がいないとき、御三家から選ばれました。</span>
+      </span></span>：徳川氏の一族（御三家など）
+    </li>
+    <li>
+      <span class="blank" data-id="E">譜代大名<span class="pop-box">
+        <span class="pop-name">🟡 譜代大名</span>
+        <span class="pop-body">関ヶ原以前からの家臣が大名になった人々です。幕府の老中など重要役職を独占できました。江戸周辺の要所に配置されました。</span>
+        <span class="pop-memo">💡 「重要ポストは信頼できる家臣だけ」という原則で、外様大名は政治の中枢に入れませんでした。</span>
+      </span></span>：関ヶ原以前から従っていた大名
+    </li>
+    <li>
+      <span class="blank" data-id="F">外様大名<span class="pop-box">
+        <span class="pop-name">🔵 外様大名</span>
+        <span class="pop-body">関ヶ原以後に従った大名です。前田・島津・伊達など石高の大きい有力者が多かったため、幕府に警戒されて江戸から遠い地方に置かれました。</span>
+        <span class="pop-memo">💡 皮肉にも、幕末に倒幕運動を起こしたのは薩摩（島津）・長州（毛利）などの外様藩でした。250年後の逆転です。</span>
+      </span></span>：関ヶ原以後に従った大名
+    </li>
+  </ul>
+  <div class="key-point">⭐ <strong>大名の区分</strong>：親藩（一族）→ 譜代（関ヶ原前・要職あり）→ 外様（関ヶ原後・遠方配置）</div>
+
+  <button class="column-toggle" onclick="toggleCol(this)"><span class="arrow">▶</span>💡 外様大名はなぜ遠い場所に置かれたのですか？</button>
+  <div class="column-body">
+    <div class="col-row"><span class="col-icon">❓</span><div><span class="col-label">理由</span>外様大名の多くは石高が大きく、反乱を起こす力を持っていました。江戸から遠い場所に置くことで、すぐに兵を動かせないようにし、参勤交代でお金を使わせて財力を弱めました。</div></div>
+    <div class="col-row"><span class="col-icon">🌊</span><div><span class="col-label">皮肉な結末</span>幕末、不満をためた薩摩・長州などの外様藩が倒幕運動の主役になりました。締め付けすぎた反動が250年後に返ってきたのです。</div></div>
   </div>
-  <div class="word-bank-wrapper">
-    <div class="word-bank-title">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
-    <div class="word-bank" id="bank"></div>
+</div>
+
+<!-- ③ 大名・朝廷・農民の統制 -->
+<div class="section">
+  <span class="section-label label-3">③ 大名・朝廷・農民の統制</span>
+  <h2>武家諸法度と参勤交代</h2>
+  <p>二代将軍徳川秀忠のとき、大名を統制するために
+    <span class="blank" data-id="G">武家諸法度<span class="pop-box">
+      <span class="pop-name">📜 武家諸法度（1615年〜）</span>
+      <span class="pop-body">大名を縛るための法令です。「城を無断で修理してはいけない」「幕府の許可なく結婚してはいけない」などを定めました。違反すると改易（領地没収）という厳しい処罰がありました。</span>
+      <span class="pop-memo">💡 つまり「反乱の準備」を制度で封じたのです。城＝軍事力、婚姻＝同盟、の禁止です。</span>
+    </span></span>
+    が定められ、城の無断修理などが制限されました。また、三代将軍
+    <span class="blank" data-id="H">徳川家光<span class="pop-box">
+      <span class="pop-name">🏯 徳川家光（1604〜1651）</span>
+      <span class="pop-body">三代将軍。祖父・家康が始めた幕府体制を「完成形」にした人物です。参勤交代の義務化・鎖国体制の完成など、江戸時代の基本ルールをほぼ確定させました。</span>
+      <span class="pop-memo">💡 「自分は生まれながらの将軍だ」と言い放ったそうです。それだけ幕府の権威が確立されていました。</span>
+    </span></span>
+    のとき、大名に1年おきに江戸と領地を往復させる
+    <span class="blank" data-id="I">参勤交代<span class="pop-box">
+      <span class="pop-name">🚶 参勤交代（1635年〜）</span>
+      <span class="pop-body">大名が1年おきに江戸と領地を往復する制度です。行列は数百〜千人規模で費用は莫大、妻子は人質として江戸に常住しました。</span>
+      <span class="pop-memo">💡 「お金を使い果たさせる」「家族を人質にする」「常に監視する」という3重の仕掛けです。加賀百万石の前田藩でも費用は年収の3〜4割を占めたといわれています。</span>
+    </span></span>
+    が義務づけられました。朝廷に対しては
+    <span class="kw">禁中並公家諸法度<span class="pop-box">
+      <span class="pop-name">👑 禁中並公家諸法度（1615年）</span>
+      <span class="pop-body">天皇・公家の行動を制限した法令です。天皇の役割を「学問・礼儀」に限定し、政治には関われなくしました。</span>
+      <span class="pop-memo">💡 ただし天皇の「権威」は消えませんでした。幕末、倒幕派が「天皇の命令だ」と言えたのはこのためです。</span>
+    </span></span>
+    を出しました。農民に対しては
+    <span class="blank" data-id="J">慶安のお触書<span class="pop-box">
+      <span class="pop-name">🌾 慶安のお触書（1649年）</span>
+      <span class="pop-body">農民の衣食住を細かく制限した法令です。「米は食べず麦・粟を食べなさい」「酒・茶は買ってはなりません」など32か条にわたります。</span>
+      <span class="pop-memo">💡 幕府の収入は農民の年貢が命綱でした。農民に豊かになられると年貢が減るため「生かさず殺さず」の方針でした。</span>
+    </span></span>
+    が出されました。</p>
+  <div class="key-point">⭐ <strong>統制のまとめ</strong>：大名→武家諸法度・参勤交代 ／ 朝廷→禁中並公家諸法度 ／ 農民→慶安のお触書</div>
+
+  <button class="column-toggle" onclick="toggleCol(this)"><span class="arrow">▶</span>💡 参勤交代の「3重の仕掛け」とは何ですか？</button>
+  <div class="column-body">
+    <div class="col-row"><span class="col-icon">💰</span><div><span class="col-label">①財力の消耗</span>数百〜千人規模の行列の費用が莫大でした。加賀百万石の前田藩でも年収の3〜4割を費やしたといわれています。お金を使い果たさせることで、反乱の軍資金を残させませんでした。</div></div>
+    <div class="col-row"><span class="col-icon">👨‍👩‍👧</span><div><span class="col-label">②人質の確保</span>大名の妻子は江戸に常住しました。「反乱を起こせば家族が人質になる」という心理的な抑止力です。</div></div>
+    <div class="col-row"><span class="col-icon">👁️</span><div><span class="col-label">③常時監視</span>江戸にいる間、大名の行動を幕府が常に把握できました。反乱の計画を立てる暇もありませんでした。</div></div>
+    <div class="col-row"><span class="col-icon">🌊</span><div><span class="col-label">意外な副産物</span>大名行列が全国を往来したことで、街道・宿場町が大発展しました。幕府にとっては統制の道具でしたが、日本全国の物流・文化交流を促進しました。</div></div>
   </div>
-  <div class="controls">
-    <button class="start-btn" onclick="startChallenge()">チャレンジ開始</button>
-    <button class="check-btn" onclick="checkAnswers()">判定</button>
-    <button class="reset-btn" onclick="resetParagraph()">この段落をやり直す</button>
-    <button class="time-reset-btn" onclick="resetTimer()">時間リセット</button>
-    <button class="next-btn" id="next-btn" disabled>次の段落へ進む ▶</button>
-    <button class="explain-btn" onclick="toggleExplain()">【解説】を見る</button>
+</div>
+
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button onclick="startChallenge()">チャレンジ開始</button>
+      <button onclick="checkAnswers()">判定</button>
+      <button class="secondary" onclick="location.reload()">やり直す</button>
+      <button class="secondary" onclick="resetTimer()">時間リセット</button>
+      <button id="next-btn" onclick="location.href='edo2.html'" disabled>次の単元へ ▶</button>
+      <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
+    </div>
+    <div class="timer-info" id="timer-display">経過時間：---</div>
+    <div class="explain-box" id="explain-box">
+      ①成立：関ヶ原（1600）→ 征夷大将軍（1603）→ 江戸幕府開設<br>
+      ②幕藩体制：将軍が幕領を直轄。大名は親藩・譜代・外様に分類。<br>
+      ③統制：武家諸法度・参勤交代（大名）／禁中並公家諸法度（朝廷）／慶安のお触書（農民）
+    </div>
   </div>
-  <div class="timer-info" id="timer">経過時間：---　（まだ記録がありません）</div>
-  <div class="explain-box" id="exp"><b>【解説】</b><br>徳川家康は関ヶ原の戦いを経て江戸幕府をひらき、強力な幕藩体制を築きました。大名は親藩・譜代・外様に分けられ、武家諸法度や参勤交代で厳格に統制されました。朝廷には禁中並公家諸法度、農民には慶安のお触書を出すことで、社会の全階層を幕府の支配下に置きました。</div>
 </div>
 
 <script>
-  let selChip = null, timer = null, startTime = null;
-  const ansWords = ["徳川家康", "征夷大将軍", "幕領", "親藩", "譜代大名", "外様大名", "武家諸法度", "徳川家光", "参勤交代", "慶安のお触書"];
+const WORD_TIPS={
+  "徳川家康":"三河出身。関ヶ原（1600）を制し、1603年に江戸幕府を開きました。すぐ息子に将軍を譲り世襲を確立しました。",
+  "征夷大将軍":"天皇から授けられる武家の最高位です。これを得て幕府を開く正当性が生まれました。",
+  "幕領":"将軍が直接支配する土地（天領）です。主要都市・金山・銀山を含む幕府の財政基盤でした。",
+  "親藩":"徳川一族の大名です。御三家（尾張・紀伊・水戸）が代表。将軍後継ぎを出す家柄でした。",
+  "譜代大名":"関ヶ原以前からの家臣の大名です。老中など幕府要職を独占しました。",
+  "外様大名":"関ヶ原以後に従った大名です。有力ですが遠方に配置され、幕府要職には就けませんでした。",
+  "武家諸法度":"大名統制の法令です。城の無断修理・無許可婚姻を禁止。違反は改易（領地没収）でした。",
+  "徳川家光":"三代将軍です。参勤交代を義務化し、鎖国体制を完成させました。",
+  "参勤交代":"大名が1年おきに江戸と領地を往復する制度です。莫大な費用で大名の財力を削ぎました。",
+  "慶安のお触書":"農民の衣食住を制限した法令（1649年）。「米は食べるな」など32か条にわたります。",
+};
 
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => {
-      b.textContent = "？";
-      b.classList.add('waiting');
-      b.classList.remove('correct');
-      b.onclick = () => fillBlank(b);
-    });
-    const bank = document.getElementById('bank');
-    bank.innerHTML = "";
-    const shuffled = [...ansWords].sort(() => Math.random() - 0.5);
-    shuffled.forEach(w => {
-      const chip = document.createElement("div");
-      chip.className = "word-chip";
-      chip.textContent = w;
-      chip.onclick = () => {
-        if (chip.classList.contains('used')) return;
-        if (selChip) selChip.classList.remove('selected');
-        selChip = chip;
-        chip.classList.add('selected');
-      };
-      bank.appendChild(chip);
-    });
-    startTime = Date.now();
-    if (timer) clearInterval(timer);
-    timer = setInterval(() => {
-      const s = Math.floor((Date.now() - startTime) / 1000);
-      document.getElementById('timer').textContent = `経過時間：${s}秒`;
-    }, 1000);
-    selChip = null;
-  }
+const answers={
+  "A":"徳川家康","B":"征夷大将軍","C":"幕領",
+  "D":"親藩","E":"譜代大名","F":"外様大名",
+  "G":"武家諸法度","H":"徳川家光","I":"参勤交代","J":"慶安のお触書"
+};
 
-  function fillBlank(b) {
-    if (!selChip) return;
-    if (b.textContent !== "？") {
-      const oldVal = b.textContent;
-      const chips = document.querySelectorAll('.word-chip');
-      for (let c of chips) {
-        if (c.textContent === oldVal && c.classList.contains('used')) {
-          c.classList.remove('used');
-          break;
-        }
-      }
+/* ========== 語群バンク ========== */
+let startTime, timerId, selectedChip = null;
+
+function renderBank(){
+  const bank = document.getElementById('word-bank');
+  bank.style.display = "flex"; bank.innerHTML = "";
+  [...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    const label = document.createElement('span');
+    label.textContent = word;
+    chip.appendChild(label);
+    const tip = WORD_TIPS[word];
+    if(tip){
+      const pop = document.createElement('div');
+      pop.className = 'chip-pop';
+      pop.textContent = tip;
+      chip.appendChild(pop);
     }
-    b.textContent = selChip.textContent;
-    b.classList.remove('waiting');
-    selChip.classList.add('used');
-    selChip.classList.remove('selected');
-    selChip = null;
-  }
-
-  function checkAnswers() {
-    let ok = true;
-    document.querySelectorAll('.blank').forEach(b => {
-      if (b.textContent === b.getAttribute('data-ans')) {
-        b.classList.add('correct');
-      } else {
-        ok = false;
-        b.classList.remove('correct');
-      }
+    chip.addEventListener('click', ()=>{
+      if(chip.classList.contains('used')) return;
+      document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));
+      selectedChip = chip;
+      chip.classList.add('selected-chip');
     });
-    if (ok) {
-      clearInterval(timer);
-      document.getElementById('next-btn').disabled = false;
-      document.getElementById('next-btn').classList.add('active');
-      alert("全問正解です！江戸時代の支配体制を完璧にマスターしました。");
-    } else {
-      alert("間違いがあります。もう一度見直してみましょう。");
-    }
-  }
+    bank.appendChild(chip);
+  });
+}
 
-  function resetParagraph() { location.reload(); }
-  function resetTimer() { clearInterval(timer); document.getElementById('timer').textContent = "経過時間：---"; }
-  function toggleExplain() { const e = document.getElementById('exp'); e.style.display = e.style.display === 'block' ? 'none' : 'block'; }
+/* ========== 穴埋め ========== */
+function getBlankText(b){
+  const c = b.cloneNode(true);
+  c.querySelectorAll('.pop-box').forEach(p=>p.remove());
+  return c.textContent.trim();
+}
+function setBlankText(b, txt){for(const n of [...b.childNodes]){if(n.nodeType===3) n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3) n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+
+document.querySelectorAll('.blank').forEach(blank=>{
+  blank.addEventListener('click', e=>{
+    e.stopPropagation();
+    if(selectedChip){
+      const old = getBlankText(blank);
+      if(old) document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old) c.classList.remove('used');});
+      setBlankText(blank, getChipWord(selectedChip));
+      selectedChip.classList.add('used');
+      selectedChip.classList.remove('selected-chip');
+      selectedChip = null;
+    }
+  });
+});
+
+/* ========== コラム ========== */
+function toggleCol(btn){
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+/* ========== ボタン ========== */
+function startChallenge(){
+  document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b); b.classList.remove('correct');});
+  renderBank(); selectedChip = null;
+  startTime = Date.now();
+  if(timerId) clearInterval(timerId);
+  timerId = setInterval(()=>{
+    document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;
+  }, 1000);
+}
+function checkAnswers(){
+  let ok = true;
+  document.querySelectorAll('.blank').forEach(b=>{
+    if(getBlankText(b)===answers[b.dataset.id]) b.classList.add('correct');
+    else{ok=false; b.classList.remove('correct');}
+  });
+  if(ok){clearInterval(timerId); document.getElementById('next-btn').disabled=false; alert("全問正解です！江戸幕府の支配体制を完璧にマスターしました。");}
+  else alert("間違いがあります。もう一度見直してみましょう。");
+}
+function resetTimer(){clearInterval(timerId); document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box'); b.style.display=(b.style.display==='block')?'none':'block';}
 </script>
-
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['edo1'] = prog['edo1'] || {};
-      prog['edo1'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
 </body>
 </html>
