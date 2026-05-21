@@ -5,39 +5,158 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>歴史学習GAMBA：鎌倉文化</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:270px;background:#2c1800;color:#fff;border-radius:10px;padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none;}
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>鎌倉文化</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>鎌倉新仏教</h2><div class="question-text">鎌倉時代には武士や庶民にわかりやすい新しい仏教が次々と生まれました。<span class="blank" data-id="A">法然</span>の<span class="blank" data-id="B">浄土宗</span>（念仏を唱えれば極楽往生できる）、<span class="blank" data-id="C">親鸞</span>の<span class="blank" data-id="D">浄土真宗</span>（悪人こそ救われる）、<span class="blank" data-id="E">一遍</span>の<span class="blank" data-id="F">時宗</span>（踊り念仏）、<span class="blank" data-id="G">日蓮</span>の<span class="blank" data-id="H">日蓮宗</span>（題目「南無妙法蓮華経」）、<span class="blank" data-id="I">栄西</span>の<span class="blank" data-id="J">臨済宗</span>（坐禅）、<span class="blank" data-id="K">道元</span>の<span class="blank" data-id="L">曹洞宗</span>（坐禅）が生まれた。</div></div>
-<div class="section"><h2>鎌倉文化の文学・彫刻・農業</h2><div class="question-text">文学では琵琶法師が語り伝えた軍記物<span class="blank" data-id="M">平家物語</span>、鴨長明の随筆<span class="blank" data-id="N">方丈記</span>、吉田兼好の<span class="blank" data-id="O">徒然草</span>が有名。藤原定家らが編集した和歌集<span class="blank" data-id="P">新古今和歌集</span>も生まれた。<br><br>彫刻では<span class="blank" data-id="Q">運慶・快慶</span>が東大寺南大門の<span class="blank" data-id="R">金剛力士像</span>を制作した。素朴で力強い武士らしい文化が特徴。農業では<span class="blank" data-id="S">二毛作</span>（米の裏作に麦）が始まり、<span class="blank" data-id="T">草木灰</span>が肥料として使われた。</div></div>
+
+<div class="section">
+  <h2>鎌倉新仏教</h2>
+  <p>鎌倉時代には武士や庶民にわかりやすい新しい仏教が次々と生まれました。
+  <span class="blank" data-id="A">法然<span class="pop-box">
+    <span class="pop-name">🧘 法然（1133〜1212）</span>
+    <span class="pop-body">浄土宗の開祖。「南無阿弥陀仏と唱えれば誰でも極楽に行ける」という「専修念仏」を説きました。比叡山で学んだ後、庶民への布教に転じた先駆者です。</span>
+    <span class="pop-memo">💡 「念仏を唱えるだけ」という簡単さが革命的でした。それまで仏教は貴族のものでしたが、法然が庶民に開放しました。</span>
+  </span></span>の
+  <span class="blank" data-id="B">浄土宗<span class="pop-box">
+    <span class="pop-name">⛩️ 浄土宗</span>
+    <span class="pop-body">法然が開いた宗派。「南無阿弥陀仏」の念仏を唱えることで阿弥陀仏の力により極楽浄土に生まれ変わると説きます。現在も大きな宗派の一つです。</span>
+    <span class="pop-memo">💡 浄土宗＝法然、浄土真宗＝親鸞、の区別が試験頻出です。</span>
+  </span></span>（念仏を唱えれば極楽往生できる）、
+  <span class="blank" data-id="C">親鸞<span class="pop-box">
+    <span class="pop-name">🧘 親鸞（1173〜1263）</span>
+    <span class="pop-body">浄土真宗の開祖。法然の弟子。「悪人こそが阿弥陀仏に救われる（悪人正機説）」と説きました。妻帯・肉食を認め、在家（普通の生活者）として布教しました。</span>
+    <span class="pop-memo">💡 「善人でさえ救われるのだから悪人はなおさら救われる」という逆転の論理。現代の浄土真宗は日本最大規模の仏教宗派です。</span>
+  </span></span>の
+  <span class="blank" data-id="D">浄土真宗<span class="pop-box">
+    <span class="pop-name">⛩️ 浄土真宗</span>
+    <span class="pop-body">親鸞が開いた宗派。阿弥陀仏の力（他力本願）への信心だけで救われると説きます。現在、日本最大の仏教宗派の一つです。</span>
+    <span class="pop-memo">💡 「他力本願」という言葉はここから来ています。本来は「阿弥陀仏の力に頼る」という意味ですが、現在は「人任せ」という意味で使われています。</span>
+  </span></span>（悪人こそ救われる）、
+  <span class="blank" data-id="E">一遍<span class="pop-box">
+    <span class="pop-name">🧘 一遍（1239〜1289）</span>
+    <span class="pop-body">時宗の開祖。「踊り念仏（念仏を唱えながら踊る）」で全国を遊行しながら布教しました。財産・家族を捨て、定住しない独特のスタイルで知られます。</span>
+    <span class="pop-memo">💡 踊り念仏が日本各地の盆踊りの起源になったという説があります。日本全国を旅した「移動する布教者」でした。</span>
+  </span></span>の
+  <span class="blank" data-id="F">時宗<span class="pop-box">
+    <span class="pop-name">⛩️ 時宗</span>
+    <span class="pop-body">一遍が開いた宗派。念仏を唱えながら踊る「踊り念仏」が特徴です。死の直前に念仏を唱えることを重視し、「いつ死んでも救われる」という教えです。</span>
+    <span class="pop-memo">💡 盆踊りの起源の一つとされています。</span>
+  </span></span>（踊り念仏）、
+  <span class="blank" data-id="G">日蓮<span class="pop-box">
+    <span class="pop-name">🧘 日蓮（1222〜1282）</span>
+    <span class="pop-body">日蓮宗の開祖。「南無妙法蓮華経（題目）」を唱えることで救われると説きました。他宗派・幕府を激しく批判し、迫害を受けながらも主張を曲げませんでした。</span>
+    <span class="pop-memo">💡 元寇を「正しい仏教に帰依しないからだ」と予言して的中させ、信者が増えました。現代の創価学会・日蓮正宗もこの流れを汲みます。</span>
+  </span></span>の
+  <span class="blank" data-id="H">日蓮宗<span class="pop-box">
+    <span class="pop-name">⛩️ 日蓮宗</span>
+    <span class="pop-body">日蓮が開いた宗派。「南無妙法蓮華経」という題目を唱えることを根本とします。他宗批判で知られる激しい宗派です。</span>
+    <span class="pop-memo">💡 6宗派の中で唯一「念仏ではなく題目（お経のタイトル）を唱える」宗派です。</span>
+  </span></span>（題目「南無妙法蓮華経」）、
+  <span class="blank" data-id="I">栄西<span class="pop-box">
+    <span class="pop-name">🧘 栄西（1141〜1215）</span>
+    <span class="pop-body">臨済宗の開祖。宋から禅宗を持ち帰りました。公案（禅問答）と座禅で悟りを目指す教えで、鎌倉武士に広まりました。「喫茶養生記」を著しお茶を普及させた人物でもあります。</span>
+    <span class="pop-memo">💡 お茶を日本に広めた「お茶の祖」でもあります。「茶は養生の仙薬なり」と述べた最初の人物です。</span>
+  </span></span>の
+  <span class="blank" data-id="J">臨済宗<span class="pop-box">
+    <span class="pop-name">⛩️ 臨済宗</span>
+    <span class="pop-body">栄西が開いた禅宗の一派。公案（例：「隻手の声を聞け」など論理で解けない問題）と座禅で悟りを目指します。京都の禅寺（建仁寺・南禅寺など）が有名です。</span>
+    <span class="pop-memo">💡 武士の気質（厳しい修行・精神統一）と合い、鎌倉・室町幕府の保護を受けました。</span>
+  </span></span>（坐禅）、
+  <span class="blank" data-id="K">道元<span class="pop-box">
+    <span class="pop-name">🧘 道元（1200〜1253）</span>
+    <span class="pop-body">曹洞宗の開祖。「ただ座るだけ（只管打坐）」の座禅を重んじました。悟りを求めて座禅するのではなく、「座禅すること自体が仏道修行だ」という独自の思想を持ちました。</span>
+    <span class="pop-memo">💡 「考えるな、ただ座れ」という徹底した実践主義。著書「正法眼蔵」は日本最高の哲学書ともいわれています。現代の永平寺（福井県）が総本山です。</span>
+  </span></span>の
+  <span class="blank" data-id="L">曹洞宗<span class="pop-box">
+    <span class="pop-name">⛩️ 曹洞宗</span>
+    <span class="pop-body">道元が開いた禅宗の一派。「只管打坐（ひたすら坐禅する）」を根本とします。農村の武士・農民に広まり、現在も日本有数の宗派（寺院数日本最多）です。</span>
+    <span class="pop-memo">💡 臨済宗が「問答で悟りを求める」のに対し、曹洞宗は「ただ座ることが全て」というシンプルな教えです。</span>
+  </span></span>（坐禅）が生まれました。</p>
+</div>
+
+<div class="section">
+  <h2>鎌倉文化の文学・彫刻・農業</h2>
+  <p>文学では琵琶法師が語り伝えた軍記物
+  <span class="blank" data-id="M">平家物語<span class="pop-box">
+    <span class="pop-name">📖 平家物語</span>
+    <span class="pop-body">平氏の栄枯盛衰を描いた軍記物語です。「祇園精舎の鐘の声、諸行無常の響きあり」という冒頭が有名です。琵琶法師が語り伝えました。</span>
+    <span class="pop-memo">💡 「諸行無常（すべては変わりゆく）」が全編のテーマ。平家の栄華と没落が無常の象徴として描かれています。ほぼすべての平家一族が滅びます。</span>
+  </span></span>、鴨長明の随筆
+  <span class="blank" data-id="N">方丈記<span class="pop-box">
+    <span class="pop-name">📖 方丈記（鴨長明・1212年）</span>
+    <span class="pop-body">「ゆく河の流れは絶えずして…」で始まる随筆です。火事・竜巻・飢饉・地震という五つの大災害を体験した著者が、世の無常と隠遁生活を綴りました。</span>
+    <span class="pop-memo">💡 方丈（約3m四方）の小屋に引きこもって書いた作品。「小さな家でミニマルに生きる」という現代のダウンサイジング思想の先駆けともいえます。</span>
+  </span></span>、吉田兼好の
+  <span class="blank" data-id="O">徒然草<span class="pop-box">
+    <span class="pop-name">📖 徒然草（吉田兼好・14世紀）</span>
+    <span class="pop-body">「つれづれなるままに…」で始まる随筆です。世の中の事柄・人間の性質について鋭く観察した243段からなる随筆集です。</span>
+    <span class="pop-memo">💡 「つれづれなるまま（退屈のまま）にひぐらし（一日中）すずりにむかひて…」という冒頭が有名。「枕草子・方丈記・徒然草」が三大随筆です。</span>
+  </span></span>が有名です。藤原定家らが編集した和歌集
+  <span class="blank" data-id="P">新古今和歌集<span class="pop-box">
+    <span class="pop-name">📚 新古今和歌集（1205年）</span>
+    <span class="pop-body">後鳥羽上皇の命で藤原定家らが編集した勅撰和歌集。「古今和歌集」に続く8番目の勅撰和歌集で、約1980首が収録されています。</span>
+    <span class="pop-memo">💡 古今和歌集（905年）→新古今和歌集（1205年）の300年後に作られた「続編」です。藤原定家は後に「百人一首」も選びました。</span>
+  </span></span>も生まれました。彫刻では
+  <span class="blank" data-id="Q">運慶・快慶<span class="pop-box">
+    <span class="pop-name">🗿 運慶・快慶</span>
+    <span class="pop-body">東大寺南大門の金剛力士像（阿形・吽形）を制作した仏師です。力強くリアルな造形が武士の時代にふさわしいとされました。わずか69日間で完成させたといわれています。</span>
+    <span class="pop-memo">💡 奈良東大寺の仁王門に今も立っています。8メートルを超える巨大像を69日で完成させた驚異的な仕事ぶりです。</span>
+  </span></span>が東大寺南大門の
+  <span class="blank" data-id="R">金剛力士像<span class="pop-box">
+    <span class="pop-name">🗿 金剛力士像</span>
+    <span class="pop-body">東大寺南大門に安置された2体の仁王像です。口を開けた「阿形（あぎょう）」と口を閉じた「吽形（うんぎょう）」があります。「阿吽の呼吸」の語源でもあります。</span>
+    <span class="pop-memo">💡 「阿吽（あうん）の呼吸」とは、お互いに息が合った動作のことを指します。この2体の仁王像が語源です。</span>
+  </span></span>を制作しました。農業では
+  <span class="blank" data-id="S">二毛作<span class="pop-box">
+    <span class="pop-name">🌾 二毛作</span>
+    <span class="pop-body">同じ田畑で1年間に2種類の作物を栽培することです。鎌倉時代に西日本から広まりました。米を収穫した後、同じ田で麦を育てました。</span>
+    <span class="pop-memo">💡 「二毛作」は「年2回収穫できる」わけではなく「同じ土地で2種類作る」という意味です。収入・食料が約2倍になる農業革命でした。</span>
+  </span></span>（米の裏作に麦）が始まり、
+  <span class="blank" data-id="T">草木灰<span class="pop-box">
+    <span class="pop-name">🌿 草木灰</span>
+    <span class="pop-body">草や木を燃やした灰を肥料として使う技術です。カリウムを多く含み、土地を豊かにします。牛馬の糞なども肥料として使われるようになりました。</span>
+    <span class="pop-memo">💡 「灰を肥料にする」という発想が農業生産性の向上につながりました。江戸時代の干鰯（いわしの肥料）も同じ流れです。</span>
+  </span></span>が肥料として使われました。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -50,44 +169,50 @@
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">6宗派と開祖をセットで覚えよう。念仏系（法然・親鸞・一遍）、日蓮宗、禅宗（栄西・道元）の3グループに整理すると覚えやすい。</div>
+    <div class="explain-box" id="explain-box">
+      6宗派：念仏系（法然・親鸞・一遍）、日蓮宗（日蓮）、禅宗（栄西・道元）の3グループに整理すると覚えやすいです。<br>
+      文学三大随筆：枕草子（清少納言）・方丈記（鴨長明）・徒然草（吉田兼好）<br>
+      彫刻：運慶・快慶→金剛力士像（東大寺南大門）　農業：二毛作・草木灰
+    </div>
   </div>
 </div>
+
 <script>
-  const answers = { "A":"法然", "B":"浄土宗", "C":"親鸞", "D":"浄土真宗", "E":"一遍", "F":"時宗", "G":"日蓮", "H":"日蓮宗", "I":"栄西", "J":"臨済宗", "K":"道元", "L":"曹洞宗", "M":"平家物語", "N":"方丈記", "O":"徒然草", "P":"新古今和歌集", "Q":"運慶・快慶", "R":"金剛力士像", "S":"二毛作", "T":"草木灰" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
-    });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
-  });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  (function() {
-    try { var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}'); prog['kamakura_bunka'] = prog['kamakura_bunka'] || {}; prog['kamakura_bunka'].studyDone = true; localStorage.setItem('gamba_progress', JSON.stringify(prog)); } catch(e) {}
-  })();
+const WORD_TIPS={
+  "法然":"浄土宗の開祖。「念仏を唱えれば誰でも極楽往生できる」と説きました。",
+  "浄土宗":"法然が開いた宗派。念仏（南無阿弥陀仏）が中心です。",
+  "親鸞":"浄土真宗の開祖。「悪人正機説」で知られます。法然の弟子です。",
+  "浄土真宗":"親鸞が開いた宗派。「他力本願」を説く日本最大規模の宗派です。",
+  "一遍":"時宗の開祖。「踊り念仏」で全国を旅しながら布教しました。",
+  "時宗":"一遍が開いた宗派。踊り念仏が盆踊りの起源の一つとされています。",
+  "日蓮":"日蓮宗の開祖。「南無妙法蓮華経」の題目を唱えることを説きました。",
+  "日蓮宗":"日蓮が開いた宗派。他宗批判で知られます。",
+  "栄西":"臨済宗の開祖。宋から禅宗を持ち帰りました。「お茶の祖」でもあります。",
+  "臨済宗":"栄西が開いた禅宗。公案と座禅で悟りを目指します。",
+  "道元":"曹洞宗の開祖。「只管打坐（ひたすら座禅）」を説きました。",
+  "曹洞宗":"道元が開いた禅宗。「ただ座ること」を根本とします。",
+  "平家物語":"「祇園精舎の鐘の声…」で始まる軍記物語。諸行無常がテーマです。",
+  "方丈記":"鴨長明の随筆。「ゆく河の流れは絶えずして…」で始まります。",
+  "徒然草":"吉田兼好の随筆。「つれづれなるままに…」で始まります。",
+  "新古今和歌集":"1205年に藤原定家らが編集した勅撰和歌集です。",
+  "運慶・快慶":"東大寺南大門の金剛力士像を制作した仏師です。",
+  "金剛力士像":"東大寺南大門の仁王像。「阿吽の呼吸」の語源でもあります。",
+  "二毛作":"同じ田畑で1年に2種類作る農法。鎌倉時代に広まりました。",
+  "草木灰":"草木を燃やした灰を肥料にする技術。農業生産性を高めました。",
+};
+const answers={"A":"法然","B":"浄土宗","C":"親鸞","D":"浄土真宗","E":"一遍","F":"時宗","G":"日蓮","H":"日蓮宗","I":"栄西","J":"臨済宗","K":"道元","L":"曹洞宗","M":"平家物語","N":"方丈記","O":"徒然草","P":"新古今和歌集","Q":"運慶・快慶","R":"金剛力士像","S":"二毛作","T":"草木灰"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";[...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{const chip=document.createElement('div');chip.className='word-chip';const label=document.createElement('span');label.textContent=word;chip.appendChild(label);const tip=WORD_TIPS[word];if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}chip.addEventListener('click',()=>{if(chip.classList.contains('used'))return;document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip');});bank.appendChild(chip);});}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{blank.addEventListener('click',e=>{e.stopPropagation();if(selectedChip){const old=getBlankText(blank);if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});setBlankText(blank,getChipWord(selectedChip));selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;}});});
+function startChallenge(){document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});renderBank();selectedChip=null;startTime=Date.now();if(timerId)clearInterval(timerId);timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);}
+function checkAnswers(){let ok=true;document.querySelectorAll('.blank').forEach(b=>{if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');else{ok=false;b.classList.remove('correct');}});if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！鎌倉文化をマスターしました。");}else alert("間違いがあります。もう一度見直してみましょう。");}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['kamakura_bunka']=p['kamakura_bunka']||{};p['kamakura_bunka'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>

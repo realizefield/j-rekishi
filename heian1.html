@@ -5,39 +5,135 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>歴史学習GAMBA：平安時代①</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+
+  /* ホバーポップ */
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{
+    display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);
+    width:270px;background:#2c1800;color:#fff;border-radius:10px;
+    padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none;
+  }
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>⑦ 平安時代①〜国風文化・藤原氏</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>桓武天皇と平安遷都</h2><div class="question-text">794年、<span class="blank" data-id="A">桓武</span>天皇は奈良仏教の影響を断ち切るため<span class="blank" data-id="B">平安京</span>（京都府）に遷都した（「鳴くよ鶯平安京」794年）。平安京は唐の都<span class="blank" data-id="C">長安</span>をモデルに作られた。東北の蝦夷を平定するため<span class="blank" data-id="D">坂上田村麻呂</span>を<span class="blank" data-id="E">征夷大将軍</span>に任命した。新仏教では<span class="blank" data-id="F">最澄</span>が天台宗、<span class="blank" data-id="G">空海</span>が真言宗を開いた。</div></div>
-<div class="section"><h2>国風文化と藤原氏の摂関政治</h2><div class="question-text">894年、<span class="blank" data-id="H">菅原道真</span>の進言で<span class="blank" data-id="I">遣唐使</span>が廃止された（「白紙に戻そう遣唐使」894年）。これにより日本独自の<span class="blank" data-id="J">国風</span>文化が生まれた。<span class="blank" data-id="K">かな</span>文字が発明され、紫式部の<span class="blank" data-id="L">源氏物語</span>・清少納言の<span class="blank" data-id="M">枕草子</span>などが生まれた。<span class="blank" data-id="N">藤原道長</span>は4人の娘を天皇に嫁がせ<span class="blank" data-id="O">摂関政治</span>の絶頂を迎えた。</div></div>
+
+<div class="section">
+  <h2>桓武天皇と平安遷都</h2>
+  <p>794年、<span class="blank" data-id="A">桓武<span class="pop-box">
+    <span class="pop-name">👑 桓武天皇（737〜806）</span>
+    <span class="pop-body">平城京（奈良）の仏教勢力が政治に介入するのを嫌い、新しい都を作って権力を立て直そうとした天皇です。2度の遷都（長岡京→平安京）を断行しました。</span>
+    <span class="pop-memo">💡 「仏教から逃げた天皇」と覚えましょう。奈良のお坊さんたちの政治介入に手を焼いていたのです。</span>
+  </span></span>天皇は奈良仏教の影響を断ち切るため
+  <span class="blank" data-id="B">平安京<span class="pop-box">
+    <span class="pop-name">🏙️ 平安京（京都）</span>
+    <span class="pop-body">794年に現在の京都に建設された都です。唐の都・長安をモデルにした碁盤目状の都市計画で、以後約1000年間日本の首都であり続けました。</span>
+    <span class="pop-memo">💡 「鳴くよ（794）鶯、平安京」で覚えましょう。江戸時代まで天皇は基本的にここに住んでいました。</span>
+  </span></span>（京都府）に遷都しました。東北の蝦夷を平定するため
+  <span class="blank" data-id="D">坂上田村麻呂<span class="pop-box">
+    <span class="pop-name">⚔️ 坂上田村麻呂（758〜811）</span>
+    <span class="pop-body">桓武天皇から征夷大将軍に任命され、東北の蝦夷（アテルイら）を平定した武将です。武士が活躍する時代のさきがけとなった人物です。</span>
+    <span class="pop-memo">💡 「征夷大将軍」の称号はここから始まります。後の鎌倉・江戸幕府の将軍も同じ称号を使いました。</span>
+  </span></span>を
+  <span class="blank" data-id="E">征夷大将軍<span class="pop-box">
+    <span class="pop-name">🎖️ 征夷大将軍</span>
+    <span class="pop-body">天皇から授けられる東国・蝦夷征討の最高司令官の称号です。後に頼朝・家康らが「幕府を開く権威の象徴」として使いました。</span>
+    <span class="pop-memo">💡 最初は「蝦夷を征伐する将軍」という意味でしたが、後に「武家政権のトップ」を意味する称号になりました。</span>
+  </span></span>に任命しました。新仏教では
+  <span class="blank" data-id="F">最澄<span class="pop-box">
+    <span class="pop-name">🧘 最澄（767〜822）</span>
+    <span class="pop-body">唐に渡って天台宗を学び、比叡山に延暦寺を建てました。「すべての人が救われる」という考えを説きました。</span>
+    <span class="pop-memo">💡 最澄＝天台宗＝比叡山延暦寺、がセットです。後の法然・親鸞・道元・日蓮はみな比叡山で学んでいます。</span>
+  </span></span>が天台宗、
+  <span class="blank" data-id="G">空海<span class="pop-box">
+    <span class="pop-name">🧘 空海（774〜835）</span>
+    <span class="pop-body">唐に渡って真言宗を学び、高野山に金剛峯寺を建てました。「お大師さま」として今も親しまれています。書道・土木など多才な人物でもありました。</span>
+    <span class="pop-memo">💡 空海＝真言宗＝高野山金剛峯寺、がセットです。最澄と空海は同じ時期に唐に渡った「同期」でした。</span>
+  </span></span>が真言宗を開きました。</p>
+</div>
+
+<div class="section">
+  <h2>国風文化と藤原氏の摂関政治</h2>
+  <p>894年、
+  <span class="blank" data-id="H">菅原道真<span class="pop-box">
+    <span class="pop-name">📚 菅原道真（845〜903）</span>
+    <span class="pop-body">宇多天皇・醍醐天皇に仕えた優秀な学者政治家です。遣唐使の廃止を進言しました。藤原氏の策略で大宰府に左遷され失意のまま没しました。</span>
+    <span class="pop-memo">💡 死後、京都では疫病・落雷が続き「道真の祟り」と恐れられました。それを鎮めるために建てられたのが北野天満宮です。学問の神様として今も有名です。</span>
+  </span></span>の進言で
+  <span class="blank" data-id="I">遣唐使<span class="pop-box">
+    <span class="pop-name">⛵ 遣唐使の廃止（894年）</span>
+    <span class="pop-body">奈良時代から続いた唐への使節派遣が廃止されました。道真は「唐の衰退」と「航海の危険性」を理由に廃止を提言しました。</span>
+    <span class="pop-memo">💡 「白紙（894）に戻そう遣唐使」で覚えましょう。廃止後、日本独自の文化（国風文化）が花開きました。</span>
+  </span></span>が廃止されました。これにより日本独自の
+  <span class="blank" data-id="J">国風<span class="pop-box">
+    <span class="pop-name">🌸 国風文化</span>
+    <span class="pop-body">唐の影響を離れ、日本の自然や感情を表現した独自の文化です。かな文字・和歌・大和絵・寝殿造などが発達しました。</span>
+    <span class="pop-memo">💡 「外国の文化を輸入する時代→日本流にアレンジする時代」への転換です。現代の「日本文化」の原点はここにあります。</span>
+  </span></span>文化が生まれました。
+  <span class="blank" data-id="K">かな<span class="pop-box">
+    <span class="pop-name">📝 かな文字</span>
+    <span class="pop-body">漢字をもとに日本人が作った表音文字です。平仮名（万葉仮名を崩したもの）と片仮名（漢字の一部をとったもの）があります。</span>
+    <span class="pop-memo">💡 かな文字の発明で女性が気軽に文章を書けるようになり、紫式部・清少納言などの女流文学が生まれました。</span>
+  </span></span>文字が発明され、紫式部の
+  <span class="blank" data-id="L">源氏物語<span class="pop-box">
+    <span class="pop-name">📖 源氏物語（紫式部）</span>
+    <span class="pop-body">光源氏の恋愛・栄光・没落を描いた世界最古級の長編小説です（全54帖）。1000年以上前に書かれたにもかかわらず、現代でも世界中で読まれています。</span>
+    <span class="pop-memo">💡 「世界最古の長編小説」とも呼ばれます。紫式部は藤原道長の娘・彰子に仕えた女房でした。</span>
+  </span></span>・清少納言の
+  <span class="blank" data-id="M">枕草子<span class="pop-box">
+    <span class="pop-name">📖 枕草子（清少納言）</span>
+    <span class="pop-body">「春はあけぼの…」で始まる随筆（エッセイ）です。自然の美しさや宮廷生活の機微を鋭い感性で描きました。</span>
+    <span class="pop-memo">💡 紫式部と清少納言はライバル関係だったといわれています。清少納言は中宮・定子に仕えた女房でした。</span>
+  </span></span>などが生まれました。
+  <span class="blank" data-id="N">藤原道長<span class="pop-box">
+    <span class="pop-name">👑 藤原道長（966〜1027）</span>
+    <span class="pop-body">4人の娘を天皇の妃にして摂関政治の頂点に立ちました。「この世をば我が世とぞ思ふ望月の欠けたることもなしと思へば」という歌が有名です。</span>
+    <span class="pop-memo">💡 この歌は「満月のように何も欠けていない」と満足感を詠んだものです。権力の絶頂を示す有名な一句です。</span>
+  </span></span>は4人の娘を天皇に嫁がせ
+  <span class="blank" data-id="O">摂関政治<span class="pop-box">
+    <span class="pop-name">🏛️ 摂関政治</span>
+    <span class="pop-body">天皇が幼いときは「摂政」、成人後は「関白」として藤原氏が実権を握る政治形態です。外戚（天皇の母方の親族）として権力を独占しました。</span>
+    <span class="pop-memo">💡 「娘を天皇の妃にして生まれた子を次の天皇に」というシステムで権力を世襲しました。血縁を利用した巧みな政治手法です。</span>
+  </span></span>の絶頂を迎えました。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -50,52 +146,82 @@
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">桓武天皇の平安遷都のポイントは「奈良仏教からの分離」。坂上田村麻呂と征夷大将軍もセットで覚えよう。</div>
+    <div class="explain-box" id="explain-box">
+      桓武天皇の平安遷都のポイントは「奈良仏教からの分離」。坂上田村麻呂と征夷大将軍はセットで覚えましょう。<br>
+      最澄＝天台宗＝比叡山 ／ 空海＝真言宗＝高野山<br>
+      遣唐使廃止（894）→国風文化→かな文字→源氏物語・枕草子→摂関政治（藤原道長）
+    </div>
   </div>
 </div>
+
 <script>
-
-  const answers = { "A":"桓武", "B":"平安京", "C":"長安", "D":"坂上田村麻呂", "E":"征夷大将軍", "F":"最澄", "G":"空海", "H":"菅原道真", "I":"遣唐使", "J":"国風", "K":"かな", "L":"源氏物語", "M":"枕草子", "N":"藤原道長", "O":"摂関政治" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
+const WORD_TIPS={
+  "桓武":"794年に平安京（京都）へ遷都した天皇です。奈良仏教の影響を断ち切るための遷都でした。",
+  "平安京":"794年に建設された現在の京都。以後約1000年間、日本の首都でした。「鳴くよ鶯平安京」で覚えましょう。",
+  "長安":"唐の首都。平安京のモデルになった都市です。",
+  "坂上田村麻呂":"征夷大将軍として東北の蝦夷を平定した武将です。桓武天皇に任命されました。",
+  "征夷大将軍":"東国・蝦夷征討の最高司令官の称号。後に幕府を開く権威の象徴になりました。",
+  "最澄":"天台宗の開祖。比叡山延暦寺を建てました。後の鎌倉仏教の開祖たちの師となりました。",
+  "空海":"真言宗の開祖。高野山金剛峯寺を建てました。「お大師さま」として今も親しまれています。",
+  "菅原道真":"遣唐使廃止を進言した学者政治家。左遷後に学問の神様として祀られました（北野天満宮）。",
+  "遣唐使":"奈良時代から続いた唐への使節団。894年に菅原道真の進言で廃止されました。",
+  "国風":"遣唐使廃止後に生まれた日本独自の文化。かな文字・和歌・大和絵などが発達しました。",
+  "かな":"漢字をもとに作られた日本独自の表音文字。女流文学の発展につながりました。",
+  "源氏物語":"紫式部が書いた世界最古級の長編小説。光源氏の恋愛と栄枯盛衰を描きました。",
+  "枕草子":"清少納言が書いた随筆（エッセイ）。「春はあけぼの…」で始まります。",
+  "藤原道長":"摂関政治の頂点に立った人物。娘4人を天皇の妃にして権力を握りました。",
+  "摂関政治":"藤原氏が摂政・関白として天皇を補佐しながら実権を握った政治形態です。",
+};
+const answers={"A":"桓武","B":"平安京","C":"長安","D":"坂上田村麻呂","E":"征夷大将軍","F":"最澄","G":"空海","H":"菅原道真","I":"遣唐使","J":"国風","K":"かな","L":"源氏物語","M":"枕草子","N":"藤原道長","O":"摂関政治"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){
+  const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";
+  [...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{
+    const chip=document.createElement('div');chip.className='word-chip';
+    const label=document.createElement('span');label.textContent=word;chip.appendChild(label);
+    const tip=WORD_TIPS[word];
+    if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}
+    chip.addEventListener('click',()=>{
+      if(chip.classList.contains('used'))return;
+      document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));
+      selectedChip=chip;chip.classList.add('selected-chip');
     });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
+    bank.appendChild(chip);
   });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['heian1'] = prog['heian1'] || {};
-      prog['heian1'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
+}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{
+  blank.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(selectedChip){
+      const old=getBlankText(blank);
+      if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});
+      setBlankText(blank,getChipWord(selectedChip));
+      selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;
+    }
+  });
+});
+function startChallenge(){
+  document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});
+  renderBank();selectedChip=null;startTime=Date.now();
+  if(timerId)clearInterval(timerId);
+  timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);
+}
+function checkAnswers(){
+  let ok=true;
+  document.querySelectorAll('.blank').forEach(b=>{
+    if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');
+    else{ok=false;b.classList.remove('correct');}
+  });
+  if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！平安時代①をマスターしました。");}
+  else alert("間違いがあります。もう一度見直してみましょう。");
+}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['heian1']=p['heian1']||{};p['heian1'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>

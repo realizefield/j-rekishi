@@ -3,41 +3,146 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>歴史学習GAMBA：縄文・弥生・邪馬台国</title>
+<title>歴史学習GAMBA：縄文・弥生時代と邪馬台国</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:270px;background:#2c1800;color:#fff;border-radius:10px;padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none}
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>③ 縄文・弥生時代と邪馬台国</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>縄文時代</h2><div class="question-text">約1万年前、氷河時代が終わり<span class="blank" data-id="A">縄文</span>時代が始まった。縄目模様の<span class="blank" data-id="B">縄文土器</span>が使われ、<span class="blank" data-id="C">たて穴住居</span>に住み、食べた貝殻のゴミ捨て場<span class="blank" data-id="D">貝塚</span>が残された。祈りのための土人形<span class="blank" data-id="E">土偶</span>も作られた。青森県の<span class="blank" data-id="F">三内丸山</span>遺跡には巨大な縄文集落の跡が残る。</div></div>
-<div class="section"><h2>弥生時代と邪馬台国</h2><div class="question-text">紀元前3世紀ごろ、朝鮮半島から<span class="blank" data-id="G">稲作</span>が伝わり<span class="blank" data-id="H">弥生</span>時代が始まった。薄くて丈夫な<span class="blank" data-id="I">弥生土器</span>が使われ、稲を高床の<span class="blank" data-id="J">高床倉庫</span>に保存した。<span class="blank" data-id="K">青銅器</span>・鉄器も伝わり、佐賀県の<span class="blank" data-id="L">吉野ヶ里</span>遺跡は環濠集落の代表例。<br><br>3世紀、<span class="blank" data-id="M">邪馬台国</span>の女王<span class="blank" data-id="N">卑弥呼</span>が30余りの国を治め、中国の<span class="blank" data-id="O">魏</span>に使いを送り「親魏倭王」の称号と<span class="blank" data-id="P">金印</span>・銅鏡を授けられた。これは中国の歴史書<span class="blank" data-id="Q">魏志倭人伝</span>に記されている。</div></div>
+
+<div class="section">
+  <h2>縄文時代</h2>
+  <p>約1万年前、氷河時代が終わり
+  <span class="blank" data-id="A">縄文<span class="pop-box">
+    <span class="pop-name">🏺 縄文時代（約1万年前〜前3世紀）</span>
+    <span class="pop-body">日本最古の文化時代です。土器に縄を転がしてつけた縄目模様が特徴で、それが時代の名前になりました。狩猟・採集・漁労で生活し、定住生活を送っていました。</span>
+    <span class="pop-memo">💡 縄文時代は約1万年続いた非常に長い時代です。農耕なしに安定した生活を送っていた「豊かな採集社会」だったことが最近わかってきています。</span>
+  </span></span>時代が始まりました。縄目模様の
+  <span class="blank" data-id="B">縄文土器<span class="pop-box">
+    <span class="pop-name">🏺 縄文土器</span>
+    <span class="pop-body">縄を転がして模様をつけた厚手で黒褐色の土器です。煮炊き・貯蔵に使われました。世界最古レベルの土器で、約1万6千年前のものが発見されています。</span>
+    <span class="pop-memo">💡 縄文土器は世界最古クラスの土器です。土器の発明は「食べ物を煮て食べる」→「食中毒が減る・栄養が増える」という革命でした。</span>
+  </span></span>が使われ、
+  <span class="blank" data-id="C">たて穴住居<span class="pop-box">
+    <span class="pop-name">🏠 たて穴住居</span>
+    <span class="pop-body">地面を掘り下げて床面を作り、柱を立てて屋根を葺いた住居です。地面に潜ることで冬は暖かく夏は涼しい、自然の断熱構造でした。</span>
+    <span class="pop-memo">💡 「地面より低くする」という発想が断熱の決め手です。現代の「地下室は温度変化が少ない」という原理と同じです。縄文から弥生・古墳時代まで長く使われました。</span>
+  </span></span>に住み、食べた貝殻のゴミ捨て場
+  <span class="blank" data-id="D">貝塚<span class="pop-box">
+    <span class="pop-name">🐚 貝塚</span>
+    <span class="pop-body">縄文人が食べた貝や動物の骨などを捨てたゴミ捨て場の跡です。酸性の土壌に残りにくい骨が貝のアルカリ成分で保存され、当時の食生活や気候がわかります。</span>
+    <span class="pop-memo">💡 ゴミ捨て場が「歴史の宝庫」になりました。東京都大田区の大森貝塚はモース（アメリカの動物学者）が1877年に発見した日本考古学発祥の地です。</span>
+  </span></span>が残されました。祈りのための土人形
+  <span class="blank" data-id="E">土偶<span class="pop-box">
+    <span class="pop-name">🗿 土偶</span>
+    <span class="pop-body">縄文時代に作られた土製の人形です。女性や妊婦を模したものが多く、豊穣・多産を祈る呪術的な用途があったと考えられています。壊された状態で見つかることが多いです。</span>
+    <span class="pop-memo">💡 なぜ壊れた状態で見つかるのかは謎です。「壊すことで呪いが成就する」という儀式だったという説があります。土偶は弥生時代の埴輪とは別物です。</span>
+  </span></span>も作られました。青森県の
+  <span class="blank" data-id="F">三内丸山<span class="pop-box">
+    <span class="pop-name">🏘️ 三内丸山遺跡（青森県）</span>
+    <span class="pop-body">縄文時代（約5500〜4000年前）の大規模集落跡です。高さ約15mの六本柱の建物・500棟以上の住居跡が発見され、数百人規模の定住集落があったことがわかりました。2021年に世界遺産登録されました。</span>
+    <span class="pop-memo">💡 「縄文人は移動しながら生活していた」という定説を覆した遺跡です。4000年前に数百人が定住する計画的な集落があったのです。</span>
+  </span></span>遺跡には巨大な縄文集落の跡が残っています。</p>
+</div>
+
+<div class="section">
+  <h2>弥生時代と邪馬台国</h2>
+  <p>紀元前3世紀ごろ、朝鮮半島から
+  <span class="blank" data-id="G">稲作<span class="pop-box">
+    <span class="pop-name">🌾 稲作の伝来</span>
+    <span class="pop-body">紀元前3世紀ごろ、大陸（中国・朝鮮半島）から稲作が伝わりました。九州北部から徐々に東へ広がりました。稲作により「余剰食料→貯蓄→貧富の差→争い→国家の成立」という流れが生まれました。</span>
+    <span class="pop-memo">💡 稲作の伝来は日本の社会を根本から変えました。「余った食べ物を誰が管理するか」という問題が権力の源になり、やがて国家が生まれました。</span>
+  </span></span>が伝わり
+  <span class="blank" data-id="H">弥生<span class="pop-box">
+    <span class="pop-name">🏺 弥生時代（前3世紀〜後3世紀）</span>
+    <span class="pop-body">稲作が始まった時代です。「弥生」の名前は東京都文京区弥生町で最初に発見された土器の地名から来ています。稲作の普及により社会が大きく変化しました。</span>
+    <span class="pop-memo">💡 「縄文→弥生」の転換は、「採集社会→農耕社会」という人類史上最大の転換の一つです。この変化で人口が急増し、争いも増えました。</span>
+  </span></span>時代が始まりました。薄くて丈夫な
+  <span class="blank" data-id="I">弥生土器<span class="pop-box">
+    <span class="pop-name">🏺 弥生土器</span>
+    <span class="pop-body">縄文土器より薄くて硬い、赤褐色の土器です。高温で焼いて作りました。食料の煮炊き・貯蔵・祭祀用に使われました。縄文土器のような装飾が少なく、実用的なデザインです。</span>
+    <span class="pop-memo">💡 縄文土器と弥生土器の違い：縄文＝厚くて黒褐色で装飾豊か、弥生＝薄くて赤褐色でシンプル。農耕社会になって「実用性」が重視されるようになりました。</span>
+  </span></span>が使われ、稲を高床の
+  <span class="blank" data-id="J">高床倉庫<span class="pop-box">
+    <span class="pop-name">🏠 高床倉庫</span>
+    <span class="pop-body">床を地面より高く上げた倉庫です。湿気・ネズミ・虫から穀物を守る工夫が施されています。柱の上に「ねずみ返し」を取り付け、ネズミの侵入を防ぎました。</span>
+    <span class="pop-memo">💡 「ねずみ返し（柱に取り付けた円盤状の板）」という発明が面白いです。稲作社会で「食べ物を守る」ことがいかに重要だったかがわかります。</span>
+  </span></span>に保存しました。
+  <span class="blank" data-id="K">青銅器<span class="pop-box">
+    <span class="pop-name">🔔 青銅器（弥生時代）</span>
+    <span class="pop-body">弥生時代には銅鐸・銅鏡・銅剣などの青銅器が伝わりました。中国・朝鮮半島から伝わり、主に祭祀・儀礼用に使われました。武器としてではなく宗教的な道具でした。</span>
+    <span class="pop-memo">💡 日本の弥生時代の青銅器は「実用の武器」ではなく「祭りの道具」として使われた点が特徴的です。銅鐸（どうたく）は音を出す楽器・呪術具でした。</span>
+  </span></span>・鉄器も伝わり、佐賀県の
+  <span class="blank" data-id="L">吉野ヶ里<span class="pop-box">
+    <span class="pop-name">🏘️ 吉野ヶ里遺跡（佐賀県）</span>
+    <span class="pop-body">弥生時代最大規模の環濠集落跡です。集落の周りに溝（濠）を掘り、木柵を立てた「要塞」のような構造でした。物見やぐら・高床倉庫・墓などが発見されています。</span>
+    <span class="pop-memo">💡 「なぜ周りに溝と柵が必要だったか」→争いが増えた証拠です。稲作で貯蓄が生まれ→貧富の差→争い→集落防衛、という弥生社会の変化が見えます。</span>
+  </span></span>遺跡は環濠集落の代表例です。</p>
+  <p>3世紀、
+  <span class="blank" data-id="M">邪馬台国<span class="pop-box">
+    <span class="pop-name">🏯 邪馬台国</span>
+    <span class="pop-body">3世紀の日本に存在した強力な国家で、30余りの小国を統率していました。卑弥呼が女王として君臨し、呪術（まじない）で統治しました。現在も「どこにあったか（大和説・九州説）」は謎です。</span>
+    <span class="pop-memo">💡 「邪馬台国論争」は日本史最大の謎の一つです。大和（奈良）説と九州（北部）説が対立しており、決定的な証拠はまだ見つかっていません。</span>
+  </span></span>の女王
+  <span class="blank" data-id="N">卑弥呼<span class="pop-box">
+    <span class="pop-name">👸 卑弥呼（？〜248年ごろ）</span>
+    <span class="pop-body">邪馬台国の女王。「鬼道（呪術・シャーマニズム）」で民を統治しました。弟が政治を補佐し、卑弥呼自身は人前にほとんど現れなかったといわれます。</span>
+    <span class="pop-memo">💡 「女性が国のトップ」「神秘性で統治する」というのが卑弥呼の特徴です。卑弥呼の死後、男王が立ちましたが国が乱れ、卑弥呼の親族の台与（とよ）が次の女王になりました。</span>
+  </span></span>が30余りの国を治め、中国の
+  <span class="blank" data-id="O">魏<span class="pop-box">
+    <span class="pop-name">🇨🇳 魏（220〜265年）</span>
+    <span class="pop-body">3世紀の中国の国の一つ（三国時代の三国：魏・呉・蜀）です。卑弥呼は239年に魏に使いを送り、「親魏倭王」の称号と金印・銅鏡100枚を授けられました。</span>
+    <span class="pop-memo">💡 三国志（魏・呉・蜀）の「魏」です。卑弥呼はこの魏に使いを送りました。「中国の権威を利用して国内の支配を強化する」という外交戦略でした。</span>
+  </span></span>に使いを送り「親魏倭王」の称号と
+  <span class="blank" data-id="P">金印<span class="pop-box">
+    <span class="pop-name">🔑 金印</span>
+    <span class="pop-body">中国の皇帝が周辺国の王に与えた金製の印章です。卑弥呼は「親魏倭王（魏に親しい倭の王）」という称号とともに金印を授けられました。</span>
+    <span class="pop-memo">💡 1784年に福岡県志賀島で発見された「漢委奴国王」の金印は、1〜2世紀に中国（漢）から倭国の王に贈られたものです。国宝として福岡市博物館に展示されています。</span>
+  </span></span>・銅鏡を授けられました。これは中国の歴史書
+  <span class="blank" data-id="Q">魏志倭人伝<span class="pop-box">
+    <span class="pop-name">📖 魏志倭人伝</span>
+    <span class="pop-body">中国の歴史書「三国志」の一部で、3世紀の倭国（日本）の様子が書かれています。卑弥呼・邪馬台国の記述の主要な史料です。ただし中国人が書いたため、日本側の事実と異なる点もあるとされます。</span>
+    <span class="pop-memo">💡 「魏志倭人伝に書いてある倭国の場所を地図上でたどると、日本ではなく太平洋上に出てしまう」という問題があります。古代の方位・距離の計算が不正確だったためです。</span>
+  </span></span>に記されています。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -46,56 +151,51 @@
       <button onclick="checkAnswers()">判定</button>
       <button class="secondary" onclick="location.reload()">やり直す</button>
       <button class="secondary" onclick="resetTimer()">時間リセット</button>
-      <button id="next-btn" onclick="location.href='kofun1.html'" disabled>次へ：古墳時代 ▶</button>
+      <button id="next-btn" onclick="location.href='kofun1.html'" disabled>次へ：古墳時代と大和政権 ▶</button>
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">縄文時代のキーワード：縄文土器・たて穴住居・土偶・貝塚・三内丸山遺跡を整理しよう。</div>
+    <div class="explain-box" id="explain-box">
+      縄文：縄文土器・たて穴住居・貝塚・土偶・三内丸山遺跡<br>
+      弥生：稲作の伝来・弥生土器・高床倉庫・青銅器・吉野ヶ里遺跡<br>
+      邪馬台国：卑弥呼→魏に使い→「親魏倭王」の称号・金印→魏志倭人伝に記録
+    </div>
   </div>
 </div>
+
 <script>
-
-  const answers = { "A":"縄文", "B":"縄文土器", "C":"たて穴住居", "D":"貝塚", "E":"土偶", "F":"三内丸山", "G":"稲作", "H":"弥生", "I":"弥生土器", "J":"高床倉庫", "K":"青銅器", "L":"吉野ヶ里", "M":"邪馬台国", "N":"卑弥呼", "O":"魏", "P":"金印", "Q":"魏志倭人伝" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
-    });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
-  });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['kodai3'] = prog['kodai3'] || {};
-      prog['kodai3'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
+const WORD_TIPS={
+  "縄文":"約1万年前〜前3世紀の時代。土器に縄目模様があることが名前の由来です。",
+  "縄文土器":"縄目模様の厚手・黒褐色の土器。世界最古レベルの土器です。",
+  "たて穴住居":"地面を掘り下げた住居。冬暖かく夏涼しい自然の断熱構造です。",
+  "貝塚":"縄文人のゴミ捨て場の跡。当時の食生活や環境がわかる貴重な史料です。",
+  "土偶":"縄文時代の土製人形。豊穣・多産を祈る呪術的な用途があったとされます。",
+  "三内丸山":"青森県の縄文大規模集落跡。数百人が定住していたことがわかりました（世界遺産）。",
+  "稲作":"紀元前3世紀ごろ朝鮮半島から伝来。社会に貧富の差・争いをもたらし国家成立へ。",
+  "弥生":"前3世紀〜後3世紀の稲作が始まった時代。弥生町（東京）で発見された土器が名の由来。",
+  "弥生土器":"薄くて硬い赤褐色の土器。縄文土器よりシンプルで実用的なデザインです。",
+  "高床倉庫":"床を高くした穀物倉庫。湿気・ネズミ・虫から稲を守る工夫がされています。",
+  "青銅器":"弥生時代に伝わった銅鐸・銅鏡・銅剣など。日本では主に祭祀用に使われました。",
+  "吉野ヶ里":"佐賀県の弥生時代最大規模の環濠集落跡。争いが増えた弥生社会の象徴です。",
+  "邪馬台国":"3世紀の日本の強力な国家。所在地（大和説・九州説）は今も謎です。",
+  "卑弥呼":"邪馬台国の女王。呪術で統治し、239年に魏に使いを送りました。",
+  "魏":"三国時代の中国の一国。卑弥呼が使いを送り「親魏倭王」の称号を得ました。",
+  "金印":"魏の皇帝が卑弥呼に与えた金製の印章。「親魏倭王」の称号とともに授けられました。",
+  "魏志倭人伝":"中国の歴史書「三国志」の一部。3世紀の邪馬台国・卑弥呼が記録されています。",
+};
+const answers={"A":"縄文","B":"縄文土器","C":"たて穴住居","D":"貝塚","E":"土偶","F":"三内丸山","G":"稲作","H":"弥生","I":"弥生土器","J":"高床倉庫","K":"青銅器","L":"吉野ヶ里","M":"邪馬台国","N":"卑弥呼","O":"魏","P":"金印","Q":"魏志倭人伝"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";[...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{const chip=document.createElement('div');chip.className='word-chip';const label=document.createElement('span');label.textContent=word;chip.appendChild(label);const tip=WORD_TIPS[word];if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}chip.addEventListener('click',()=>{if(chip.classList.contains('used'))return;document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip');});bank.appendChild(chip);});}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{blank.addEventListener('click',e=>{e.stopPropagation();if(selectedChip){const old=getBlankText(blank);if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});setBlankText(blank,getChipWord(selectedChip));selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;}});});
+function startChallenge(){document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});renderBank();selectedChip=null;startTime=Date.now();if(timerId)clearInterval(timerId);timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);}
+function checkAnswers(){let ok=true;document.querySelectorAll('.blank').forEach(b=>{if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');else{ok=false;b.classList.remove('correct');}});if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！縄文・弥生・邪馬台国をマスターしました。");}else alert("間違いがあります。もう一度見直してみましょう。");}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['kodai3']=p['kodai3']||{};p['kodai3'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>

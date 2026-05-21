@@ -5,39 +5,118 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>歴史学習GAMBA：平安時代②</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:270px;background:#2c1800;color:#fff;border-radius:10px;padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none;}
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>⑧ 平安時代②〜武士の台頭</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>武士の誕生と院政</h2><div class="question-text">荘園を守るために武装した<span class="blank" data-id="A">武士</span>が誕生した。武士団の中で東国の<span class="blank" data-id="B">源氏</span>と西国の<span class="blank" data-id="C">平氏</span>が最大勢力となった。藤原摂関政治が衰えると、天皇が退位後も実権を握る<span class="blank" data-id="D">院政</span>が始まった。1086年、<span class="blank" data-id="E">白河</span>上皇が院政を開始した。</div></div>
-<div class="section"><h2>平氏の台頭と源平の争乱</h2><div class="question-text">1156年の<span class="blank" data-id="F">保元</span>の乱、1159年の<span class="blank" data-id="G">平治</span>の乱を経て<span class="blank" data-id="H">平清盛</span>が武士として初めて<span class="blank" data-id="I">太政大臣</span>となり政権を握った。平氏は<span class="blank" data-id="J">日宋貿易</span>（大輪田泊を整備）で富を蓄えた。その後、源頼朝・<span class="blank" data-id="K">源義経</span>が立ち上がり、1185年の<span class="blank" data-id="L">壇ノ浦</span>の戦いで平氏が滅亡した。</div></div>
+
+<div class="section">
+  <h2>武士の誕生と院政</h2>
+  <p>荘園を守るために武装した
+  <span class="blank" data-id="A">武士<span class="pop-box">
+    <span class="pop-name">⚔️ 武士の誕生</span>
+    <span class="pop-body">平安時代中期、貴族の荘園を守るために地方豪族が武装化した人々です。貴族が政治に専念するようになると、武力を持つ武士が次第に力をつけていきました。</span>
+    <span class="pop-memo">💡 「貴族が作り、貴族に使われ、貴族を倒した」存在が武士です。</span>
+  </span></span>が誕生しました。武士団の中で東国の
+  <span class="blank" data-id="B">源氏<span class="pop-box">
+    <span class="pop-name">🏹 源氏</span>
+    <span class="pop-body">東国（関東・東北）を拠点とした武士団です。清和天皇の子孫を称し、後に源頼朝が鎌倉幕府を開きます。</span>
+    <span class="pop-memo">💡 源氏は東、平氏は西という棲み分けでしたが、最終的に源氏が壇ノ浦で平氏を滅ぼしました。</span>
+  </span></span>と西国の
+  <span class="blank" data-id="C">平氏<span class="pop-box">
+    <span class="pop-name">🏹 平氏</span>
+    <span class="pop-body">西国（瀬戸内海・九州）を拠点とした武士団です。桓武天皇の子孫を称し、平清盛が武家初の太政大臣となって権力の頂点に立ちました。</span>
+    <span class="pop-memo">💡 「平家にあらずんば人にあらず」と言われるほど栄えましたが、わずか20年で源氏に滅ぼされました。</span>
+  </span></span>が最大勢力となりました。藤原摂関政治が衰えると、天皇が退位後も実権を握る
+  <span class="blank" data-id="D">院政<span class="pop-box">
+    <span class="pop-name">👑 院政</span>
+    <span class="pop-body">天皇が退位して「上皇」や「法皇」になった後も、「院庁」を設けて政治の実権を握り続ける仕組みです。藤原氏の摂関政治への対抗手段でもありました。</span>
+    <span class="pop-memo">💡 「天皇を辞めたのに実権は手放さない」という巧みなシステムです。藤原氏は天皇家の外戚として力を持っていたので、天皇が退位することで藤原氏を牽制できました。</span>
+  </span></span>が始まりました。1086年、
+  <span class="blank" data-id="E">白河<span class="pop-box">
+    <span class="pop-name">👑 白河上皇（1053〜1129）</span>
+    <span class="pop-body">1086年に院政を始めた最初の上皇です。43年間にわたって院政を行い、「天下三不如意（天下で意のままにならないのは賀茂川の水、双六の賽、山法師だけ）」という言葉が有名です。</span>
+    <span class="pop-memo">💡 院政を始めた最初の上皇です。「白河上皇が院政を開始した」というのが試験頻出の知識です。</span>
+  </span></span>上皇が院政を開始しました。</p>
+</div>
+
+<div class="section">
+  <h2>平氏の台頭と源平の争乱</h2>
+  <p>1156年の
+  <span class="blank" data-id="F">保元<span class="pop-box">
+    <span class="pop-name">⚔️ 保元の乱（1156年）</span>
+    <span class="pop-body">天皇家・藤原氏の内部対立が武力で解決された事件です。この乱で武士が「政治の実力者」として認められるようになりました。</span>
+    <span class="pop-memo">💡 「武士が政治の道具から主役へ」転換した最初の事件です。</span>
+  </span></span>の乱、1159年の
+  <span class="blank" data-id="G">平治<span class="pop-box">
+    <span class="pop-name">⚔️ 平治の乱（1159年）</span>
+    <span class="pop-body">保元の乱3年後、源氏と平氏が直接衝突した事件です。平清盛が勝利し、源義朝（頼朝の父）が敗死しました。頼朝は流罪、義経は寺に預けられました。</span>
+    <span class="pop-memo">💡 「源氏vs平氏」の本格的な争いの始まりです。この戦いで源氏は力を失い、平氏の天下になります。</span>
+  </span></span>の乱を経て
+  <span class="blank" data-id="H">平清盛<span class="pop-box">
+    <span class="pop-name">👑 平清盛（1118〜1181）</span>
+    <span class="pop-body">武士として初めて太政大臣となり「平氏政権」を築きました。日宋貿易を推進し、娘を天皇に嫁がせる「藤原氏方式」で権力を握りました。</span>
+    <span class="pop-memo">💡 「武士でありながら貴族の真似をした」清盛への不満が、源氏の反乱につながりました。</span>
+  </span></span>が武士として初めて
+  <span class="blank" data-id="I">太政大臣<span class="pop-box">
+    <span class="pop-name">🎖️ 太政大臣</span>
+    <span class="pop-body">律令制度における最高位の官職です。それまでは藤原氏などの貴族が就く役職でしたが、平清盛が武士として初めてこの地位に就きました。</span>
+    <span class="pop-memo">💡 「武士が朝廷の最高位に就いた」という歴史的な転換点でした。</span>
+  </span></span>となり政権を握りました。平氏は
+  <span class="blank" data-id="J">日宋貿易<span class="pop-box">
+    <span class="pop-name">⛵ 日宋貿易</span>
+    <span class="pop-body">宋（中国）との貿易です。清盛は大輪田泊（現在の神戸港）を整備して積極的に推進しました。宋銭・陶磁器・絹を輸入し、砂金・硫黄・木材などを輸出しました。</span>
+    <span class="pop-memo">💡 平氏の財力の源は日宋貿易でした。「商業センスを持った武士」だったのです。</span>
+  </span></span>（大輪田泊を整備）で富を蓄えました。源頼朝・
+  <span class="blank" data-id="K">源義経<span class="pop-box">
+    <span class="pop-name">🏹 源義経（1159〜1189）</span>
+    <span class="pop-body">頼朝の弟。一ノ谷・屋島・壇ノ浦の戦いで平氏を滅ぼした天才的な武将です。しかし兄・頼朝と対立し、奥州に逃れて非業の最期を遂げました。</span>
+    <span class="pop-memo">💡 「判官贔屓（ほうがんびいき）」という言葉は義経への同情から生まれました。強い兄に疎まれた悲劇の英雄として今も人気があります。</span>
+  </span></span>が立ち上がり、1185年の
+  <span class="blank" data-id="L">壇ノ浦<span class="pop-box">
+    <span class="pop-name">⚔️ 壇ノ浦の戦い（1185年）</span>
+    <span class="pop-body">現在の山口県下関市沖（関門海峡）で行われた源平最後の海戦です。安徳天皇も入水し、平氏が滅亡しました。</span>
+    <span class="pop-memo">💡 「いざ（1185）壇ノ浦」で覚えましょう。平家物語のクライマックスです。</span>
+  </span></span>の戦いで平氏が滅亡しました。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -50,52 +129,53 @@
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">武士の誕生→源氏・平氏の台頭→院政という流れを覚えよう。</div>
+    <div class="explain-box" id="explain-box">
+      武士の誕生→源氏（東）・平氏（西）の台頭→院政（白河上皇）という流れを覚えましょう。<br>
+      保元の乱（1156）→平治の乱（1159）→平清盛が太政大臣→壇ノ浦（1185）で平氏滅亡
+    </div>
   </div>
 </div>
+
 <script>
-
-  const answers = { "A":"武士", "B":"源氏", "C":"平氏", "D":"院政", "E":"白河", "F":"保元", "G":"平治", "H":"平清盛", "I":"太政大臣", "J":"日宋貿易", "K":"源義経", "L":"壇ノ浦" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
-    });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
+const WORD_TIPS={
+  "武士":"荘園を守るために武装化した地方豪族。平安中期から台頭し始めました。",
+  "源氏":"東国を拠点とした武士団。後に源頼朝が鎌倉幕府を開きます。",
+  "平氏":"西国を拠点とした武士団。平清盛が武家初の太政大臣となりました。",
+  "院政":"天皇が退位後も上皇・法皇として政治の実権を握る仕組みです。",
+  "白河":"1086年に院政を開始した最初の上皇です。約43年間院政を続けました。",
+  "保元":"1156年に起きた天皇家・藤原氏の内部対立による内乱です。",
+  "平治":"1159年に起きた源氏と平氏の直接対立。平清盛が勝利しました。",
+  "平清盛":"武士として初めて太政大臣に就任。日宋貿易を推進しました。",
+  "太政大臣":"律令制度の最高官職。清盛が武士として初めて就任しました。",
+  "日宋貿易":"平清盛が推進した宋（中国）との貿易。大輪田泊を整備しました。",
+  "源義経":"頼朝の弟。壇ノ浦で平氏を滅ぼした天才武将。悲劇の英雄として有名です。",
+  "壇ノ浦":"1185年の源平最後の海戦。平氏が滅亡しました（山口県下関）。",
+};
+const answers={"A":"武士","B":"源氏","C":"平氏","D":"院政","E":"白河","F":"保元","G":"平治","H":"平清盛","I":"太政大臣","J":"日宋貿易","K":"源義経","L":"壇ノ浦"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){
+  const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";
+  [...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{
+    const chip=document.createElement('div');chip.className='word-chip';
+    const label=document.createElement('span');label.textContent=word;chip.appendChild(label);
+    const tip=WORD_TIPS[word];
+    if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}
+    chip.addEventListener('click',()=>{if(chip.classList.contains('used'))return;document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip');});
+    bank.appendChild(chip);
   });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['heian2'] = prog['heian2'] || {};
-      prog['heian2'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
+}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{
+  blank.addEventListener('click',e=>{e.stopPropagation();if(selectedChip){const old=getBlankText(blank);if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});setBlankText(blank,getChipWord(selectedChip));selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;}});
+});
+function startChallenge(){document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});renderBank();selectedChip=null;startTime=Date.now();if(timerId)clearInterval(timerId);timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);}
+function checkAnswers(){let ok=true;document.querySelectorAll('.blank').forEach(b=>{if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');else{ok=false;b.classList.remove('correct');}});if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！平安時代②をマスターしました。");}else alert("間違いがあります。もう一度見直してみましょう。");}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['heian2']=p['heian2']||{};p['heian2'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>

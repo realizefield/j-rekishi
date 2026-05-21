@@ -5,39 +5,118 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>歴史学習GAMBA：古墳時代と大和政権</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:270px;background:#2c1800;color:#fff;border-radius:10px;padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none}
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>④ 古墳時代と大和政権</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>古墳時代と大和政権</h2><div class="question-text">3〜6世紀、近畿地方を中心に日本独自の<span class="blank" data-id="A">前方後円墳</span>が多く作られた。大阪府堺市にある日本最大の古墳は<span class="blank" data-id="B">大山</span>古墳で、周囲には<span class="blank" data-id="C">埴輪</span>が置かれた。奈良盆地を中心に王を中心とした豪族連合<span class="blank" data-id="D">大和政権</span>が成立し、王は<span class="blank" data-id="E">大王</span>と呼ばれた。</div></div>
-<div class="section"><h2>渡来人の文化</h2><div class="question-text">朝鮮から日本に移り住んだ人々を<span class="blank" data-id="F">渡来人</span>という。渡来人は<span class="blank" data-id="G">漢字</span>・<span class="blank" data-id="H">儒教</span>・<span class="blank" data-id="I">仏教</span>・登り窯を使った硬い土器<span class="blank" data-id="J">須恵器</span>などを伝えた。仏教は朝鮮半島の<span class="blank" data-id="K">百済</span>の聖明王から伝わった。ワカタケル大王（倭王<span class="blank" data-id="L">武</span>）は中国南朝に上表文を送り支配の正当性を認めさせた。</div></div>
+
+<div class="section">
+  <h2>古墳時代と大和政権</h2>
+  <p>3〜6世紀、近畿地方を中心に日本独自の
+  <span class="blank" data-id="A">前方後円墳<span class="pop-box">
+    <span class="pop-name">🏔️ 前方後円墳</span>
+    <span class="pop-body">前が四角（前方）・後ろが丸（後円）という日本独特の形の古墳です。日本列島でのみ見られる形で、大王・豪族の墓として全国に広まりました。空から見ると鍵穴のような形をしています。</span>
+    <span class="pop-memo">💡 「前方後円」は前（手前）が四角くて後ろが丸いという意味です。なぜこの形になったかは完全には解明されていませんが、「葬送儀礼のための空間を正面に設けた」という説が有力です。</span>
+  </span></span>が多く作られました。大阪府堺市にある日本最大の古墳は
+  <span class="blank" data-id="B">大山<span class="pop-box">
+    <span class="pop-name">🏔️ 大山（仁徳天皇陵）古墳</span>
+    <span class="pop-body">大阪府堺市にある日本最大の古墳（全長約486m）です。「仁徳天皇陵」とも呼ばれます。エジプトのクフ王のピラミッド・秦の始皇帝陵と並び「世界三大墳墓」の一つです。2019年に世界遺産登録されました。</span>
+    <span class="pop-memo">💡 建設には延べ680万人が動員されたといわれます。当時の日本の総人口が約50万人という説もあるので、国力を総動員した超巨大プロジェクトでした。</span>
+  </span></span>古墳で、周囲には
+  <span class="blank" data-id="C">埴輪<span class="pop-box">
+    <span class="pop-name">🗿 埴輪（はにわ）</span>
+    <span class="pop-body">古墳の周囲に並べた素焼きの土製品です。円筒形・人物・馬・家・器などさまざまな形があります。死者への副葬品・祭祀用として置かれました。</span>
+    <span class="pop-memo">💡 埴輪の表情は「ぽかんと口を開けた素朴な顔」が多く、現代でも人気のキャラクター風デザインです。縄文の土偶と混同しないよう注意しましょう（土偶＝縄文、埴輪＝古墳時代）。</span>
+  </span></span>が置かれました。奈良盆地を中心に王を中心とした豪族連合
+  <span class="blank" data-id="D">大和政権<span class="pop-box">
+    <span class="pop-name">🏯 大和政権（ヤマト王権）</span>
+    <span class="pop-body">4〜7世紀に奈良盆地（大和）を中心に成立した豪族連合国家です。各地の豪族が大王のもとにまとまり、しだいに全国統一を進めました。後の律令国家・天皇制の基礎となりました。</span>
+    <span class="pop-memo">💡 「大和政権」と「大和民族」の「大和（やまと）」は奈良のことです。奈良から始まった政権が日本全国に広がっていきました。</span>
+  </span></span>が成立し、王は
+  <span class="blank" data-id="E">大王<span class="pop-box">
+    <span class="pop-name">👑 大王（おおきみ）</span>
+    <span class="pop-body">大和政権の頂点に立つ最高権力者の称号です。後に「天皇」という称号に変わりました（7世紀ごろ）。大王の権威を示すために巨大な古墳が作られました。</span>
+    <span class="pop-memo">💡 「大王→天皇」という称号の変化は、7世紀の中国（唐）との外交を通じて「皇帝と対等な称号が必要」と考えたためといわれています。</span>
+  </span></span>と呼ばれました。</p>
+</div>
+
+<div class="section">
+  <h2>渡来人の文化</h2>
+  <p>朝鮮から日本に移り住んだ人々を
+  <span class="blank" data-id="F">渡来人<span class="pop-box">
+    <span class="pop-name">🚢 渡来人</span>
+    <span class="pop-body">4〜7世紀ごろ、主に朝鮮半島から日本に渡ってきた人々です。様々な技術・知識を持ち込み、日本の文化・技術を大きく発展させました。秦氏・東漢氏などの渡来人集団が知られています。</span>
+    <span class="pop-memo">💡 渡来人は「技術移民」のような存在でした。漢字・儒教・仏教・養蚕・機織り・鉄器製造など、当時の最先端技術を持ち込んだ人々です。</span>
+  </span></span>といいます。渡来人は
+  <span class="blank" data-id="G">漢字<span class="pop-box">
+    <span class="pop-name">📝 漢字の伝来</span>
+    <span class="pop-body">渡来人を通じて5世紀ごろに日本に伝わりました。最初は中国語のまま使われましたが、やがて日本語の音を漢字で表す「万葉仮名」が生まれ、後に平仮名・片仮名が生まれました。</span>
+    <span class="pop-memo">💡 「漢字がなければ日本語の文字もなかった」といえます。平仮名も片仮名も漢字から生まれています。現代の日本語は漢字なしには成立しません。</span>
+  </span></span>・
+  <span class="blank" data-id="H">儒教<span class="pop-box">
+    <span class="pop-name">📚 儒教の伝来</span>
+    <span class="pop-body">孔子の教えを記した「論語」などが渡来人を通じて伝わりました。「目上の人を敬う」「礼儀を重んじる」という儒教の考え方は、その後の日本の社会道徳・政治思想に大きな影響を与えました。</span>
+    <span class="pop-memo">💡 「上下関係を大切にする」「礼儀を守る」という現代の日本人の価値観のルーツの一つが儒教の伝来です。聖徳太子の十七条の憲法にも儒教の影響が見られます。</span>
+  </span></span>・
+  <span class="blank" data-id="I">仏教<span class="pop-box">
+    <span class="pop-name">☸️ 仏教の伝来（538年または552年）</span>
+    <span class="pop-body">朝鮮半島の百済の聖明王から大和政権に仏教が伝えられました（538年説・552年説があります）。仏教の受け入れをめぐって蘇我氏（賛成）と物部氏（反対）が対立しました。</span>
+    <span class="pop-memo">💡 「仏教を受け入れる＝新しい文明を取り入れる」という意味がありました。蘇我氏が勝利したことで仏教が公式に認められ、法隆寺など多くの寺院が建立されました。</span>
+  </span></span>・登り窯を使った硬い土器
+  <span class="blank" data-id="J">須恵器<span class="pop-box">
+    <span class="pop-name">🏺 須恵器（すえき）</span>
+    <span class="pop-body">渡来人が持ち込んだ技術で作られた硬質の土器です。登り窯で高温焼成するため、それまでの土師器（はじき）より硬く薄く作れました。灰色で金属的な光沢が特徴です。</span>
+    <span class="pop-memo">💡 「登り窯で高温焼成」という技術は革命的でした。より硬く・薄く・多様な形が作れるようになりました。現代の陶磁器技術の原型でもあります。</span>
+  </span></span>などを伝えました。仏教は朝鮮半島の
+  <span class="blank" data-id="K">百済<span class="pop-box">
+    <span class="pop-name">🇰🇷 百済（くだら）</span>
+    <span class="pop-body">4〜7世紀に朝鮮半島南西部に存在した国です。日本と友好関係にあり、仏教・漢字・儒教・技術者などを送り込みました。660年に新羅・唐の連合軍に滅ぼされました。</span>
+    <span class="pop-memo">💡 日本語の「くだらない（下らない）」は「百済（くだら）から来ていない＝価値がない」という語源という説があります（他の説もあります）。</span>
+  </span></span>の聖明王から伝わりました。ワカタケル大王（倭王
+  <span class="blank" data-id="L">武<span class="pop-box">
+    <span class="pop-name">👑 倭王武（ワカタケル大王）</span>
+    <span class="pop-body">5世紀後半の大王（雄略天皇に比定される）です。中国南朝に「朝鮮半島を支配する権利の承認」を求める上表文を送りました。埼玉県の稲荷山古墳の鉄剣にも「ワカタケル大王」の名が刻まれています。</span>
+    <span class="pop-memo">💡 中国の歴史書「宋書」に記された「倭の五王（讃・珍・済・興・武）」の最後の王が武です。中国の権威を使って朝鮮半島での地位を高めようとしました。</span>
+  </span></span>）は中国南朝に上表文を送り支配の正当性を認めさせました。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -50,52 +129,42 @@
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">古墳時代のキーワード：前方後円墳・埴輪・大和政権・大王をセットで覚えよう。</div>
+    <div class="explain-box" id="explain-box">
+      古墳時代：前方後円墳・大山古墳（世界最大）・埴輪<br>
+      大和政権：奈良盆地を中心とした豪族連合。王＝大王（後に天皇）<br>
+      渡来人：漢字・儒教・仏教（百済から）・須恵器を伝えた。倭王武が中国に上表文
+    </div>
   </div>
 </div>
+
 <script>
-
-  const answers = { "A":"前方後円墳", "B":"大山", "C":"埴輪", "D":"大和政権", "E":"大王", "F":"渡来人", "G":"漢字", "H":"儒教", "I":"仏教", "J":"須恵器", "K":"百済", "L":"武" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
-    });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
-  });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['kofun1'] = prog['kofun1'] || {};
-      prog['kofun1'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
+const WORD_TIPS={
+  "前方後円墳":"前が四角・後ろが丸の日本独特の古墳。大王・豪族の墓です。",
+  "大山":"大阪府堺市にある日本最大の前方後円墳（全長486m）。世界遺産です。",
+  "埴輪":"古墳の周りに並べた素焼きの土製品。人物・馬・家など様々な形があります。",
+  "大和政権":"4〜7世紀の奈良盆地を中心とした豪族連合。後の天皇制の基礎となりました。",
+  "大王":"大和政権の最高権力者の称号。後に「天皇」という称号に変わりました（7世紀）。",
+  "渡来人":"4〜7世紀に朝鮮半島から移住した人々。漢字・儒教・仏教・須恵器などを伝えました。",
+  "漢字":"渡来人を通じて伝わった文字。平仮名・片仮名も漢字から生まれました。",
+  "儒教":"孔子の教え（論語）。「目上を敬い礼儀を守る」という日本の道徳観の源の一つです。",
+  "仏教":"538年（または552年）に百済の聖明王から大和政権に伝えられた宗教です。",
+  "須恵器":"渡来人が伝えた登り窯技術で作られた硬質の土器。灰色で硬くて薄いのが特徴です。",
+  "百済":"朝鮮半島南西部の国。仏教・漢字・儒教を日本に伝えました（660年に滅亡）。",
+  "武":"倭の五王の最後の王（ワカタケル大王）。中国南朝に上表文を送りました。",
+};
+const answers={"A":"前方後円墳","B":"大山","C":"埴輪","D":"大和政権","E":"大王","F":"渡来人","G":"漢字","H":"儒教","I":"仏教","J":"須恵器","K":"百済","L":"武"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";[...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{const chip=document.createElement('div');chip.className='word-chip';const label=document.createElement('span');label.textContent=word;chip.appendChild(label);const tip=WORD_TIPS[word];if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}chip.addEventListener('click',()=>{if(chip.classList.contains('used'))return;document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip');});bank.appendChild(chip);});}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{blank.addEventListener('click',e=>{e.stopPropagation();if(selectedChip){const old=getBlankText(blank);if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});setBlankText(blank,getChipWord(selectedChip));selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;}});});
+function startChallenge(){document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});renderBank();selectedChip=null;startTime=Date.now();if(timerId)clearInterval(timerId);timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);}
+function checkAnswers(){let ok=true;document.querySelectorAll('.blank').forEach(b=>{if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');else{ok=false;b.classList.remove('correct');}});if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！古墳時代と大和政権をマスターしました。");}else alert("間違いがあります。もう一度見直してみましょう。");}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['kofun1']=p['kofun1']||{};p['kofun1'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>

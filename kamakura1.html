@@ -5,39 +5,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>歴史学習GAMBA：鎌倉幕府の成立</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:270px;background:#2c1800;color:#fff;border-radius:10px;padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none;}
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>⑨ 鎌倉幕府の成立</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>鎌倉幕府の成立と仕組み</h2><div class="question-text">1185年、<span class="blank" data-id="A">源頼朝</span>は全国に<span class="blank" data-id="B">守護</span>（軍事・警察）と<span class="blank" data-id="C">地頭</span>（年貢管理）の設置を朝廷に認めさせた。1192年には<span class="blank" data-id="D">征夷大将軍</span>に任命され<span class="blank" data-id="E">鎌倉幕府</span>を開いた。将軍が土地を与え家臣が奉仕するという「<span class="blank" data-id="F">御恩</span>と<span class="blank" data-id="G">奉公</span>」の主従関係（<span class="blank" data-id="H">封建制度</span>）が確立した。</div></div>
-<div class="section"><h2>執権政治と承久の乱</h2><div class="question-text">頼朝の死後、実権は妻<span class="blank" data-id="I">北条政子</span>の実家北条氏に移り、<span class="blank" data-id="J">執権</span>として幕府を支配した。1221年、<span class="blank" data-id="K">後鳥羽上皇</span>が幕府打倒を企てた<span class="blank" data-id="L">承久の乱</span>が起こったが幕府が勝利し、朝廷監視のため<span class="blank" data-id="M">六波羅探題</span>を設置した。1232年、執権<span class="blank" data-id="N">北条泰時</span>が武家法<span class="blank" data-id="O">御成敗式目</span>（51か条）を制定した。</div></div>
+
+<div class="section">
+  <h2>鎌倉幕府の成立と仕組み</h2>
+  <p>1185年、
+  <span class="blank" data-id="A">源頼朝<span class="pop-box">
+    <span class="pop-name">👑 源頼朝（1147〜1199）</span>
+    <span class="pop-body">鎌倉幕府を開いた初代将軍です。平治の乱で父・義朝が敗死したため伊豆に流されましたが、1180年に挙兵。弟・義経らの活躍で平氏を滅ぼし、武家政権を樹立しました。</span>
+    <span class="pop-memo">💡 「武士の棟梁として全国を支配する」という新しい政治モデルを作った人物です。朝廷と別に独自の政府（幕府）を作ったことが革命的でした。</span>
+  </span></span>は全国に
+  <span class="blank" data-id="B">守護<span class="pop-box">
+    <span class="pop-name">⚔️ 守護</span>
+    <span class="pop-body">国（都道府県に相当）ごとに置かれた幕府の役人です。主な仕事は軍事・警察（御家人の統率・犯罪人の逮捕）で、朝廷の国司と並立しました。</span>
+    <span class="pop-memo">💡 守護は「国単位」で置かれます。地頭は「荘園・公領単位」で置かれます。この違いがよく試験に出ます。</span>
+  </span></span>（軍事・警察）と
+  <span class="blank" data-id="C">地頭<span class="pop-box">
+    <span class="pop-name">⚔️ 地頭</span>
+    <span class="pop-body">荘園・公領ごとに置かれた幕府の役人です。年貢の取り立て・土地管理・治安維持が主な仕事です。荘園領主（貴族・寺社）との間でしばしば争いが起きました。</span>
+    <span class="pop-memo">💡 地頭は「荘園単位」で置かれます。守護より数が多く、地方支配の実務担当者でした。</span>
+  </span></span>（年貢管理）の設置を朝廷に認めさせました。1192年には
+  <span class="blank" data-id="D">征夷大将軍<span class="pop-box">
+    <span class="pop-name">🎖️ 征夷大将軍</span>
+    <span class="pop-body">天皇から授けられる武家政権トップの称号です。頼朝が就任することで「幕府を開く正当性」が生まれました。以後、室町・江戸幕府も同じ称号を使いました。</span>
+    <span class="pop-memo">💡 「いいくに（1192）作ろう鎌倉幕府」ですが、現在は1185年に守護・地頭を設置した時点を幕府成立とする考え方が有力です。</span>
+  </span></span>に任命され
+  <span class="blank" data-id="E">鎌倉幕府<span class="pop-box">
+    <span class="pop-name">🏯 鎌倉幕府（1185〜1333）</span>
+    <span class="pop-body">源頼朝が神奈川県鎌倉に開いた日本初の武家政権です。約150年間続きました。将軍と御家人の主従関係（御恩と奉公）を基本とした封建制度が特徴です。</span>
+    <span class="pop-memo">💡 日本初の「武士による政府」です。それまでは天皇・貴族が政治を行っていました。</span>
+  </span></span>を開きました。将軍が土地を与え家臣が奉仕するという「
+  <span class="blank" data-id="F">御恩<span class="pop-box">
+    <span class="pop-name">🏡 御恩</span>
+    <span class="pop-body">将軍が御家人（家臣）に与える恩恵のことです。具体的には「本領安堵（もとの土地の支配を保証する）」と「新恩給与（新しく土地を与える）」の2種類があります。</span>
+    <span class="pop-memo">💡 「土地をもらう」代わりに「命がけで仕える」という関係です。土地と忠誠を交換する仕組みです。</span>
+  </span></span>と
+  <span class="blank" data-id="G">奉公<span class="pop-box">
+    <span class="pop-name">⚔️ 奉公</span>
+    <span class="pop-body">御家人（家臣）が将軍に捧げる奉仕のことです。具体的には「軍役（戦時に馳せ参じる）」と「番役（京都・鎌倉の警備）」が主な内容です。</span>
+    <span class="pop-memo">💡 「御恩と奉公」は双方向の契約関係です。将軍が御恩を与えない・御家人が奉公しない場合は関係が崩れます。元寇後の御恩不足が幕府衰退の原因になりました。</span>
+  </span></span>」の主従関係（
+  <span class="blank" data-id="H">封建制度<span class="pop-box">
+    <span class="pop-name">🏰 封建制度</span>
+    <span class="pop-body">土地を仲立ちにした主従関係を基礎とした支配体制です。将軍→御家人→農民という階層構造で社会が成り立ちます。西ヨーロッパの中世にも同様の制度がありました。</span>
+    <span class="pop-memo">💡 「封建的」という言葉は今でも「古くて硬直した」という意味で使われます。この時代に生まれた制度が語源です。</span>
+  </span></span>）が確立しました。</p>
+</div>
+
+<div class="section">
+  <h2>執権政治と承久の乱</h2>
+  <p>頼朝の死後、実権は妻
+  <span class="blank" data-id="I">北条政子<span class="pop-box">
+    <span class="pop-name">👩 北条政子（1157〜1225）</span>
+    <span class="pop-body">源頼朝の妻。頼朝の死後も「尼将軍」として幕府を支え、承久の乱では御家人を説得して幕府側の勝利に貢献しました。「女性宰相」的な役割を果たした歴史上稀な人物です。</span>
+    <span class="pop-memo">💡 「頼朝公の御恩は山より高く海より深い。今こそ報いるべき時です」という演説で御家人の心を動かし、承久の乱を勝利に導きました。</span>
+  </span></span>の実家北条氏に移り、
+  <span class="blank" data-id="J">執権<span class="pop-box">
+    <span class="pop-name">🏛️ 執権</span>
+    <span class="pop-body">将軍を補佐する幕府最高の実務職です。北条氏が代々独占しました。形式上の将軍（源氏→皇族・摂家出身）を「お飾り」にして、執権として実権を握りました。</span>
+    <span class="pop-memo">💡 「将軍の補佐役なのに、実際は将軍より偉い」という不思議な立場です。江戸幕府の老中に似た役割です。</span>
+  </span></span>として幕府を支配しました。1221年、
+  <span class="blank" data-id="K">後鳥羽上皇<span class="pop-box">
+    <span class="pop-name">👑 後鳥羽上皇（1180〜1239）</span>
+    <span class="pop-body">幕府打倒を目指して承久の乱を起こした上皇です。文武両道で知られ、「百人一首」の編者・藤原定家のパトロンでもありました。乱の後は隠岐（島根県）に流されました。</span>
+    <span class="pop-memo">💡 承久の乱で幕府に敗れた後も隠岐の島で和歌を詠み続けました。「人もをし 人も恨めし あぢきなく 世を思ふゆゑに 物思ふ身は」という歌が有名です。</span>
+  </span></span>が幕府打倒を企てた
+  <span class="blank" data-id="L">承久の乱<span class="pop-box">
+    <span class="pop-name">⚔️ 承久の乱（1221年）</span>
+    <span class="pop-body">後鳥羽上皇が幕府打倒の院宣を出して起こした内乱です。北条政子の演説で結束した幕府軍が圧勝し、3人の上皇が流罪になりました。</span>
+    <span class="pop-memo">💡 この乱の結果、幕府の権力が西日本にも及ぶようになりました。「朝廷より幕府が上」という関係が確定した事件です。</span>
+  </span></span>が起こりましたが幕府が勝利し、朝廷監視のため
+  <span class="blank" data-id="M">六波羅探題<span class="pop-box">
+    <span class="pop-name">🏛️ 六波羅探題</span>
+    <span class="pop-body">承久の乱後、京都（六波羅）に設置された幕府の機関です。朝廷の監視・西国の御家人の統率が主な役割です。「探題」は監察・裁判の意味です。</span>
+    <span class="pop-memo">💡 「六波羅」は京都の地名です。元々平清盛が邸宅を構えた場所でした。幕府が京都に監視の目を置くことで、朝廷を完全にコントロールしました。</span>
+  </span></span>を設置しました。1232年、執権
+  <span class="blank" data-id="N">北条泰時<span class="pop-box">
+    <span class="pop-name">👑 北条泰時（1183〜1242）</span>
+    <span class="pop-body">3代執権。武家社会最初の法律「御成敗式目」を制定しました。「評定衆（合議制）」を設けて公正な裁判を目指した、優れた政治家として知られています。</span>
+    <span class="pop-memo">💡 「武士の慣習や道理を成文化した」のが御成敗式目の特徴です。それまで暗黙のルールだったものを文書にしました。</span>
+  </span></span>が武家法
+  <span class="blank" data-id="O">御成敗式目<span class="pop-box">
+    <span class="pop-name">📜 御成敗式目（1232年・51か条）</span>
+    <span class="pop-body">北条泰時が制定した武家社会初の法律です。武士の慣習・道理をもとに51か条にまとめました。守護・地頭の職務・土地の相続・女性の権利なども定めました。</span>
+    <span class="pop-memo">💡 「武士には武士のルールがある」という宣言です。朝廷の律令とは別の、武士独自の法体系を作りました。後の武家法の手本になりました。</span>
+  </span></span>（51か条）を制定しました。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -50,52 +144,45 @@
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">守護＝国ごと、地頭＝荘園ごとに配置。御恩と奉公の内容も確認しよう。</div>
+    <div class="explain-box" id="explain-box">
+      守護＝国ごと（軍事・警察）、地頭＝荘園ごと（年貢管理）の違いを確認しましょう。<br>
+      御恩（土地の保証・給与）と奉公（軍役・番役）がセットです。<br>
+      承久の乱（1221）→六波羅探題の設置→御成敗式目（1232）の流れを覚えましょう。
+    </div>
   </div>
 </div>
+
 <script>
-
-  const answers = { "A":"源頼朝", "B":"守護", "C":"地頭", "D":"征夷大将軍", "E":"鎌倉幕府", "F":"御恩", "G":"奉公", "H":"封建制度", "I":"北条政子", "J":"執権", "K":"後鳥羽上皇", "L":"承久の乱", "M":"六波羅探題", "N":"北条泰時", "O":"御成敗式目" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
-    });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
-  });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['kamakura1'] = prog['kamakura1'] || {};
-      prog['kamakura1'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
+const WORD_TIPS={
+  "源頼朝":"鎌倉幕府を開いた初代将軍。平治の乱で伊豆に流された後、1180年に挙兵しました。",
+  "守護":"国（都道府県）ごとに置かれた幕府の役人。軍事・警察担当。",
+  "地頭":"荘園・公領ごとに置かれた幕府の役人。年貢管理・治安維持担当。",
+  "征夷大将軍":"幕府を開く権威の象徴。頼朝が1192年に就任しました。",
+  "鎌倉幕府":"源頼朝が1185年（または1192年）に開いた日本初の武家政権。",
+  "御恩":"将軍が御家人に土地を保証・給与する恩恵。本領安堵と新恩給与の2種類があります。",
+  "奉公":"御家人が将軍に捧げる奉仕。軍役と番役が主な内容です。",
+  "封建制度":"土地を仲立ちにした主従関係を基礎とする支配体制です。",
+  "北条政子":"頼朝の妻。「尼将軍」と呼ばれ、承久の乱では御家人を説得して幕府側の勝利に貢献しました。",
+  "執権":"将軍を補佐する幕府の最高実務職。北条氏が代々独占しました。",
+  "後鳥羽上皇":"1221年に承久の乱を起こした上皇。敗れて隠岐に流されました。",
+  "承久の乱":"1221年に後鳥羽上皇が起こした幕府打倒の乱。幕府が圧勝し朝廷より優位に立ちました。",
+  "六波羅探題":"承久の乱後に京都に設置された朝廷監視機関です。",
+  "北条泰時":"3代執権。御成敗式目を制定した公正な政治家として知られています。",
+  "御成敗式目":"1232年に制定された武家社会初の法律（51か条）。武士の慣習を文書化しました。",
+};
+const answers={"A":"源頼朝","B":"守護","C":"地頭","D":"征夷大将軍","E":"鎌倉幕府","F":"御恩","G":"奉公","H":"封建制度","I":"北条政子","J":"執権","K":"後鳥羽上皇","L":"承久の乱","M":"六波羅探題","N":"北条泰時","O":"御成敗式目"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";[...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{const chip=document.createElement('div');chip.className='word-chip';const label=document.createElement('span');label.textContent=word;chip.appendChild(label);const tip=WORD_TIPS[word];if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}chip.addEventListener('click',()=>{if(chip.classList.contains('used'))return;document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip');});bank.appendChild(chip);});}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{blank.addEventListener('click',e=>{e.stopPropagation();if(selectedChip){const old=getBlankText(blank);if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});setBlankText(blank,getChipWord(selectedChip));selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;}});});
+function startChallenge(){document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});renderBank();selectedChip=null;startTime=Date.now();if(timerId)clearInterval(timerId);timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);}
+function checkAnswers(){let ok=true;document.querySelectorAll('.blank').forEach(b=>{if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');else{ok=false;b.classList.remove('correct');}});if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！鎌倉幕府の成立をマスターしました。");}else alert("間違いがあります。もう一度見直してみましょう。");}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['kamakura1']=p['kamakura1']||{};p['kamakura1'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>

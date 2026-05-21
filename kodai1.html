@@ -3,41 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>歴史学習GAMBA：四大文明</title>
+<title>歴史学習GAMBA：四大文明の誕生</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:270px;background:#2c1800;color:#fff;border-radius:10px;padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none}
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>① 四大文明の誕生</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>エジプト文明・メソポタミア文明</h2><div class="question-text">紀元前3100年ごろ、<span class="blank" data-id="A">ナイル</span>川流域に<span class="blank" data-id="B">エジプト</span>文明が栄えた。文字は<span class="blank" data-id="C">象形</span>文字、暦は<span class="blank" data-id="D">太陽暦</span>を使い、<span class="blank" data-id="E">ピラミッド</span>が建てられた。<br><br>紀元前3500年ごろ、<span class="blank" data-id="F">チグリス</span>・<span class="blank" data-id="G">ユーフラテス</span>川流域に<span class="blank" data-id="H">メソポタミア</span>文明が栄えた。文字は粘土板に刻んだ<span class="blank" data-id="I">くさび形</span>文字、暦は<span class="blank" data-id="J">太陰暦</span>を使い、<span class="blank" data-id="K">ハンムラビ</span>王が「目には目を、歯には歯を」で有名な<span class="blank" data-id="L">ハンムラビ法典</span>を制定した。</div></div>
-<div class="section"><h2>インダス文明・中国文明</h2><div class="question-text">紀元前2300年ごろ、<span class="blank" data-id="M">インダス</span>川流域に<span class="blank" data-id="N">インダス</span>文明が栄えた。計画的な都市国家<span class="blank" data-id="O">モヘンジョダロ</span>が建設された。<br><br>紀元前1500年ごろ、<span class="blank" data-id="P">黄河</span>流域に中国文明が栄えた。最古の王朝<span class="blank" data-id="Q">殷</span>では<span class="blank" data-id="R">青銅器</span>が使われ、占いの記録を刻んだ<span class="blank" data-id="S">甲骨</span>文字が使われた。</div></div>
+
+<div class="section">
+  <h2>エジプト文明・メソポタミア文明</h2>
+  <p>紀元前3100年ごろ、
+  <span class="blank" data-id="A">ナイル<span class="pop-box">
+    <span class="pop-name">🌊 ナイル川</span>
+    <span class="pop-body">アフリカを南北に流れる世界最長の川（約6650km）です。毎年定期的に氾濫して肥沃な土を運ぶため、農業が発達しました。古代ギリシャの歴史家ヘロドトスは「エジプトはナイルの賜物」と述べました。</span>
+    <span class="pop-memo">💡 「定期的に洪水が来る川＝農業に最適」というのが四大文明の共通点です。洪水の時期を予測するために天文学・暦が発達しました。</span>
+  </span></span>川流域に
+  <span class="blank" data-id="B">エジプト<span class="pop-box">
+    <span class="pop-name">🏺 エジプト文明</span>
+    <span class="pop-body">紀元前3100年ごろ、ナイル川流域に統一国家が誕生しました。ファラオ（神聖な王）を頂点とした神権政治が行われ、約3000年間続きました。</span>
+    <span class="pop-memo">💡 「3000年も続いた文明」というのが凄さです。日本の歴史（約2000年）より長い！ ピラミッドはその権威の象徴でした。</span>
+  </span></span>文明が栄えました。文字は
+  <span class="blank" data-id="C">象形<span class="pop-box">
+    <span class="pop-name">📝 象形文字（ヒエログリフ）</span>
+    <span class="pop-body">物の形をかたどった絵文字から発展したエジプトの文字です。神殿の壁や石碑に刻まれました。1799年のロゼッタ・ストーン発見まで長らく解読できませんでした。</span>
+    <span class="pop-memo">💡 「象形」は「形を象（かたど）る」という意味です。太陽なら☉、水なら～のように描きました。日本の漢字も象形文字が起源です。</span>
+  </span></span>文字、暦は
+  <span class="blank" data-id="D">太陽暦<span class="pop-box">
+    <span class="pop-name">📅 太陽暦</span>
+    <span class="pop-body">太陽の動きをもとにした暦（1年＝365日）です。エジプトではナイル川の氾濫時期を予測するために発達しました。現在の世界標準カレンダーの原型です。</span>
+    <span class="pop-memo">💡 現代の私たちが使うカレンダーの直接のルーツはエジプトの太陽暦です。「1年=365日」という計算はここから始まりました。</span>
+  </span></span>を使い、
+  <span class="blank" data-id="E">ピラミッド<span class="pop-box">
+    <span class="pop-name">🔺 ピラミッド</span>
+    <span class="pop-body">エジプト・ファラオの巨大な墓です。ギザの大ピラミッド（クフ王のもの）は高さ約138m、石の数は約230万個。現在でもどうやって建てたか完全には解明されていません。</span>
+    <span class="pop-memo">💡 大ピラミッドは建設後4500年経った今も世界最大級の石造建築物です。当時の労働者は「奴隷」ではなく「給与をもらう職人」だったという説が有力です。</span>
+  </span></span>が建てられました。</p>
+  <p>紀元前3500年ごろ、
+  <span class="blank" data-id="F">チグリス<span class="pop-box">
+    <span class="pop-name">🌊 チグリス川</span>
+    <span class="pop-body">現在のイラクを流れる川です。ユーフラテス川とともにメソポタミアを形成しました。「チグリス」はアッカド語で「矢のように速い川」という意味です。</span>
+    <span class="pop-memo">💡 「チグリス・ユーフラテス」はセットで覚えましょう。現在のイラクにあたる地域で、この2つの川の間（メソポタミア＝「川の間」の意）に文明が栄えました。</span>
+  </span></span>・
+  <span class="blank" data-id="G">ユーフラテス<span class="pop-box">
+    <span class="pop-name">🌊 ユーフラテス川</span>
+    <span class="pop-body">現在のトルコ・シリア・イラクを流れる川です。チグリス川とともにメソポタミア文明を育みました。「ユーフラテス」はギリシャ語で「良い川」を意味します。</span>
+    <span class="pop-memo">💡 聖書の「エデンの園」はチグリス・ユーフラテス川の源流付近にあったとされています。「人類の楽園」と呼ばれた豊かな地域でした。</span>
+  </span></span>川流域に
+  <span class="blank" data-id="H">メソポタミア<span class="pop-box">
+    <span class="pop-name">🏺 メソポタミア文明</span>
+    <span class="pop-body">ギリシャ語で「川（ポタミア）の間（メソ）の土地」という意味です。シュメール人が最初に都市文明を築き、後にバビロニア・アッシリアなど多くの民族が栄えました。</span>
+    <span class="pop-memo">💡 「文明発祥の地」の一つで、車輪・60進法・天文学など多くの発明が生まれました。60進法は今も「1時間=60分」「1分=60秒」として使われています。</span>
+  </span></span>文明が栄えました。文字は粘土板に刻んだ
+  <span class="blank" data-id="I">くさび形<span class="pop-box">
+    <span class="pop-name">📝 くさび形文字</span>
+    <span class="pop-body">葦のペンで粘土板に押しつけて書いた文字です。くさび（楔）の形をした記号の組み合わせでできています。紀元前3200年ごろに誕生した世界最古の文字の一つです。</span>
+    <span class="pop-memo">💡 粘土板に書いた後、焼いて保存しました。おかげで5000年後の今も読めます。「紙に書く」より「粘土に刻む」ほうが長持ちというのは面白いですね。</span>
+  </span></span>文字、暦は
+  <span class="blank" data-id="J">太陰暦<span class="pop-box">
+    <span class="pop-name">📅 太陰暦</span>
+    <span class="pop-body">月の満ち欠けをもとにした暦（1ヶ月≒29.5日）です。メソポタミアで発達しました。現在もイスラム暦（ヒジュラ暦）として使われています。</span>
+    <span class="pop-memo">💡 「太陰」の「陰」は月のことです（太陽＝陽、月＝陰）。現在の日本でもお盆や旧正月は旧暦（太陰暦ベース）を使います。</span>
+  </span></span>を使い、
+  <span class="blank" data-id="K">ハンムラビ<span class="pop-box">
+    <span class="pop-name">👑 ハンムラビ王（在位：前1792〜前1750年）</span>
+    <span class="pop-body">バビロン第一王朝の王で、メソポタミアを統一しました。「目には目を、歯には歯を」の原則で知られるハンムラビ法典を制定しました。</span>
+    <span class="pop-memo">💡 「目には目を」は「同じ程度の報復は許されるが、それ以上の報復は禁止」という意味です。実は「倍返しNG」という復讐の制限法でした。</span>
+  </span></span>王が「目には目を、歯には歯を」で有名な
+  <span class="blank" data-id="L">ハンムラビ法典<span class="pop-box">
+    <span class="pop-name">📜 ハンムラビ法典</span>
+    <span class="pop-body">紀元前1754年ごろに制定された世界最古の成文法典の一つです。282条からなり、身分・商業・財産・家族・労働などに関する法が定められています。現在パリのルーブル美術館に石碑が展示されています。</span>
+    <span class="pop-memo">💡 「成文法（文字で書かれた法律）」の先駆けです。「法律を文字で書いて公開する」ことで、みんなが同じルールで裁かれる公平性を目指しました。</span>
+  </span></span>を制定しました。</p>
+</div>
+
+<div class="section">
+  <h2>インダス文明・中国文明</h2>
+  <p>紀元前2300年ごろ、
+  <span class="blank" data-id="M">インダス<span class="pop-box">
+    <span class="pop-name">🌊 インダス川</span>
+    <span class="pop-body">現在のパキスタン・インドを流れる川です。「インド」という国名の語源でもあります。長さ約3180kmの大河で、ヒマラヤ山脈の雪解け水を集めて流れます。</span>
+    <span class="pop-memo">💡 「インダス＝インド」の語源です。インダス文明→インド文明→インド、という流れで名前が受け継がれました。</span>
+  </span></span>川流域に
+  <span class="blank" data-id="N">インダス<span class="pop-box">
+    <span class="pop-name">🏺 インダス文明</span>
+    <span class="pop-body">紀元前2600〜1900年ごろに栄えた文明です。モヘンジョダロ・ハラッパーなどの計画都市が建設され、上下水道・レンガ造りの建物が整備されていました。なぜ突然滅んだかは今も謎です。</span>
+    <span class="pop-memo">💡 「4000年前に上下水道があった文明」というのが驚異的です。ローマより2000年早く下水道を整備していました。</span>
+  </span></span>文明が栄えました。計画的な都市国家
+  <span class="blank" data-id="O">モヘンジョダロ<span class="pop-box">
+    <span class="pop-name">🏙️ モヘンジョダロ</span>
+    <span class="pop-body">インダス文明最大の都市遺跡（現・パキスタン）です。格子状の街路・公衆浴場・下水道などを持つ計画都市です。「モヘンジョダロ」はシンド語で「死者の丘」を意味します。</span>
+    <span class="pop-memo">💡 約4000年前に「格子状の街路（碁盤目状の都市計画）」が存在していました。奈良・平安京の都市計画より2500年以上前のことです。</span>
+  </span></span>が建設されました。</p>
+  <p>紀元前1500年ごろ、
+  <span class="blank" data-id="P">黄河<span class="pop-box">
+    <span class="pop-name">🌊 黄河</span>
+    <span class="pop-body">中国北部を流れる全長約5464kmの大河です。黄色い土（黄土）を多く含んで濁るため「黄河」と呼ばれます。「中国文明の母」ともいわれます。</span>
+    <span class="pop-memo">💡 長江（揚子江）も文明の発祥地ですが、試験では「黄河流域に中国最古の文明」と覚えましょう。現代の中国では黄河より長江流域の方が経済の中心です。</span>
+  </span></span>流域に中国文明が栄えました。最古の王朝
+  <span class="blank" data-id="Q">殷<span class="pop-box">
+    <span class="pop-name">👑 殷（商）王朝（前1600〜前1046年ごろ）</span>
+    <span class="pop-body">中国最古の王朝の一つで、甲骨文字・青銅器で有名です。神に問いかけて政治を決める「神権政治」が行われました。殷（いん）は後の呼び名で、当時は「商（しょう）」と呼ばれていました。</span>
+    <span class="pop-memo">💡 「殷」は中国最古の文字記録を持つ王朝です。甲骨文字が解読できたのは、中国語の漢字と連続性があったからです。</span>
+  </span></span>では
+  <span class="blank" data-id="R">青銅器<span class="pop-box">
+    <span class="pop-name">🏺 青銅器</span>
+    <span class="pop-body">銅とスズを混ぜた合金（青銅）で作られた道具・武器・祭器です。祭礼用の鼎（かなえ）や武器が作られました。鉄器より先に発達しました。</span>
+    <span class="pop-memo">💡 「石器→青銅器→鉄器」の順で金属器が発達しました。青銅は硬いが加工が難しく高価なため、最初は武器・祭器など特別なものに使われました。</span>
+  </span></span>が使われ、占いの記録を刻んだ
+  <span class="blank" data-id="S">甲骨<span class="pop-box">
+    <span class="pop-name">📝 甲骨文字</span>
+    <span class="pop-body">亀の甲羅や牛・鹿の骨に刻まれた中国最古の文字です。占いの結果を記録するために使われました。現代の漢字の直接のルーツです。</span>
+    <span class="pop-memo">💡 「甲骨」は「甲（亀の甲）と骨（動物の骨）」の意味です。火であぶって入ったひびの模様で神の意志を読み取り、それを文字で記録しました。</span>
+  </span></span>文字が使われました。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -46,56 +162,53 @@
       <button onclick="checkAnswers()">判定</button>
       <button class="secondary" onclick="location.reload()">やり直す</button>
       <button class="secondary" onclick="resetTimer()">時間リセット</button>
-      <button id="next-btn" onclick="location.href='kodai2.html'" disabled>次へ：中国統一 ▶</button>
+      <button id="next-btn" onclick="location.href='kodai2.html'" disabled>次へ：中国統一・シルクロード ▶</button>
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">四大文明はすべて大河の流域に発達した。エジプト＝ナイル川、メソポタミア＝チグリス・ユーフラテス川という組み合わせを確実に覚えよう。</div>
+    <div class="explain-box" id="explain-box">
+      エジプト：ナイル川・象形文字・太陽暦・ピラミッド<br>
+      メソポタミア：チグリス・ユーフラテス川・くさび形文字・太陰暦・ハンムラビ法典<br>
+      インダス：インダス川・モヘンジョダロ（計画都市）<br>
+      中国：黄河・殷・青銅器・甲骨文字
+    </div>
   </div>
 </div>
+
 <script>
-
-  const answers = { "A":"ナイル", "B":"エジプト", "C":"象形", "D":"太陽暦", "E":"ピラミッド", "F":"チグリス", "G":"ユーフラテス", "H":"メソポタミア", "I":"くさび形", "J":"太陰暦", "K":"ハンムラビ", "L":"ハンムラビ法典", "M":"インダス", "N":"インダス", "O":"モヘンジョダロ", "P":"黄河", "Q":"殷", "R":"青銅器", "S":"甲骨" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    Object.values(answers).sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
-    });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
-  });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['kodai1'] = prog['kodai1'] || {};
-      prog['kodai1'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
+const WORD_TIPS={
+  "ナイル":"アフリカを流れる世界最長の川。エジプト文明の源で「エジプトはナイルの賜物」といわれます。",
+  "エジプト":"ナイル川流域に栄えた文明。象形文字・太陽暦・ピラミッドが有名です。",
+  "象形":"物の形をかたどった絵文字から発展したエジプトの文字（ヒエログリフ）です。",
+  "太陽暦":"太陽の動きをもとにした暦（1年=365日）。現在の世界標準カレンダーの原型です。",
+  "ピラミッド":"エジプトのファラオの巨大な墓。ギザの大ピラミッドは高さ約138mです。",
+  "チグリス":"メソポタミア（現イラク）を流れる川。ユーフラテス川とセットで覚えましょう。",
+  "ユーフラテス":"メソポタミア（現イラク）を流れる川。チグリス川とセットで覚えましょう。",
+  "メソポタミア":"「川の間の土地」の意味。チグリス・ユーフラテス川流域の文明です（現イラク）。",
+  "くさび形":"葦のペンで粘土板に刻んだメソポタミアの文字。世界最古の文字の一つです。",
+  "太陰暦":"月の満ち欠けをもとにした暦（1ヶ月≒29.5日）。メソポタミアで発達しました。",
+  "ハンムラビ":"バビロン第一王朝の王。「目には目を、歯には歯を」のハンムラビ法典を制定しました。",
+  "ハンムラビ法典":"紀元前1754年ごろ制定された世界最古の成文法典の一つ。282か条からなります。",
+  "インダス":"パキスタン・インドを流れる川。「インド」の語源でもあります。",
+  "モヘンジョダロ":"インダス文明最大の計画都市。格子状の街路・下水道を持ちます（現パキスタン）。",
+  "黄河":"中国北部を流れる大河。「中国文明の母」といわれ、殷など最古の王朝が栄えました。",
+  "殷":"中国最古の王朝の一つ。甲骨文字・青銅器で有名です（前1600〜前1046年ごろ）。",
+  "青銅器":"銅とスズの合金（青銅）で作られた道具・武器。石器の次に発達した金属器です。",
+  "甲骨":"亀の甲羅や骨に刻まれた中国最古の文字。現代の漢字の直接のルーツです。",
+};
+const answers={"A":"ナイル","B":"エジプト","C":"象形","D":"太陽暦","E":"ピラミッド","F":"チグリス","G":"ユーフラテス","H":"メソポタミア","I":"くさび形","J":"太陰暦","K":"ハンムラビ","L":"ハンムラビ法典","M":"インダス","N":"インダス","O":"モヘンジョダロ","P":"黄河","Q":"殷","R":"青銅器","S":"甲骨"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";[...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{const chip=document.createElement('div');chip.className='word-chip';const label=document.createElement('span');label.textContent=word;chip.appendChild(label);const tip=WORD_TIPS[word];if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}chip.addEventListener('click',()=>{if(chip.classList.contains('used'))return;document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip');});bank.appendChild(chip);});}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{blank.addEventListener('click',e=>{e.stopPropagation();if(selectedChip){const old=getBlankText(blank);if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});setBlankText(blank,getChipWord(selectedChip));selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;}});});
+function startChallenge(){document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});renderBank();selectedChip=null;startTime=Date.now();if(timerId)clearInterval(timerId);timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);}
+function checkAnswers(){let ok=true;document.querySelectorAll('.blank').forEach(b=>{if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');else{ok=false;b.classList.remove('correct');}});if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！四大文明をマスターしました。");}else alert("間違いがあります。もう一度見直してみましょう。");}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['kodai1']=p['kodai1']||{};p['kodai1'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>

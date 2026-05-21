@@ -5,39 +5,138 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>歴史学習GAMBA：元寇と鎌倉幕府の滅亡</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:270px;background:#2c1800;color:#fff;border-radius:10px;padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none;}
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>⑩ 元寇と鎌倉幕府の滅亡</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>元寇と幕府の危機</h2><div class="question-text">モンゴル帝国（元）の皇帝<span class="blank" data-id="A">フビライ＝ハン</span>は2度にわたり日本に侵攻した（<span class="blank" data-id="B">元寇</span>）。1274年の<span class="blank" data-id="C">文永</span>の役、1281年の<span class="blank" data-id="D">弘安</span>の役はともに<span class="blank" data-id="E">暴風雨（神風）</span>もあり退けた。執権<span class="blank" data-id="F">北条時宗</span>が防衛を指揮したが、御家人への恩賞が与えられず不満が高まった。幕府は<span class="blank" data-id="G">永仁の徳政令</span>（1297年）で御家人の借金を帳消しにしようとした。</div></div>
-<div class="section"><h2>鎌倉文化と幕府の滅亡</h2><div class="question-text">鎌倉時代の新仏教として、<span class="blank" data-id="H">法然</span>の浄土宗・<span class="blank" data-id="I">親鸞</span>の浄土真宗・<span class="blank" data-id="J">一遍</span>の時宗・<span class="blank" data-id="K">日蓮</span>の日蓮宗・<span class="blank" data-id="L">栄西</span>の臨済宗・<span class="blank" data-id="M">道元</span>の曹洞宗が生まれた。文学では軍記物<span class="blank" data-id="N">平家物語</span>が成立。彫刻では<span class="blank" data-id="O">運慶・快慶</span>が東大寺南大門の金剛力士像を制作した。1333年、<span class="blank" data-id="P">後醍醐天皇</span>の討幕運動で鎌倉幕府は滅亡した。</div></div>
+
+<div class="section">
+  <h2>元寇と幕府の危機</h2>
+  <p>モンゴル帝国（元）の皇帝
+  <span class="blank" data-id="A">フビライ＝ハン<span class="pop-box">
+    <span class="pop-name">👑 フビライ＝ハン（1215〜1294）</span>
+    <span class="pop-body">モンゴル帝国5代皇帝で、中国に元を建国しました。アジア・東ヨーロッパにまたがる史上最大の帝国を支配しました。日本にも朝貢（服従の意思表示）を求め、拒否されると2度侵攻しました。</span>
+    <span class="pop-memo">💡 「マルコ・ポーロが大カーンと紹介した人物」です。日本については「黄金の国ジパング」として興味を持っていたといわれています。</span>
+  </span></span>は2度にわたり日本に侵攻しました（
+  <span class="blank" data-id="B">元寇<span class="pop-box">
+    <span class="pop-name">⚔️ 元寇（1274・1281年）</span>
+    <span class="pop-body">モンゴル（元）の2度にわたる日本侵攻です。文永の役（1274）と弘安の役（1281）を合わせてこう呼びます。どちらも暴風雨（台風）が元軍を壊滅させました。</span>
+    <span class="pop-memo">💡 「神風」として美化されましたが、実際は御家人たちの命がけの奮戦も大きな要因でした。</span>
+  </span></span>）。1274年の
+  <span class="blank" data-id="C">文永<span class="pop-box">
+    <span class="pop-name">⚔️ 文永の役（1274年）</span>
+    <span class="pop-body">元・高麗連合軍約2万8千人が博多湾（福岡県）に上陸した第一次元寇です。集団戦法・火薬兵器（てつはう）に苦しんだ日本軍でしたが、元軍は翌日撤退しました。</span>
+    <span class="pop-memo">💡 「1（ひと）に（2）な（7）し（4）、文永の役」と覚えましょう。集団戦法は日本の「1対1の決闘」文化に対する衝撃でした。</span>
+  </span></span>の役、1281年の
+  <span class="blank" data-id="D">弘安<span class="pop-box">
+    <span class="pop-name">⚔️ 弘安の役（1281年）</span>
+    <span class="pop-body">元・高麗・旧南宋軍約14万人という史上最大規模の侵攻。日本軍の防衛戦と暴風雨で元軍は壊滅しました。</span>
+    <span class="pop-memo">💡 「1（ひと）に（2）は（8）い（1）、弘安の役」で覚えましょう。文永→弘安の順番を確実に覚えましょう。</span>
+  </span></span>の役はともに
+  <span class="blank" data-id="E">暴風雨（神風）<span class="pop-box">
+    <span class="pop-name">🌪️ 暴風雨（神風）</span>
+    <span class="pop-body">2度の元寇でともに台風が元軍を壊滅させました。後に「日本は神に守られた国（神国）だから神風が吹いた」と語られ、「神風」という言葉が生まれました。</span>
+    <span class="pop-memo">💡 「神風特攻隊」の名前はここから来ています。しかし実際は御家人の奮戦・石塁建設など人間の努力も大きな役割を果たしました。</span>
+  </span></span>もあり退けました。執権
+  <span class="blank" data-id="F">北条時宗<span class="pop-box">
+    <span class="pop-name">👑 北条時宗（1251〜1284）</span>
+    <span class="pop-body">元寇のときの8代執権です。元の使者を処刑するという強硬策をとり、2度の元寇を指揮して幕府を守りました。わずか33歳で亡くなりました。</span>
+    <span class="pop-memo">💡 強い指導力で幕府の危機を乗り越えましたが、元寇後の御家人への恩賞不足が幕府衰退の原因になりました。若すぎる死が惜しまれます。</span>
+  </span></span>が防衛を指揮しましたが、御家人への恩賞が与えられず不満が高まりました。幕府は
+  <span class="blank" data-id="G">永仁の徳政令<span class="pop-box">
+    <span class="pop-name">📜 永仁の徳政令（1297年）</span>
+    <span class="pop-body">御家人が借金のために手放した土地を無償で取り戻させる法令です。御家人救済が目的でしたが、金融業者が御家人への融資を拒否するようになり、経済的混乱を招きました。</span>
+    <span class="pop-memo">💡 「良かれと思って作った法律が逆効果」の典型例です。貸したお金が返ってこなくなると知れば、誰も貸さなくなります。</span>
+  </span></span>（1297年）で御家人の借金を帳消しにしようとしました。</p>
+</div>
+
+<div class="section">
+  <h2>鎌倉文化と幕府の滅亡</h2>
+  <p>鎌倉時代の新仏教として、
+  <span class="blank" data-id="H">法然<span class="pop-box">
+    <span class="pop-name">🧘 法然（1133〜1212）</span>
+    <span class="pop-body">浄土宗の開祖。「南無阿弥陀仏と念仏を唱えれば誰でも極楽往生できる」と説きました。難しい修行なしに救われるという「易行」を民衆に広めました。</span>
+    <span class="pop-memo">💡 「念仏を唱えるだけ」という分かりやすさが鎌倉仏教の特徴です。貴族だけのものだった仏教を庶民に開放しました。</span>
+  </span></span>の浄土宗・
+  <span class="blank" data-id="I">親鸞<span class="pop-box">
+    <span class="pop-name">🧘 親鸞（1173〜1263）</span>
+    <span class="pop-body">浄土真宗の開祖。法然の弟子。「悪人こそが阿弥陀仏に救われる（悪人正機説）」と説きました。妻帯・肉食を認めた僧侶でもあり、現代の浄土真宗は日本最大の仏教宗派です。</span>
+    <span class="pop-memo">💡 「善人でさえ救われるのだから、悪人はなおさら救われる」という逆転の発想です。現代の感覚に近い「すべての人が救われる」思想です。</span>
+  </span></span>の浄土真宗・
+  <span class="blank" data-id="J">一遍<span class="pop-box">
+    <span class="pop-name">🧘 一遍（1239〜1289）</span>
+    <span class="pop-body">時宗の開祖。全国を遊行（旅）しながら「踊り念仏（念仏を唱えながら踊る）」で民衆に布教しました。財産・家族を捨て、一所に定住しない独特のスタイルでした。</span>
+    <span class="pop-memo">💡 踊り念仏が盆踊りの起源という説もあります。日本全国を歩いて教えを広めた「旅する僧侶」です。</span>
+  </span></span>の時宗・
+  <span class="blank" data-id="K">日蓮<span class="pop-box">
+    <span class="pop-name">🧘 日蓮（1222〜1282）</span>
+    <span class="pop-body">日蓮宗の開祖。「南無妙法蓮華経（題目）」を唱えることで救われると説きました。他宗派を激しく批判し、幕府にも直言する激しい性格で、度重なる迫害を受けました。</span>
+    <span class="pop-memo">💡 「日本は正しい仏教に帰依しないと国が滅ぶ」と予言し、実際に元寇が起きたことで信者が増えました。現代の創価学会もこの宗派の流れを汲みます。</span>
+  </span></span>の日蓮宗・
+  <span class="blank" data-id="L">栄西<span class="pop-box">
+    <span class="pop-name">🧘 栄西（1141〜1215）</span>
+    <span class="pop-body">臨済宗の開祖。宋から禅宗を持ち帰りました。座禅・公案（問答）によって悟りを開く教えで、鎌倉武士に広まりました。お茶を日本に普及させた「茶の祖」でもあります。</span>
+    <span class="pop-memo">💡 「鎌倉武士には禅が合う」といわれました。厳しい修行・質素な生活・精神統一を重んじる禅の精神は武士道に通じます。</span>
+  </span></span>の臨済宗・
+  <span class="blank" data-id="M">道元<span class="pop-box">
+    <span class="pop-name">🧘 道元（1200〜1253）</span>
+    <span class="pop-body">曹洞宗の開祖。「ただ座るだけ（只管打坐）」の座禅を重んじました。「悟りを求めて座禅するのではなく、座禅そのものが悟りだ」という独自の境地を説きました。</span>
+    <span class="pop-memo">💡 「考えるな、ただ座れ」という徹底した実践主義です。道元の著「正法眼蔵（しょうぼうげんぞう）」は日本最高の哲学書ともいわれています。</span>
+  </span></span>の曹洞宗が生まれました。文学では軍記物
+  <span class="blank" data-id="N">平家物語<span class="pop-box">
+    <span class="pop-name">📖 平家物語</span>
+    <span class="pop-body">平氏の栄枯盛衰を描いた軍記物語です。「祇園精舎の鐘の声、諸行無常の響きあり」という冒頭が有名です。琵琶法師が語り伝えました。</span>
+    <span class="pop-memo">💡 「諸行無常（すべては移り変わる）」という仏教の世界観を全編に流れるテーマとしています。平家の栄華と没落が「無常」の象徴として描かれています。</span>
+  </span></span>が成立しました。彫刻では
+  <span class="blank" data-id="O">運慶・快慶<span class="pop-box">
+    <span class="pop-name">🗿 運慶・快慶</span>
+    <span class="pop-body">東大寺南大門の金剛力士像（阿形・吽形）を制作した仏師です。力強くリアルな造形が特徴で、武士の時代にふさわしい力強い作風です。わずか69日間で制作したといわれています。</span>
+    <span class="pop-memo">💡 奈良東大寺の仁王門（南大門）に今も立っています。8メートルを超える巨大な像を69日で完成させたのは驚異的です。</span>
+  </span></span>が東大寺南大門の金剛力士像を制作しました。1333年、
+  <span class="blank" data-id="P">後醍醐天皇<span class="pop-box">
+    <span class="pop-name">👑 後醍醐天皇（1288〜1339）</span>
+    <span class="pop-body">幕府を倒して「天皇親政（建武の新政）」を実現しようとした天皇です。足利尊氏・新田義貞らを動員して1333年に鎌倉幕府を滅ぼしました。</span>
+    <span class="pop-memo">💡 幕府を倒した後「建武の新政」を始めましたが、武士の不満を招き足利尊氏に裏切られました。「やっと幕府を倒したのに3年で失敗」という悲劇の天皇です。</span>
+  </span></span>の討幕運動で鎌倉幕府は滅亡しました。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -50,52 +149,46 @@
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">文永の役（1274年）→弘安の役（1281年）の順番と、北条時宗を確実に覚えよう。</div>
+    <div class="explain-box" id="explain-box">
+      文永の役（1274）→弘安の役（1281）の順番と、執権・北条時宗を確実に覚えましょう。<br>
+      新仏教6宗派：法然（浄土宗）・親鸞（浄土真宗）・一遍（時宗）・日蓮（日蓮宗）・栄西（臨済宗）・道元（曹洞宗）<br>
+      永仁の徳政令（1297）→幕府衰退→後醍醐天皇の討幕（1333）で鎌倉幕府滅亡
+    </div>
   </div>
 </div>
+
 <script>
-
-  const answers = { "A":"フビライ＝ハン", "B":"元寇", "C":"文永", "D":"弘安", "E":"暴風雨（神風）", "F":"北条時宗", "G":"永仁の徳政令", "H":"法然", "I":"親鸞", "J":"一遍", "K":"日蓮", "L":"栄西", "M":"道元", "N":"平家物語", "O":"運慶・快慶", "P":"後醍醐天皇" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
-    });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
-  });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['kamakura2'] = prog['kamakura2'] || {};
-      prog['kamakura2'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
+const WORD_TIPS={
+  "フビライ＝ハン":"モンゴル帝国5代皇帝・元の建国者。2度にわたり日本に侵攻しました。",
+  "元寇":"1274年（文永の役）と1281年（弘安の役）のモンゴル2度の侵攻です。",
+  "文永":"1274年の第1次元寇。元・高麗連合軍が博多湾に上陸しました。",
+  "弘安":"1281年の第2次元寇。約14万の大軍が侵攻しましたが台風で壊滅しました。",
+  "暴風雨（神風）":"元寇で元軍を壊滅させた台風。「神風」と呼ばれました。",
+  "北条時宗":"元寇のときの8代執権。強硬策で2度の元寇を退けました。",
+  "永仁の徳政令":"1297年に出された御家人の借金帳消し令。逆に経済混乱を招きました。",
+  "法然":"浄土宗の開祖。「念仏を唱えれば誰でも救われる」と説きました。",
+  "親鸞":"浄土真宗の開祖。法然の弟子。「悪人正機説」で知られます。",
+  "一遍":"時宗の開祖。「踊り念仏」で全国を旅しながら布教しました。",
+  "日蓮":"日蓮宗の開祖。「南無妙法蓮華経」の題目を唱えることを説きました。",
+  "栄西":"臨済宗の開祖。宋から禅宗を持ち帰りました。「茶の祖」でもあります。",
+  "道元":"曹洞宗の開祖。「ただ座る（只管打坐）」の座禅を重んじました。",
+  "平家物語":"「祇園精舎の鐘の声…」で始まる軍記物語。琵琶法師が語り伝えました。",
+  "運慶・快慶":"東大寺南大門の金剛力士像を制作した仏師。力強いリアルな造形が特徴です。",
+  "後醍醐天皇":"幕府を倒して天皇親政を目指した天皇。1333年に鎌倉幕府を滅ぼしました。",
+};
+const answers={"A":"フビライ＝ハン","B":"元寇","C":"文永","D":"弘安","E":"暴風雨（神風）","F":"北条時宗","G":"永仁の徳政令","H":"法然","I":"親鸞","J":"一遍","K":"日蓮","L":"栄西","M":"道元","N":"平家物語","O":"運慶・快慶","P":"後醍醐天皇"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";[...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{const chip=document.createElement('div');chip.className='word-chip';const label=document.createElement('span');label.textContent=word;chip.appendChild(label);const tip=WORD_TIPS[word];if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}chip.addEventListener('click',()=>{if(chip.classList.contains('used'))return;document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip');});bank.appendChild(chip);});}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{blank.addEventListener('click',e=>{e.stopPropagation();if(selectedChip){const old=getBlankText(blank);if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});setBlankText(blank,getChipWord(selectedChip));selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;}});});
+function startChallenge(){document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});renderBank();selectedChip=null;startTime=Date.now();if(timerId)clearInterval(timerId);timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);}
+function checkAnswers(){let ok=true;document.querySelectorAll('.blank').forEach(b=>{if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');else{ok=false;b.classList.remove('correct');}});if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！元寇と鎌倉幕府の滅亡をマスターしました。");}else alert("間違いがあります。もう一度見直してみましょう。");}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['kamakura2']=p['kamakura2']||{};p['kamakura2'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>

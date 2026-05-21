@@ -3,41 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>歴史学習GAMBA：中国統一とシルクロード</title>
+<title>歴史学習GAMBA：中国統一・シルクロード</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw,.blank{position:relative}
+  .kw{display:inline-block;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:270px;background:#2c1800;color:#fff;border-radius:10px;padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none}
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>② 中国統一・シルクロード</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>秦の中国統一</h2><div class="question-text"><span class="blank" data-id="A">殷</span>→周→<span class="blank" data-id="B">春秋戦国</span>時代と続き、孔子が<span class="blank" data-id="C">儒教</span>（儒学）を説き、その言葉を弟子がまとめた書物を<span class="blank" data-id="D">論語</span>という。紀元前3世紀に<span class="blank" data-id="E">秦</span>が中国を統一した。王は<span class="blank" data-id="F">始皇帝</span>と名乗り、北方の遊牧民族を防ぐため<span class="blank" data-id="G">万里の長城</span>を築いた。墓の近くには等身大の土人形<span class="blank" data-id="H">兵馬俑</span>が埋められた。</div></div>
-<div class="section"><h2>漢とシルクロード</h2><div class="question-text">秦の滅亡後、農民出身の劉邦が<span class="blank" data-id="I">漢</span>を建国した（紀元前202年）。7代目皇帝<span class="blank" data-id="J">武帝</span>は北方の騎馬民族<span class="blank" data-id="K">匈奴</span>を倒し、漢とローマをつなぐ<span class="blank" data-id="L">シルクロード</span>（絹の道）で東西貿易を行った。漢からは<span class="blank" data-id="M">絹</span>が輸出され、インドから<span class="blank" data-id="N">仏教</span>が伝わった。武帝は朝鮮半島を支配し<span class="blank" data-id="O">楽浪郡</span>など4つの郡を置いた。</div></div>
+
+<div class="section">
+  <h2>秦の中国統一</h2>
+  <p>
+  <span class="blank" data-id="A">殷<span class="pop-box">
+    <span class="pop-name">👑 殷（商）王朝</span>
+    <span class="pop-body">中国最古の王朝の一つ（前1600〜前1046年ごろ）。甲骨文字・青銅器で有名です。神に問いかけて政治を決める神権政治が行われました。</span>
+    <span class="pop-memo">💡 前の単元で学んだ殷です。殷→周→春秋戦国→秦という流れを押さえましょう。</span>
+  </span></span>→周→
+  <span class="blank" data-id="B">春秋戦国<span class="pop-box">
+    <span class="pop-name">⚔️ 春秋戦国時代（前770〜前221年）</span>
+    <span class="pop-body">約550年にわたる中国の戦乱の時代です。諸侯が争い、多くの思想家（諸子百家）が生まれました。孔子・孟子・老子・荘子・韓非子などが活躍しました。</span>
+    <span class="pop-memo">💡 「百花繚乱の思想時代」です。現代の中国の思想・政治・哲学のルーツのほとんどがこの時代に生まれました。</span>
+  </span></span>時代と続き、孔子が
+  <span class="blank" data-id="C">儒教<span class="pop-box">
+    <span class="pop-name">📚 儒教（儒学）</span>
+    <span class="pop-body">孔子が説いた思想です。「仁（思いやり）」「礼（礼儀）」を中心に、家族・社会・国家の秩序を重んじます。日本にも渡来人を通じて伝わり、武士道や道徳教育に大きな影響を与えました。</span>
+    <span class="pop-memo">💡 「目上の人を敬う」「礼儀を守る」という日本人の価値観の多くは儒教に由来します。江戸時代には幕府が公式に採用した学問でもあります。</span>
+  </span></span>（儒学）を説き、その言葉を弟子がまとめた書物を
+  <span class="blank" data-id="D">論語<span class="pop-box">
+    <span class="pop-name">📖 論語</span>
+    <span class="pop-body">孔子の言葉を弟子たちがまとめた書物です。「学びて思わざれば則ち罔し（学ぶだけで考えなければ無駄だ）」など人生の指針となる言葉が多く収められています。</span>
+    <span class="pop-memo">💡 「論語」の冒頭「学びて時に之を習う、また説ばしからずや（学んで繰り返し復習する、なんと喜ばしいことか）」は試験勉強にも通じる言葉です。</span>
+  </span></span>といいます。紀元前3世紀に
+  <span class="blank" data-id="E">秦<span class="pop-box">
+    <span class="pop-name">👑 秦（前221〜前206年）</span>
+    <span class="pop-body">紀元前221年に中国を初めて統一した王朝です。わずか15年で滅びましたが、統一度量衡・統一貨幣・郡県制など後世に続く制度を多く作りました。</span>
+    <span class="pop-memo">💡 「China（チャイナ）」という英語は「秦（Chin）」が語源という説が有力です。わずか15年の短命王朝が「中国」の国名の由来になりました。</span>
+  </span></span>が中国を統一しました。王は
+  <span class="blank" data-id="F">始皇帝<span class="pop-box">
+    <span class="pop-name">👑 始皇帝（前259〜前210年）</span>
+    <span class="pop-body">中国初の統一皇帝（秦の政）です。「皇帝」という称号を自ら作りました。文字・貨幣・度量衡（長さや重さの基準）を統一し、長城を築きました。不老不死を求めて薬探しを続けた話でも有名です。</span>
+    <span class="pop-memo">💡 「始皇帝」の「始」は「最初の皇帝」という意味です。自分以降の皇帝を2世・3世…と無限に続けるつもりでしたが秦は2代で滅亡しました。</span>
+  </span></span>と名乗り、北方の遊牧民族を防ぐため
+  <span class="blank" data-id="G">万里の長城<span class="pop-box">
+    <span class="pop-name">🏰 万里の長城</span>
+    <span class="pop-body">北方の遊牧民族（匈奴など）の侵入を防ぐために築かれた城壁です。全長は時代によって異なりますが、総延長は約21,000km以上といわれます。</span>
+    <span class="pop-memo">💡 「宇宙から見える人工建造物」といわれますが、実際は幅が細すぎて宇宙からは見えません。都市伝説の代表例です。現在のものは主に明代（14〜17世紀）に建設されたものです。</span>
+  </span></span>を築きました。墓の近くには等身大の土人形
+  <span class="blank" data-id="H">兵馬俑<span class="pop-box">
+    <span class="pop-name">🗿 兵馬俑（へいばよう）</span>
+    <span class="pop-body">始皇帝の墓の近くで発見された等身大の兵士・馬の陶製人形群です。1974年に農民が偶然発見しました。約8000体以上が埋まっており、全て顔が異なるといわれています。</span>
+    <span class="pop-memo">💡 1974年まで2200年間誰も知らなかった「地下の軍隊」です。農民が井戸を掘っていて偶然発見しました。現在も発掘が続いています。</span>
+  </span></span>が埋められました。</p>
+</div>
+
+<div class="section">
+  <h2>漢とシルクロード</h2>
+  <p>秦の滅亡後、農民出身の劉邦が
+  <span class="blank" data-id="I">漢<span class="pop-box">
+    <span class="pop-name">👑 漢（前202〜後220年）</span>
+    <span class="pop-body">秦滅亡後に劉邦（高祖）が建てた王朝です。約400年続き、中国史上最長クラスの安定した帝国でした。「漢字・漢民族・漢方薬」など「漢」という名前は今も使われています。</span>
+    <span class="pop-memo">💡 「漢字」「漢民族」「漢方」など、現代でも「漢」という字が多く使われています。それほど漢の影響が大きかった証拠です。</span>
+  </span></span>を建国しました。7代目皇帝
+  <span class="blank" data-id="J">武帝<span class="pop-box">
+    <span class="pop-name">👑 漢の武帝（前141〜前87年）</span>
+    <span class="pop-body">漢の最盛期を築いた皇帝です。匈奴を攻撃して中央アジアまで勢力を拡大し、シルクロードを開きました。儒学を国家の公式学問として採用しました。</span>
+    <span class="pop-memo">💡 「武帝」の「武」は「武力で国を広げた」という意味です。シルクロードを通じて東西交流が活発になりました。</span>
+  </span></span>は北方の騎馬民族
+  <span class="blank" data-id="K">匈奴<span class="pop-box">
+    <span class="pop-name">🏇 匈奴（きょうど）</span>
+    <span class="pop-body">紀元前3〜1世紀に中央アジア・モンゴル高原で活躍した遊牧騎馬民族です。始皇帝が万里の長城を築いた主な理由でもあります。匈奴の一部がヨーロッパに移動してフン族になったという説もあります。</span>
+    <span class="pop-memo">💡 「匈奴がヨーロッパに逃げてフン族になり、ローマ帝国を滅ぼした」という説があります。中国の出来事がローマ滅亡に影響したかもしれません。</span>
+  </span></span>を倒し、漢とローマをつなぐ
+  <span class="blank" data-id="L">シルクロード<span class="pop-box">
+    <span class="pop-name">🐪 シルクロード（絹の道）</span>
+    <span class="pop-body">中国から中央アジア・西アジアを経てローマに至る交易路です。全長約6400km。絹・香辛料・ガラス・宗教・技術などが行き交いました。「シルクロード」という名称は19世紀のドイツ人地理学者リヒトホーフェンが命名しました。</span>
+    <span class="pop-memo">💡 「シルクロード」は実際には1本の道ではなく、複数のルートからなるネットワークです。現代でも中国の「一帯一路」政策はシルクロードの現代版とされています。</span>
+  </span></span>（絹の道）で東西貿易を行いました。漢からは
+  <span class="blank" data-id="M">絹<span class="pop-box">
+    <span class="pop-name">🧵 絹（シルク）</span>
+    <span class="pop-body">蚕（カイコ）の繭から作る最高級の布です。ローマ人に大人気で「黄金と同じ重さで取引された」といわれます。製法は長く中国の国家機密でした。</span>
+    <span class="pop-memo">💡 絹の製法（蚕を育てる養蚕）は何世紀にもわたって中国の秘密でした。6世紀にビザンツ帝国の修道士が蚕の卵を持ち出して秘密が漏れたといわれています。</span>
+  </span></span>が輸出され、インドから
+  <span class="blank" data-id="N">仏教<span class="pop-box">
+    <span class="pop-name">☸️ 仏教</span>
+    <span class="pop-body">紀元前5世紀ごろにインドのガウタマ・シッダールタ（釈迦）が説いた宗教です。「苦しみから解放されるには欲望を捨てる修行が必要」と教えます。シルクロードを通じて中国・日本に伝わりました。</span>
+    <span class="pop-memo">💡 仏教がシルクロードを通って中国に伝わったのが1〜2世紀ごろ、日本には6世紀（538年または552年）に伝わりました。</span>
+  </span></span>が伝わりました。武帝は朝鮮半島を支配し
+  <span class="blank" data-id="O">楽浪郡<span class="pop-box">
+    <span class="pop-name">🏛️ 楽浪郡（らくろうぐん）</span>
+    <span class="pop-body">漢の武帝が朝鮮半島に設置した4つの郡の一つ（前108年設置）。現在の平壌（ピョンヤン）付近にあったとされます。約400年間、中国文化の朝鮮半島への入り口となりました。</span>
+    <span class="pop-memo">💡 日本の弥生時代の人々が中国に使いを送った際に経由した場所の一つです。後に倭国の使いがここを通って中国王朝と交流しました。</span>
+  </span></span>など4つの郡を置きました。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -46,56 +141,49 @@
       <button onclick="checkAnswers()">判定</button>
       <button class="secondary" onclick="location.reload()">やり直す</button>
       <button class="secondary" onclick="resetTimer()">時間リセット</button>
-      <button id="next-btn" onclick="location.href='kodai3.html'" disabled>次へ：縄文・弥生 ▶</button>
+      <button id="next-btn" onclick="location.href='kodai3.html'" disabled>次へ：縄文・弥生・邪馬台国 ▶</button>
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">殷→周→春秋戦国→秦→漢の流れを順番通りに覚えよう。</div>
+    <div class="explain-box" id="explain-box">
+      中国の流れ：殷→周→春秋戦国→秦（始皇帝・万里の長城・兵馬俑）→漢（武帝・匈奴・シルクロード・楽浪郡）<br>
+      孔子→儒教→論語（春秋戦国時代）<br>
+      シルクロード：漢→絹を輸出、インド→仏教が伝来
+    </div>
   </div>
 </div>
+
 <script>
-
-  const answers = { "A":"殷", "B":"春秋戦国", "C":"儒教", "D":"論語", "E":"秦", "F":"始皇帝", "G":"万里の長城", "H":"兵馬俑", "I":"漢", "J":"武帝", "K":"匈奴", "L":"シルクロード", "M":"絹", "N":"仏教", "O":"楽浪郡" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
-    });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
-  });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  // 学習完了を保存
-  (function() {
-    try {
-      var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
-      prog['kodai2'] = prog['kodai2'] || {};
-      prog['kodai2'].studyDone = true;
-      localStorage.setItem('gamba_progress', JSON.stringify(prog));
-    } catch(e) {}
-  })();
-
+const WORD_TIPS={
+  "殷":"中国最古の王朝の一つ。前の単元で学んだ殷→周→春秋戦国→秦の流れを覚えましょう。",
+  "春秋戦国":"約550年の中国の戦乱時代。孔子など多くの思想家が活躍しました（前770〜前221年）。",
+  "儒教":"孔子が説いた「仁（思いやり）」「礼（礼儀）」を重んじる思想。日本の道徳観にも大きな影響を与えました。",
+  "論語":"孔子の言葉を弟子がまとめた書物。儒教の根本経典です。",
+  "秦":"紀元前221年に中国を初めて統一した王朝（前221〜前206年）。「China」の語源という説があります。",
+  "始皇帝":"秦の初代皇帝。万里の長城・兵馬俑・度量衡統一などで有名です。",
+  "万里の長城":"北方民族の侵入を防ぐために築かれた城壁。総延長2万km以上です。",
+  "兵馬俑":"始皇帝の墓近くに埋められた等身大の兵士・馬の土人形。約8000体以上あります。",
+  "漢":"秦滅亡後に劉邦が建てた約400年続いた王朝。「漢字」「漢民族」の語源です。",
+  "武帝":"漢の7代目皇帝。匈奴を攻撃しシルクロードを開きました。",
+  "匈奴":"中央アジアの遊牧騎馬民族。万里の長城建設・シルクロード開通のきっかけとなりました。",
+  "シルクロード":"漢とローマをつなぐ全長約6400kmの交易路。絹・仏教・技術が行き交いました。",
+  "絹":"シルクロードの名前の由来となった中国の輸出品。製法は長く中国の国家機密でした。",
+  "仏教":"インドのシッダールタ（釈迦）が説いた宗教。シルクロードを通じて中国・日本に伝わりました。",
+  "楽浪郡":"漢の武帝が朝鮮半島に設置した郡（前108年）。中国文化の朝鮮・日本への窓口でした。",
+};
+const answers={"A":"殷","B":"春秋戦国","C":"儒教","D":"論語","E":"秦","F":"始皇帝","G":"万里の長城","H":"兵馬俑","I":"漢","J":"武帝","K":"匈奴","L":"シルクロード","M":"絹","N":"仏教","O":"楽浪郡"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";[...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{const chip=document.createElement('div');chip.className='word-chip';const label=document.createElement('span');label.textContent=word;chip.appendChild(label);const tip=WORD_TIPS[word];if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}chip.addEventListener('click',()=>{if(chip.classList.contains('used'))return;document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip');});bank.appendChild(chip);});}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{blank.addEventListener('click',e=>{e.stopPropagation();if(selectedChip){const old=getBlankText(blank);if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});setBlankText(blank,getChipWord(selectedChip));selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;}});});
+function startChallenge(){document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});renderBank();selectedChip=null;startTime=Date.now();if(timerId)clearInterval(timerId);timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);}
+function checkAnswers(){let ok=true;document.querySelectorAll('.blank').forEach(b=>{if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');else{ok=false;b.classList.remove('correct');}});if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！中国統一とシルクロードをマスターしました。");}else alert("間違いがあります。もう一度見直してみましょう。");}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['kodai2']=p['kodai2']||{};p['kodai2'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>

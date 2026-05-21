@@ -5,39 +5,128 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>歴史学習GAMBA：平安文化（国風文化）</title>
 <style>
-  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.8; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
-  h1 { border-bottom: 2px solid #5b4a8c; padding-bottom: 8px; font-size: 24px; }
-  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 20px; border-left: 5px solid #5b4a8c; padding-left: 10px; }
-  .back-to-index { display: inline-flex; align-items: center; gap: 6px; background: #2c3e8c; color: #fff !important; border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 12px; text-decoration: none; }
-  .back-to-index:hover { background: #1e2d6b; }
-  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
-  .word-bank { border: 2px solid #5b4a8c; border-radius: 8px; padding: 12px; min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px; background-color: #fff; display: none; }
-  .word-chip { padding: 8px 12px; border-radius: 18px; border: 1px solid #666; background-color: #fff; cursor: pointer; font-size: 14px; }
-  .word-chip.used { opacity: 0.3; }
-  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
-  .section { background-color: #fff; border-radius: 8px; padding: 20px; border: 1px solid #ccc; margin-bottom: 16px; }
-  .blank { display: inline-block; min-width: 100px; min-height: 26px; border-bottom: 2px solid #5b4a8c; margin: 0 4px; text-align: center; cursor: pointer; font-weight: bold; color: #5b4a8c; vertical-align: middle; }
-  .blank.correct { background-color: #ffeb3b; }
-  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 15px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
-  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #5b4a8c; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #3d3060; }
-  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
-  button#next-btn { background-color: #1976d2; box-shadow: 0 3px 0 #0d5aa7; }
-  button#next-btn:disabled { background-color: #90bef5; box-shadow: none; }
-  .timer-info { margin-top: 10px; padding: 6px 15px; font-size: 16px; border: 1px solid #5b4a8c; background-color: #fff; display: inline-block; }
-  .explain-box { margin-top: 15px; padding: 15px; border-left: 5px solid #5b4a8c; background-color: #f5f0ff; display: none; text-align: left; }
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #5b4a8c;padding-bottom:8px;font-size:24px}
+  h2{margin-top:18px;margin-bottom:8px;font-size:20px;border-left:5px solid #5b4a8c;padding-left:10px}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .back-to-index:hover{background:#1e2d6b}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:100;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #5b4a8c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #666;background-color:#fff;cursor:pointer;font-size:14px;user-select:none;position:relative}
+  .word-chip.used{opacity:0.3;pointer-events:none}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:100px;min-height:26px;border-bottom:2px solid #5b4a8c;margin:0 4px;text-align:center;cursor:pointer;font-weight:bold;color:#5b4a8c;vertical-align:middle;position:relative;user-select:none}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{display:inline-block;position:relative;border-bottom:2px dashed #5b4a8c;cursor:help;color:#3d2a8c;font-weight:bold;vertical-align:middle}
+  .kw>.pop-box,.blank>.pop-box{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);width:270px;background:#2c1800;color:#fff;border-radius:10px;padding:12px 15px;font-size:13px;line-height:1.8;font-weight:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:500;pointer-events:none;}
+  .kw>.pop-box::after,.blank>.pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#2c1800}
+  .kw:hover>.pop-box,.blank:hover>.pop-box{display:block}
+  .pop-name{font-weight:bold;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:5px;margin-bottom:7px}
+  .pop-body{font-size:12px;color:#f0e8d8;line-height:1.75}
+  .pop-memo{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);font-size:11px;color:#ffd700}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:200px;background:#2c1800;color:#fff;border-radius:8px;padding:8px 12px;font-size:12px;line-height:1.7;z-index:300;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.4)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2c1800}
+  .word-chip:hover .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b4a8c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3d3060}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b4a8c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b4a8c;background-color:#f5f0ff;display:none;text-align:left;font-size:14px;line-height:1.8}
 </style>
 </head>
 <body>
 <a class="back-to-index" href="rekishi.html">← 単元一覧に戻る</a>
 <h1>平安文化・国風文化</h1>
 <div class="word-bank-sticky-container">
-  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）</div>
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 太字の語句にカーソルを置くと解説が出ます</span></div>
   <div class="word-bank" id="word-bank"></div>
 </div>
-<div class="section"><h2>平安初期の文化（最澄・空海）</h2><div class="question-text">平安時代初期、唐に留学した<span class="blank" data-id="A">最澄</span>は<span class="blank" data-id="B">天台宗</span>（比叡山延暦寺）を、<span class="blank" data-id="C">空海</span>は<span class="blank" data-id="D">真言宗</span>（高野山金剛峯寺）を開いた。どちらも密教で、祈りや修行によって悟りを開くとされた。</div></div>
-<div class="section"><h2>国風文化と文学・建築</h2><div class="question-text">894年の<span class="blank" data-id="E">遣唐使</span>廃止後、日本独自の<span class="blank" data-id="F">国風</span>文化が生まれた。漢字をもとにした<span class="blank" data-id="G">かな</span>文字が発明され女流文学が栄えた。紫式部の<span class="blank" data-id="H">源氏物語</span>・清少納言の<span class="blank" data-id="I">枕草子</span>が代表作。和歌では<span class="blank" data-id="J">紀貫之</span>らが<span class="blank" data-id="K">古今和歌集</span>を編集した。日本の自然を描く<span class="blank" data-id="L">大和絵</span>も発達した。<br><br>末法思想の影響で浄土信仰が広まり、藤原頼通が宇治に建てた<span class="blank" data-id="M">平等院鳳凰堂</span>や、奥州藤原氏が建てた岩手県の<span class="blank" data-id="N">中尊寺金色堂</span>が代表建築である。</div></div>
+
+<div class="section">
+  <h2>平安初期の文化（最澄・空海）</h2>
+  <p>平安時代初期、唐に留学した
+  <span class="blank" data-id="A">最澄<span class="pop-box">
+    <span class="pop-name">🧘 最澄（767〜822）</span>
+    <span class="pop-body">比叡山延暦寺を開いた天台宗の開祖です。「すべての人が救われる（一切皆成仏）」という普遍的な教えを説きました。後の鎌倉仏教の開祖たちは全員比叡山で学んでいます。</span>
+    <span class="pop-memo">💡 最澄＝天台宗＝比叡山延暦寺、が鉄板のセットです。弟子から法然・親鸞・道元・日蓮が出た「仏教の母校」です。</span>
+  </span></span>は
+  <span class="blank" data-id="B">天台宗<span class="pop-box">
+    <span class="pop-name">⛩️ 天台宗</span>
+    <span class="pop-body">最澄が開いた宗派で、比叡山延暦寺を総本山とします。「法華経」を根本経典とし、厳しい修行によって悟りを開くことを目指します。</span>
+    <span class="pop-memo">💡 天台宗＝比叡山延暦寺（滋賀県・京都府境）です。真言宗と混同しないよう注意しましょう。</span>
+  </span></span>（比叡山延暦寺）を、
+  <span class="blank" data-id="C">空海<span class="pop-box">
+    <span class="pop-name">🧘 空海（774〜835）</span>
+    <span class="pop-body">高野山金剛峯寺を開いた真言宗の開祖です。「お大師さま」として今も四国お遍路などで親しまれています。書道・土木・医術にも長け、当時最高の知識人でした。</span>
+    <span class="pop-memo">💡 空海＝真言宗＝高野山金剛峯寺（和歌山県）です。ひらがなの発明者という伝説もありますが、実際は定かではありません。</span>
+  </span></span>は
+  <span class="blank" data-id="D">真言宗<span class="pop-box">
+    <span class="pop-name">⛩️ 真言宗</span>
+    <span class="pop-body">空海が開いた宗派で、高野山金剛峯寺を総本山とします。「即身成仏（生きたまま仏になれる）」を説き、密教の儀式・呪文・印を重視します。</span>
+    <span class="pop-memo">💡 真言宗＝高野山金剛峯寺（和歌山県）です。天台宗と並ぶ平安初期の二大宗派です。</span>
+  </span></span>（高野山金剛峯寺）を開きました。どちらも密教で、祈りや修行によって悟りを開くとされました。</p>
+</div>
+
+<div class="section">
+  <h2>国風文化と文学・建築</h2>
+  <p>894年の
+  <span class="blank" data-id="E">遣唐使<span class="pop-box">
+    <span class="pop-name">⛵ 遣唐使の廃止（894年）</span>
+    <span class="pop-body">奈良時代から続いた唐への外交使節団の派遣が廃止されました。菅原道真の進言によるものです。唐の衰退と航海の危険性が主な理由でした。</span>
+    <span class="pop-memo">💡 廃止後、日本は約200年間ほぼ「鎖国状態」になります。その間に「日本らしい文化」が育ちました。</span>
+  </span></span>廃止後、日本独自の
+  <span class="blank" data-id="F">国風<span class="pop-box">
+    <span class="pop-name">🌸 国風文化</span>
+    <span class="pop-body">遣唐使廃止後に生まれた日本独自の文化です。中国文化を「和風にアレンジ」したもので、かな文字・和歌・大和絵・寝殿造などが代表例です。</span>
+    <span class="pop-memo">💡 「外来文化を日本流に染め直す」という日本独特の文化吸収パターンの原点です。</span>
+  </span></span>文化が生まれました。漢字をもとにした
+  <span class="blank" data-id="G">かな<span class="pop-box">
+    <span class="pop-name">📝 かな文字</span>
+    <span class="pop-body">漢字を崩して作った平仮名と、漢字の一部をとった片仮名の総称です。女性にも使いやすく、女流文学の発展を促しました。</span>
+    <span class="pop-memo">💡 かな文字のおかげで「日本語の音のまま書ける」ようになりました。源氏物語・枕草子などの傑作はかな文字があって初めて生まれました。</span>
+  </span></span>文字が発明され女流文学が栄えました。紫式部の
+  <span class="blank" data-id="H">源氏物語<span class="pop-box">
+    <span class="pop-name">📖 源氏物語（紫式部）</span>
+    <span class="pop-body">光源氏の恋愛・栄光・没落を描いた世界最古級の長編小説です（全54帖・約100万字）。1000年以上前の作品でありながら現代でも世界中で読まれています。</span>
+    <span class="pop-memo">💡 「世界最古の長編小説」という説もあります。現代語に換算すると文庫本10冊以上の大作です。</span>
+  </span></span>・清少納言の
+  <span class="blank" data-id="I">枕草子<span class="pop-box">
+    <span class="pop-name">📖 枕草子（清少納言）</span>
+    <span class="pop-body">「春はあけぼの…」で始まる随筆（エッセイ）です。宮廷生活の機微や自然の美しさを鋭い感性で描き、日本最古の随筆文学とされています。</span>
+    <span class="pop-memo">💡 清少納言は中宮・定子に仕えた女房。紫式部（中宮・彰子に仕えた）とはライバル関係で、互いをライバル視していたといわれています。</span>
+  </span></span>が代表作です。和歌では
+  <span class="blank" data-id="J">紀貫之<span class="pop-box">
+    <span class="pop-name">📜 紀貫之（870頃〜945頃）</span>
+    <span class="pop-body">醍醐天皇の命で「古今和歌集」を編集した歌人・文人です。男性でありながら女性のふりをして書いた「土佐日記」でも有名です。</span>
+    <span class="pop-memo">💡 「男もすなる日記というものを、女もしてみむとてするなり」の一文が有名。日本最古の日記文学（ひらがな日記）の書き手でもあります。</span>
+  </span></span>らが
+  <span class="blank" data-id="K">古今和歌集<span class="pop-box">
+    <span class="pop-name">📚 古今和歌集（905年）</span>
+    <span class="pop-body">醍醐天皇の命で編集された日本初の勅撰和歌集（天皇の命令で作られた歌集）です。約1100首が収録されています。</span>
+    <span class="pop-memo">💡 「古今（ここん）」は「古いものも今のものも」という意味です。以後、勅撰和歌集は21集作られました。</span>
+  </span></span>を編集しました。日本の自然を描く
+  <span class="blank" data-id="L">大和絵<span class="pop-box">
+    <span class="pop-name">🖌️ 大和絵</span>
+    <span class="pop-body">日本の風景・風俗を題材にした絵画様式です。唐絵（中国風の絵）に対して「日本風の絵」という意味で「大和絵」と呼ばれました。</span>
+    <span class="pop-memo">💡 「大和」は日本の古い呼び方です。後の浮世絵のルーツともいわれています。</span>
+  </span></span>も発達しました。末法思想の影響で浄土信仰が広まり、藤原頼通が宇治に建てた
+  <span class="blank" data-id="M">平等院鳳凰堂<span class="pop-box">
+    <span class="pop-name">🏛️ 平等院鳳凰堂（1053年）</span>
+    <span class="pop-body">藤原頼通が宇治（京都府）に建てた阿弥陀堂です。極楽浄土を地上に再現したといわれ、現在も10円硬貨のデザインになっています。世界遺産です。</span>
+    <span class="pop-memo">💡 10円玉の裏を見てみましょう。平等院鳳凰堂が描かれています。約1000年前の建築が今もそのまま残っているのです。</span>
+  </span></span>や奥州藤原氏が建てた岩手県の
+  <span class="blank" data-id="N">中尊寺金色堂<span class="pop-box">
+    <span class="pop-name">🏛️ 中尊寺金色堂（1124年）</span>
+    <span class="pop-body">岩手県平泉に奥州藤原氏が建てた阿弥陀堂です。内外を金箔で覆った豪華絢爛な建築で、ミイラ化した藤原氏4代の遺体が安置されています。世界遺産です。</span>
+    <span class="pop-memo">💡 松尾芭蕉が「夏草や兵どもが夢の跡」と詠んだのはこの地です。奥州藤原氏の栄華と滅亡を思って詠んだ句です。</span>
+  </span></span>が代表建築です。</p>
+</div>
 
 <div class="fixed-footer-controls">
   <div class="footer-inner">
@@ -50,44 +139,43 @@
       <button class="secondary" onclick="toggleExplain()">【解説】を見る</button>
     </div>
     <div class="timer-info" id="timer-display">経過時間：---</div>
-    <div class="explain-box" id="explain-box">最澄＝天台宗＝比叡山、空海＝真言宗＝高野山の組み合わせを確実に覚えよう。</div>
+    <div class="explain-box" id="explain-box">
+      最澄＝天台宗＝比叡山延暦寺 ／ 空海＝真言宗＝高野山金剛峯寺<br>
+      遣唐使廃止（894）→国風文化→かな文字→源氏物語・枕草子・古今和歌集→平等院鳳凰堂・中尊寺金色堂
+    </div>
   </div>
 </div>
+
 <script>
-  const answers = { "A":"最澄", "B":"天台宗", "C":"空海", "D":"真言宗", "E":"遣唐使", "F":"国風", "G":"かな", "H":"源氏物語", "I":"枕草子", "J":"紀貫之", "K":"古今和歌集", "L":"大和絵", "M":"平等院鳳凰堂", "N":"中尊寺金色堂" };
-  let startTime, timerId, selectedChip = null;
-  function renderBank() {
-    const bank = document.getElementById('word-bank'); bank.style.display = "flex"; bank.innerHTML = "";
-    [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
-      const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
-      chip.onclick = () => { document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip')); selectedChip = chip; chip.classList.add('selected-chip'); };
-      bank.appendChild(chip);
-    });
-  }
-  function startChallenge() {
-    document.querySelectorAll('.blank').forEach(b => { b.textContent = ""; b.classList.remove('correct'); });
-    renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
-    timerId = setInterval(() => { document.getElementById('timer-display').textContent = `経過時間：${Math.floor((Date.now() - startTime) / 1000)}秒`; }, 1000);
-  }
-  document.querySelectorAll('.blank').forEach(blank => {
-    blank.onclick = () => {
-      if (selectedChip) {
-        const oldText = blank.textContent; if (oldText) document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === oldText) c.classList.remove('used'); });
-        blank.textContent = selectedChip.textContent; selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
-      } else if (blank.textContent) {
-        const txt = blank.textContent; document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent === txt) c.classList.remove('used'); }); blank.textContent = "";
-      }
-    };
-  });
-  function checkAnswers() {
-    let ok = true; document.querySelectorAll('.blank').forEach(b => { if (b.textContent === answers[b.dataset.id]) b.classList.add('correct'); else { ok = false; b.classList.remove('correct'); } });
-    if (ok) { clearInterval(timerId); document.getElementById('next-btn').disabled = false; }
-  }
-  function resetTimer() { clearInterval(timerId); document.getElementById('timer-display').textContent = "経過時間：---"; }
-  function toggleExplain() { const box = document.getElementById('explain-box'); box.style.display = (box.style.display === 'block') ? 'none' : 'block'; }
-  (function() {
-    try { var prog = JSON.parse(localStorage.getItem('gamba_progress') || '{}'); prog['heian_bunka'] = prog['heian_bunka'] || {}; prog['heian_bunka'].studyDone = true; localStorage.setItem('gamba_progress', JSON.stringify(prog)); } catch(e) {}
-  })();
+const WORD_TIPS={
+  "最澄":"天台宗の開祖。比叡山延暦寺を建てました。後の鎌倉仏教の開祖たちの師です。",
+  "天台宗":"最澄が開いた宗派。比叡山延暦寺が総本山です。",
+  "空海":"真言宗の開祖。高野山金剛峯寺を建てました。「お大師さま」として親しまれています。",
+  "真言宗":"空海が開いた宗派。高野山金剛峯寺が総本山です。",
+  "遣唐使":"奈良時代から続いた唐への使節団。894年に廃止されました。",
+  "国風":"遣唐使廃止後に生まれた日本独自の文化。かな文字・和歌・大和絵などが代表です。",
+  "かな":"漢字をもとに作られた日本独自の文字。女流文学の発展を促しました。",
+  "源氏物語":"紫式部が書いた世界最古級の長編小説。光源氏の恋愛を描きました。",
+  "枕草子":"清少納言が書いた随筆。「春はあけぼの…」で始まります。",
+  "紀貫之":"古今和歌集を編集した歌人。土佐日記の作者でもあります。",
+  "古今和歌集":"905年に編集された日本初の勅撰和歌集です。",
+  "大和絵":"日本の風景・風俗を題材にした日本独自の絵画様式です。",
+  "平等院鳳凰堂":"藤原頼通が宇治に建てた阿弥陀堂。10円硬貨のデザインです（世界遺産）。",
+  "中尊寺金色堂":"奥州藤原氏が岩手県平泉に建てた金箔の阿弥陀堂（世界遺産）。",
+};
+const answers={"A":"最澄","B":"天台宗","C":"空海","D":"真言宗","E":"遣唐使","F":"国風","G":"かな","H":"源氏物語","I":"枕草子","J":"紀貫之","K":"古今和歌集","L":"大和絵","M":"平等院鳳凰堂","N":"中尊寺金色堂"};
+let startTime,timerId,selectedChip=null;
+function renderBank(){const bank=document.getElementById('word-bank');bank.style.display="flex";bank.innerHTML="";[...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{const chip=document.createElement('div');chip.className='word-chip';const label=document.createElement('span');label.textContent=word;chip.appendChild(label);const tip=WORD_TIPS[word];if(tip){const pop=document.createElement('div');pop.className='chip-pop';pop.textContent=tip;chip.appendChild(pop);}chip.addEventListener('click',()=>{if(chip.classList.contains('used'))return;document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip');});bank.appendChild(chip);});}
+function getBlankText(b){const c=b.cloneNode(true);c.querySelectorAll('.pop-box').forEach(p=>p.remove());return c.textContent.trim();}
+function setBlankText(b,txt){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent=txt;}}
+function clearBlankText(b){for(const n of [...b.childNodes]){if(n.nodeType===3)n.textContent="";}}
+function getChipWord(c){return c.querySelector('span')?.textContent||c.textContent;}
+document.querySelectorAll('.blank').forEach(blank=>{blank.addEventListener('click',e=>{e.stopPropagation();if(selectedChip){const old=getBlankText(blank);if(old)document.querySelectorAll('.word-chip').forEach(c=>{if(getChipWord(c)===old)c.classList.remove('used');});setBlankText(blank,getChipWord(selectedChip));selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;}});});
+function startChallenge(){document.querySelectorAll('.blank').forEach(b=>{clearBlankText(b);b.classList.remove('correct');});renderBank();selectedChip=null;startTime=Date.now();if(timerId)clearInterval(timerId);timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;},1000);}
+function checkAnswers(){let ok=true;document.querySelectorAll('.blank').forEach(b=>{if(getBlankText(b)===answers[b.dataset.id])b.classList.add('correct');else{ok=false;b.classList.remove('correct');}});if(ok){clearInterval(timerId);document.getElementById('next-btn').disabled=false;alert("全問正解！平安文化をマスターしました。");}else alert("間違いがあります。もう一度見直してみましょう。");}
+function resetTimer(){clearInterval(timerId);document.getElementById('timer-display').textContent="経過時間：---";}
+function toggleExplain(){const b=document.getElementById('explain-box');b.style.display=(b.style.display==='block')?'none':'block';}
+(function(){try{var p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');p['heian_bunka']=p['heian_bunka']||{};p['heian_bunka'].studyDone=true;localStorage.setItem('gamba_progress',JSON.stringify(p));}catch(e){}})();
 </script>
 </body>
 </html>
