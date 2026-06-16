@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：⑲ 明治維新</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #d32f2f;padding-bottom:8px;font-size:24px;color:#1a1a2e}
+  h2{margin-top:18px;margin-bottom:8px;font-size:19px;border-left:5px solid #d32f2f;padding-left:10px;color:#1a1a2e}
+  .step-bar{display:flex;gap:6px;margin:16px 0 20px 0;flex-wrap:wrap}
+  .step{flex:1;min-width:70px;text-align:center;padding:6px 4px;border-radius:999px;background-color:#ddd;font-size:11px;cursor:pointer}
+  .step.active{background-color:#ffe0e0;border:2px solid #d32f2f;font-weight:bold}
+  .step:hover:not(.active){background-color:#eee}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:1001;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #d32f2f;border-radius:8px;padding:12px;min-height:60px;display:none;flex-wrap:wrap;gap:8px;background-color:#fff}
+  .word-chip{padding:8px 12px;border:1px solid #666;border-radius:18px;background-color:#fff;cursor:pointer;font-size:14px}
+  .word-chip.used{opacity:0.3}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px 24px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:90px;min-height:26px;border-bottom:2px solid #d32f2f;margin:0 3px;text-align:center;vertical-align:middle;cursor:pointer;font-weight:bold;color:#d32f2f}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{color:#d32f2f;font-weight:bold;cursor:pointer;border-bottom:2px dotted #d32f2f}
+  .kw:hover{background-color:#fff3e0;border-radius:3px}
+  .popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);z-index:2000;justify-content:center;align-items:center}
+  .popup-overlay.show{display:flex}
+  .popup-box{background:#fff;border-radius:14px;padding:28px 32px;max-width:540px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,0.25);position:relative;max-height:80vh;overflow-y:auto}
+  .popup-box h3{margin:0 0 6px;font-size:20px;color:#d32f2f;border-bottom:2px solid #d32f2f;padding-bottom:6px}
+  .popup-box .popup-sub{font-size:13px;color:#888;margin-bottom:12px}
+  .popup-box p{margin:8px 0;font-size:15px;line-height:1.85}
+  .popup-box .popup-tag{display:inline-block;background:#d32f2f;color:#fff;border-radius:6px;padding:1px 10px;font-size:12px;margin-right:6px;margin-bottom:6px}
+  .popup-close{position:absolute;top:14px;right:18px;font-size:22px;cursor:pointer;color:#888;font-weight:bold}
+  .popup-close:hover{color:#d32f2f}
+  .cause-flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px;background:#fff8f0;border:1px solid #ffcc80;border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14px}
+  .cause-flow .cf-box{background:#fff3e0;border:1px solid #ffb74d;border-radius:8px;padding:4px 12px;font-weight:bold;color:#5d4037}
+  .cause-flow .cf-box.result{background:#fce4ec;border-color:#e91e63;color:#880e4f}
+  .cause-flow .cf-arrow{font-size:18px;color:#d32f2f;font-weight:bold}
+  .point-box{background:#e8f5e9;border-left:5px solid #388e3c;border-radius:0 8px 8px 0;padding:10px 16px;margin:10px 0;font-size:15px}
+  .point-box b{color:#2e7d32}
+  .warn-box{background:#fff3e0;border-left:5px solid #f57c00;border-radius:0 8px 8px 0;padding:10px 16px;margin:10px 0;font-size:15px}
+  .nenpyo{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .nenpyo th{background:#d32f2f;color:#fff;padding:8px 12px;text-align:left}
+  .nenpyo td{padding:8px 12px;border-bottom:1px solid #eee;vertical-align:top}
+  .nenpyo tr:nth-child(even) td{background:#fafafa}
+  .nenpyo .year{font-weight:bold;color:#d32f2f;white-space:nowrap}
+  .hyo{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .hyo th{background:#424242;color:#fff;padding:8px 12px;text-align:center}
+  .hyo td{padding:8px 12px;border:1px solid #ddd;vertical-align:top}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#007bff;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #0056b3}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button.challenge-btn{background-color:#d32f2f;box-shadow:0 3px 0 #b71c1c}
+  .timer-info{margin-top:8px;padding:4px 15px;font-size:15px;border:1px solid #007bff;background-color:#fff;display:inline-block}
+</style>
+</head>
+<body>
+<h1>🏛️ ⑲ 明治維新</h1>
+<p style="color:#555;font-size:14px;">【学習のポイント】廃藩置県・富国強兵・自由民権運動・大日本帝国憲法という「近代国家建設の流れ」をつかもう。<br>🔴 赤い人物名はタップで人物紹介</p>
+
+<div class="step-bar">
+  <div class="step" onclick="location.href='ch17.html'">⑰ 開国</div>
+  <div class="step" onclick="location.href='ch18.html'">⑱ 幕府滅亡</div>
+  <div class="step active">⑲ 明治維新</div>
+  <div class="step" onclick="location.href='ch20.html'">⑳ 日清日露</div>
+  <div class="step" onclick="location.href='ch15_20_drill.html'">確認ドリル</div>
+  <div class="step" onclick="location.href='index.html'">← 一覧へ</div>
+</div>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】</div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- S1: 明治政府の成立 -->
+<div class="section">
+  <h2>１．明治政府の成立</h2>
+  <div class="cause-flow">
+    <div class="cf-box">戊辰戦争（1868）勝利</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">五箇条の御誓文・版籍奉還</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">廃藩置県（1871）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">中央集権国家の確立</div>
+  </div>
+
+  <p>1868年、新政府は政治の方針を示す<span class="blank kw-blank" data-id="A">五箇条の御誓文</span>を公布しました。「広く会議をおこし万機公論に決すべし」という民主的な方針を掲げました。</p>
+
+  <p>1869年、土地（版）と人民（籍）を天皇に返還させる<span class="blank kw-blank" data-id="B">版籍奉還</span>を実施しましたが、藩主はそのまま知藩事として残り効果は限定的でした。</p>
+
+  <p>1871年、知藩事を東京に集めて華族とし、政府から県令を派遣する<span class="blank kw-blank" data-id="C">廃藩置県</span>を断行しました。藩が廃止され県がおかれ、中央集権国家が完成しました。</p>
+
+  <div class="point-box">
+    <b>💡 四民平等と身分制度の変化</b><br>
+    天皇の一族＝<b>皇族</b>、公家・大名＝<b>華族</b>、武士＝<b>士族</b>、百姓・町人＝<b>平民</b>とし、皇族以外は平等としました。また1871年の<b>解放令</b>で「えた」「ひにん」は平民となりました。これを<span class="blank kw-blank" data-id="D">四民平等</span>といいます。
+  </div>
+
+  <p>1871年、廃藩置県が反乱なく行われたので、<span class="kw" onclick="showPopup('iwakura')">岩倉具視</span>を団長に木戸孝允・伊藤博文らの<b>岩倉遣外使節団</b>を派遣し条約改正を交渉しましたが、失敗に終わりました。</p>
+</div>
+
+<!-- S2: 富国強兵の改革 -->
+<div class="section">
+  <h2>２．富国強兵の改革</h2>
+  <p>新政府は欧米列強に劣らない強い国をつくるため、<span class="blank kw-blank" data-id="E">富国強兵</span>の政策をすすめ、外国人技術者を招いて近代産業を育てる<span class="blank kw-blank" data-id="F">殖産興業</span>を行いました。</p>
+
+  <div class="point-box">
+    <b>🔑 三大改革（1872〜1873年）</b><br>
+    ① <span class="blank kw-blank" data-id="G">学制</span>（1872年）：6歳以上の子どもに教育を義務付け<br>
+    ② <span class="blank kw-blank" data-id="H">地租改正</span>（1873年）：土地所有者に地券を発行。収穫高ではなく<b>地価の3%</b>を現金で納税<br>
+    ③ <span class="blank kw-blank" data-id="I">徴兵令</span>（1873年）：身分を問わず20歳以上の男子に兵役の義務
+  </div>
+
+  <div class="warn-box">
+    ⚠️ <b>地租改正のポイント</b><br>
+    「年貢（米）→現金」「収穫量→地価」に変更することで、国の税収が安定しました。農民には負担増となり、各地で一揆が起きました（地租改正反対一揆）。結果、税率は3%→2.5%に引き下げられました。
+  </div>
+
+  <p><b>殖産興業の主な事業：</b></p>
+  <ul style="margin:8px 0;padding-left:24px;line-height:2;font-size:15px">
+    <li>1869年 北海道の開拓（開拓使設置・屯田兵の移住）</li>
+    <li>1871年 郵便制度の実施（前島密）</li>
+    <li>1872年 新橋〜横浜間に鉄道開通</li>
+    <li>1872年 群馬県に官営工場 <span class="blank kw-blank" data-id="J">富岡製糸工場</span> 設立</li>
+  </ul>
+</div>
+
+<!-- S3: 文明開化と国際関係 -->
+<div class="section">
+  <h2>３．文明開化と国際関係</h2>
+  <p>西洋の近代思想や生活様式を積極的に取り入れようとすることを<span class="blank kw-blank" data-id="K">文明開化</span>といいます。ざんぎり頭・洋風建築・ガス灯・ビール・イス・テーブルなどが普及しました。</p>
+
+  <table class="hyo">
+    <tr><th>人物</th><th>著書・業績</th></tr>
+    <tr><td><span class="kw" onclick="showPopup('fukuzawa')">福沢諭吉</span></td><td>「学問のすゝめ」で人間の平等と独立を訴えた</td></tr>
+    <tr><td>中江兆民</td><td>ルソーの社会契約論を「民約論」として紹介</td></tr>
+  </table>
+
+  <div class="point-box">
+    <b>💡 国際関係のポイント</b><br>
+    ①1875年 琉球処分：琉球を沖縄県として明治政府の支配下に<br>
+    ②1875年 江華島事件 → 1876年 日朝修好条規（不平等条約）<br>
+    ③1875年 千島・樺太交換条約：千島を日本領、樺太をロシア領に
+  </div>
+</div>
+
+<!-- S4: 西南戦争と自由民権運動 -->
+<div class="section">
+  <h2>４．西南戦争と自由民権運動</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">板垣退助が民撰議員設立建白書（1874）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">西南戦争（1877）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">自由民権運動の高まり</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">国会開設の勅諭（1881）</div>
+  </div>
+
+  <p>1874年、征韓論に敗れ土佐に戻った<span class="kw" onclick="showPopup('itagaki')">板垣退助</span>は、国会開設を求める<b>民撰議員設立建白書</b>を政府に提出しましたが却下されました。</p>
+
+  <p>1877年、明治政府の方針に不満をもつ士族が薩摩藩出身の<span class="kw" onclick="showPopup('saigo_meiji')">西郷隆盛</span>を中心に西日本で兵をあげた<span class="blank kw-blank" data-id="M">西南戦争</span>が起きました。政府軍が勝利し、これが<b>最後の士族の反乱</b>となりました。</p>
+
+  <p>以後、武力による反政府運動から言論による<span class="blank kw-blank" data-id="L">自由民権</span>運動が活発化しました。</p>
+
+  <table class="hyo">
+    <tr><th>政党</th><th>党首</th><th>特長</th></tr>
+    <tr><td>自由党（1881）</td><td><span class="kw" onclick="showPopup('itagaki')">板垣退助</span></td><td>フランス流・共和制を求める急進派</td></tr>
+    <tr><td>立憲改進党（1882）</td><td><span class="kw" onclick="showPopup('okuma')">大隈重信</span></td><td>イギリス流・穏健な立憲君主制</td></tr>
+  </table>
+
+  <p>1885年、太政官制を廃止し<b>内閣制度</b>を創設。初代内閣総理大臣に<span class="kw" onclick="showPopup('ito')">伊藤博文</span>が就任しました。</p>
+</div>
+
+<!-- S5: 大日本帝国憲法 -->
+<div class="section">
+  <h2>５．大日本帝国憲法と帝国議会</h2>
+
+  <p><span class="kw" onclick="showPopup('ito')">伊藤博文</span>は1882年にドイツ（プロイセン）へ渡って憲法を学び、1889年に<span class="blank kw-blank" data-id="N">大日本帝国憲法</span>が公布されました。</p>
+
+  <div class="point-box">
+    <b>🔑 大日本帝国憲法の特徴</b><br>
+    ① 天皇が国民（臣民）に与える<b>欽定憲法</b><br>
+    ② 天皇に<b>統帥権</b>（軍隊の指揮権）がある<br>
+    ③ 天皇主権（民主主義ではない）<br>
+    ④ 国民の権利は<b>法律の範囲内</b>で保護
+  </div>
+
+  <p>1890年、第一回帝国議会が開かれました。衆議院の選挙権は直接国税15円以上納める満25歳以上の男子に限られ、有権者は総人口の約<b>1.1%</b>にすぎませんでした。</p>
+
+  <table class="nenpyo">
+    <tr><th>年</th><th>できごと</th><th>ポイント</th></tr>
+    <tr><td class="year">1868年</td><td>五箇条の御誓文</td><td>明治政府の政治方針を宣言</td></tr>
+    <tr><td class="year">1871年</td><td>廃藩置県</td><td>藩を廃して中央集権国家へ</td></tr>
+    <tr><td class="year">1872年</td><td>学制・鉄道開通・富岡製糸工場</td><td>殖産興業の本格化</td></tr>
+    <tr><td class="year">1873年</td><td>地租改正・徴兵令</td><td>税制・軍制の近代化</td></tr>
+    <tr><td class="year">1877年</td><td>西南戦争</td><td>最後の士族の反乱。西郷隆盛が自刃</td></tr>
+    <tr><td class="year">1881年</td><td>国会開設の勅諭</td><td>1890年に国会を開くと約束</td></tr>
+    <tr><td class="year">1885年</td><td>内閣制度創設</td><td>初代総理大臣：伊藤博文</td></tr>
+    <tr><td class="year">1889年</td><td>大日本帝国憲法公布</td><td>プロイセン憲法を手本。天皇主権</td></tr>
+    <tr><td class="year">1890年</td><td>第一回帝国議会</td><td>有権者は総人口の約1.1%</td></tr>
+  </table>
+</div>
+
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button class="challenge-btn" onclick="startChallenge()">✏️ チャレンジ開始</button>
+      <button onclick="checkAnswers()">✅ 判定</button>
+      <button class="secondary" onclick="location.reload()">🔄 やり直す</button>
+      <button onclick="location.href='ch20.html'">次へ ⑳ ▶</button>
+      <button onclick="location.href='ch15_20_drill.html'">確認ドリルへ</button>
+    </div>
+    <div class="timer-info" id="timer-display">⏱ 経過時間：---</div>
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup-overlay" onclick="closePopupOutside(event)">
+  <div class="popup-box">
+    <span class="popup-close" onclick="closePopup()">✕</span>
+    <h3 id="popup-name"></h3>
+    <div class="popup-sub" id="popup-sub"></div>
+    <div id="popup-body"></div>
+  </div>
+</div>
+
+<script>
+const answers={
+  A:"五箇条の御誓文",B:"版籍奉還",C:"廃藩置県",D:"四民平等",
+  E:"富国強兵",F:"殖産興業",G:"学制",H:"地租改正",I:"徴兵令",
+  J:"富岡製糸工場",K:"文明開化",L:"自由民権",M:"西南戦争",
+  N:"大日本帝国憲法"
+};
+let startTime,timerId,selectedChip=null;
+function renderBank(){
+  const bank=document.getElementById('word-bank');
+  bank.style.display="flex";bank.innerHTML="";
+  [...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{
+    const chip=document.createElement('div');chip.className='word-chip';chip.textContent=word;
+    chip.onclick=()=>{document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip')};
+    bank.appendChild(chip);
+  });
+}
+function startChallenge(){
+  document.querySelectorAll('.kw-blank').forEach(b=>{b.textContent="　　　";b.classList.remove('correct');b.dataset.savedOnclick=b.getAttribute('onclick')||'';b.removeAttribute('onclick')});
+  renderBank();startTime=Date.now();if(timerId)clearInterval(timerId);
+  timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`⏱ 経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`},1000);
+}
+document.querySelectorAll('.kw-blank').forEach(blank=>{
+  blank.onclick=(e)=>{
+    e.stopPropagation();
+    if(selectedChip){
+      const old=blank.textContent.trim();
+      if(old&&old!=='　　　')document.querySelectorAll('.word-chip').forEach(c=>{if(c.textContent===old)c.classList.remove('used')});
+      blank.textContent=selectedChip.textContent;selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;
+    }else if(blank.textContent.trim()&&blank.textContent.trim()!=='　　　'){
+      const txt=blank.textContent.trim();
+      document.querySelectorAll('.word-chip').forEach(c=>{if(c.textContent===txt)c.classList.remove('used')});
+      blank.textContent="　　　";
+    }
+  };
+});
+function checkAnswers(){
+  let ok=true;
+  document.querySelectorAll('.kw-blank').forEach(b=>{
+    if(b.textContent.trim()===answers[b.dataset.id])b.classList.add('correct');
+    else ok=false;
+    if(b.dataset.savedOnclick)b.setAttribute('onclick',b.dataset.savedOnclick);
+  });
+  if(ok){clearInterval(timerId);alert("🎉 全問正解！すばらしい！")}
+  else alert("まだ間違いがあります。黄色くなっていない語句を確認しよう。");
+}
+const popupData={
+  iwakura:{name:"岩倉具視（いわくら ともみ）",sub:"1825〜1883年｜公家・明治政府の重鎮",tags:["岩倉使節団","廃藩置県"],body:`<p>公家出身で、倒幕運動から明治政府の樹立に大きな役割を果たしました。1871〜1873年に欧米12ヶ国を歴訪した<b>岩倉遣外使節団</b>の団長を務め、条約改正交渉と欧米の近代化調査を行いました。条約改正は失敗しましたが、帰国後の近代化推進に大きく貢献しました。</p>`},
+  fukuzawa:{name:"福沢諭吉（ふくざわ ゆきち）",sub:"1835〜1901年｜思想家・教育者",tags:["学問のすゝめ","慶應義塾","文明開化"],body:`<p>「天は人の上に人を造らず、人の下に人を造らずと云えり」という有名な一節で始まる著書<b>「学問のすゝめ」</b>で、人間の平等と独立の精神を訴えました。慶應義塾（現・慶應義塾大学）を創設し、日本の近代教育の発展に貢献しました。</p><p>💡 現在の一万円札の肖像です。</p>`},
+  itagaki:{name:"板垣退助（いたがき たいすけ）",sub:"1837〜1919年｜土佐藩出身の政治家",tags:["自由民権運動","自由党","民撰議員設立建白書"],body:`<p>土佐藩出身。征韓論に敗れて政府を去り、1874年に<b>民撰議員設立建白書</b>を提出して国会開設を要求しました。1881年に<b>自由党</b>を結成し、自由民権運動の中心となりました。</p><p>⚠️ 1882年、岐阜で暗殺未遂に遭い「板垣死すとも自由は死せず」と叫んだという逸話が有名ですが、実際にその言葉を言ったかは不明です。</p>`},
+  okuma:{name:"大隈重信（おおくま しげのぶ）",sub:"1838〜1922年｜政治家・早稲田大学創設者",tags:["立憲改進党","早稲田大学","内閣総理大臣"],body:`<p>佐賀藩出身の政治家。国会開設を早くから求めたため、1881年に伊藤博文らに政府から追放されました（明治十四年の政変）。翌1882年に<b>立憲改進党</b>を結成し、イギリス流の穏健な立憲君主制を目指しました。</p><p>💡 早稲田大学（東京専門学校）の創設者でもあります。</p>`},
+  ito:{name:"伊藤博文（いとう ひろぶみ）",sub:"1841〜1909年｜初代内閣総理大臣",tags:["初代総理大臣","大日本帝国憲法","統監府"],body:`<p>長州藩出身。吉田松陰の弟子で、明治政府の最重要人物。1882年にドイツ（プロイセン）で憲法を学び、<b>大日本帝国憲法</b>（1889年）を起草しました。1885年に日本初の<b>内閣制度</b>を創設し、初代内閣総理大臣に就任。4度も総理を務めました。</p><p>⚠️ 1909年、満州のハルビン駅で韓国の運動家<b>安重根</b>に暗殺されました。これが翌年の<b>韓国併合</b>の口実となりました。</p>`},
+  saigo_meiji:{name:"西郷隆盛（さいごう たかもり）",sub:"1828〜1877年｜薩摩藩出身",tags:["西南戦争","征韓論","明治六年の政変"],body:`<p>明治政府の成立に大きく貢献しましたが、<b>征韓論</b>（朝鮮への出兵論）をめぐって政府と対立し、1873年に政府を去りました（明治六年の政変）。鹿児島に戻り士族の教育に当たりましたが、1877年に士族の反乱である<b>西南戦争</b>のリーダーとして立ち上がり、政府軍に敗れて<b>城山で自刃</b>しました。</p>`}
+};
+function showPopup(key){
+  const d=popupData[key];if(!d)return;
+  document.getElementById('popup-name').textContent=d.name;
+  document.getElementById('popup-sub').textContent=d.sub;
+  document.getElementById('popup-body').innerHTML=d.tags.map(t=>`<span class="popup-tag">${t}</span>`).join('')+d.body;
+  document.getElementById('popup-overlay').classList.add('show');
+}
+function closePopup(){document.getElementById('popup-overlay').classList.remove('show')}
+function closePopupOutside(e){if(e.target===document.getElementById('popup-overlay'))closePopup()}
+</script>
+</body>
+</html>

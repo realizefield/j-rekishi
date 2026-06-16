@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：⑰ 開国</title>
+<style>
+  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.9; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
+  h1 { border-bottom: 2px solid #d32f2f; padding-bottom: 8px; font-size: 24px; color: #1a1a2e; }
+  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 19px; border-left: 5px solid #d32f2f; padding-left: 10px; color: #1a1a2e; }
+  .step-bar { display: flex; gap: 6px; margin: 16px 0 20px 0; flex-wrap: wrap; }
+  .step { flex: 1; min-width: 80px; text-align: center; padding: 6px 4px; border-radius: 999px; background-color: #ddd; font-size: 12px; cursor: pointer; }
+  .step.active { background-color: #ffe0e0; border: 2px solid #d32f2f; font-weight: bold; }
+  .step:hover:not(.active) { background-color: #eee; }
+  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
+  .word-bank { border: 2px solid #d32f2f; border-radius: 8px; padding: 12px; min-height: 60px; display: none; flex-wrap: wrap; gap: 8px; background-color: #fff; }
+  .word-chip { padding: 8px 12px; border: 1px solid #666; border-radius: 18px; background-color: #fff; cursor: pointer; font-size: 14px; }
+  .word-chip.used { opacity: 0.3; }
+  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
+  .section { background-color: #fff; border-radius: 8px; padding: 20px 24px; border: 1px solid #ccc; margin-bottom: 16px; }
+  .blank { display: inline-block; min-width: 90px; min-height: 26px; border-bottom: 2px solid #d32f2f; margin: 0 3px; text-align: center; vertical-align: middle; cursor: pointer; font-weight: bold; color: #d32f2f; }
+  .blank.correct { background-color: #ffeb3b; }
+  .kw { color: #d32f2f; font-weight: bold; cursor: pointer; border-bottom: 2px dotted #d32f2f; }
+  .kw:hover { background-color: #fff3e0; border-radius: 3px; }
+  /* 語句ポップアップ（黄） */
+  .term-popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 2000; justify-content: center; align-items: center; }
+  .term-popup-overlay.show { display: flex; }
+  .term-popup-box { background: #fffde7; border: 3px solid #f9a825; border-radius: 14px; padding: 24px 28px; max-width: 500px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,0.2); position: relative; max-height: 80vh; overflow-y: auto; }
+  .term-popup-box h3 { margin: 0 0 10px; font-size: 20px; color: #e65100; border-bottom: 2px solid #f9a825; padding-bottom: 6px; }
+  .term-popup-box p { margin: 7px 0; font-size: 14px; line-height: 1.85; }
+  .term-popup-box .t-tag { display: inline-block; background: #f9a825; color: #fff; border-radius: 6px; padding: 1px 9px; font-size: 11px; margin-right: 5px; margin-bottom: 6px; }
+  .term-popup-close { position: absolute; top: 12px; right: 16px; font-size: 20px; cursor: pointer; color: #999; font-weight: bold; }
+  .term-popup-close:hover { color: #e65100; }
+  /* 人物ポップアップ（白） */
+  .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 2000; justify-content: center; align-items: center; }
+  .popup-overlay.show { display: flex; }
+  .popup-box { background: #fff; border-radius: 14px; padding: 28px 32px; max-width: 540px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,0.25); position: relative; max-height: 80vh; overflow-y: auto; }
+  .popup-box h3 { margin: 0 0 6px; font-size: 20px; color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 6px; }
+  .popup-box .popup-sub { font-size: 13px; color: #888; margin-bottom: 12px; }
+  .popup-box p { margin: 8px 0; font-size: 15px; line-height: 1.85; }
+  .popup-box .popup-tag { display: inline-block; background: #d32f2f; color: #fff; border-radius: 6px; padding: 1px 10px; font-size: 12px; margin-right: 6px; margin-bottom: 6px; }
+  .popup-close { position: absolute; top: 14px; right: 18px; font-size: 22px; cursor: pointer; color: #888; font-weight: bold; }
+  .popup-close:hover { color: #d32f2f; }
+  .cause-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; background: #fff8f0; border: 1px solid #ffcc80; border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .cause-flow .cf-box { background: #fff3e0; border: 1px solid #ffb74d; border-radius: 8px; padding: 4px 12px; font-weight: bold; color: #5d4037; }
+  .cause-flow .cf-box.result { background: #fce4ec; border-color: #e91e63; color: #880e4f; }
+  .cause-flow .cf-arrow { font-size: 18px; color: #d32f2f; font-weight: bold; }
+  .point-box { background: #e8f5e9; border-left: 5px solid #388e3c; border-radius: 0 8px 8px 0; padding: 10px 16px; margin: 10px 0; font-size: 15px; }
+  .point-box b { color: #2e7d32; }
+  .warn-box { background: #fff3e0; border-left: 5px solid #f57c00; border-radius: 0 8px 8px 0; padding: 10px 16px; margin: 10px 0; font-size: 15px; }
+  .nenpyo { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+  .nenpyo th { background: #d32f2f; color: #fff; padding: 8px 12px; text-align: left; }
+  .nenpyo td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .nenpyo tr:nth-child(even) td { background: #fafafa; }
+  .nenpyo .year { font-weight: bold; color: #d32f2f; white-space: nowrap; }
+  /* 輸出入グラフ */
+  .trade-wrap { display: flex; gap: 16px; flex-wrap: wrap; margin: 10px 0; }
+  .trade-box { flex: 1; min-width: 200px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 14px; }
+  .trade-box h4 { margin: 0 0 10px; font-size: 14px; color: #555; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+  .trade-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+  .trade-bar { height: 18px; border-radius: 4px; }
+  .trade-bar.export { background: #e53935; }
+  .trade-bar.import { background: #1e88e5; }
+  .trade-label { min-width: 90px; }
+  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 12px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #007bff; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #0056b3; }
+  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
+  button.challenge-btn { background-color: #d32f2f; box-shadow: 0 3px 0 #b71c1c; }
+  .timer-info { margin-top: 8px; padding: 4px 15px; font-size: 15px; border: 1px solid #007bff; background-color: #fff; display: inline-block; }
+</style>
+</head>
+<body>
+
+<h1>⛵ ⑰ 開国</h1>
+<p style="color:#555;font-size:14px;">【学習のポイント】なぜアメリカが日本の開国に成功したのか、ペリー来航から日米修好通商条約まで「原因→交渉→結果」の流れをつかもう。<br>🔴 赤い太字の人物名はタップで人物紹介 　🟡 太字の語句はタップで意味が出ます。</p>
+
+<div class="step-bar">
+  <div class="step" onclick="location.href='ch15.html'">⑮ 欧米①</div>
+  <div class="step" onclick="location.href='ch16.html'">⑯ 欧米②</div>
+  <div class="step active">⑰ 開国</div>
+  <div class="step" onclick="location.href='ch18.html'">⑱ 幕府滅亡</div>
+  <div class="step" onclick="location.href='ch17_18_drill.html'">確認ドリル</div>
+  <div class="step" onclick="location.href='index.html'">← 一覧へ</div>
+</div>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】</div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== S1: なぜアメリカが成功したか ========== -->
+<div class="section">
+  <h2>１．なぜアメリカが日本の開国に成功したのか</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">イギリス・フランスはアジアで手一杯</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">アメリカが太平洋進出・西部開拓</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">捕鯨・中国貿易の中継基地が必要</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">日本への開国要求はアメリカが先手</div>
+  </div>
+
+  <p>イギリスは市民革命・産業革命を経て植民地獲得に乗り出しましたが、アジアでは<b>アヘン戦争（1840年）</b>や<b>インドの大反乱（1851年）</b>の対応に追われていました。フランスも内政の混乱やイギリスとの対立が続いていました。</p>
+
+  <p>一方アメリカは、産業革命が進む中で金鉱をめぐる<b>西部への開拓</b>が進み、太平洋に面した地域まで勢力を伸ばしていました。そこで<b>太平洋を横断した中国（清）との貿易</b>を活発にしようとしました。</p>
+
+  <div class="point-box">
+    <b>💡 アメリカが日本に求めたもの（ペリー来航の2つの目的）</b><br>
+    ① 産業革命のランプに使う<b>クジラの油</b>のために、日本近海での捕鯨船への水・食料・燃料補給基地<br>
+    ② 太平洋を横断して清と貿易するための<b>中継基地</b>
+  </div>
+</div>
+
+<!-- ========== S2: ペリー来航と日米和親条約 ========== -->
+<div class="section">
+  <h2>２．ペリーの来航から日米和親条約へ</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">ペリーが黒船4隻で浦賀に来航（1853）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">幕府「翌年回答する」と追い返す</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">ペリー再来航（1854）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">日米和親条約を締結</div>
+  </div>
+
+  <p>
+    1853年、アメリカ東インド洋艦隊司令長官
+    <span class="kw" onclick="showPopup('perry')">ペリー</span>
+    は4隻の軍艦（黒船）をひきいて、現在の
+    <span class="blank kw-blank" data-id="C">神奈川</span>
+    県の
+    <span class="blank kw-blank" data-id="B">浦賀</span>
+    に入港し、開国を求めました。空砲を撃って脅しをかけましたが、幕府は「翌年回答する」として追い返しました。
+  </p>
+
+  <p>
+    翌1854年、
+    <span class="kw" onclick="showPopup('perry')">ペリー</span>
+    が再来航すると幕府は開国を受け入れ、
+    <span class="blank kw-blank" data-id="D">日米和親</span>
+    条約を結びました。
+  </p>
+
+  <div class="point-box">
+    <b>🔑 日米和親条約の内容（3つ）</b><br>
+    ① <span class="blank kw-blank" data-id="E">下田</span>（静岡県）と <span class="blank kw-blank" data-id="F">箱館</span>（北海道）の2港を開港<br>
+    ② 下田にアメリカの領事館をおく<br>
+    ③ 捕鯨船に燃料・水・食料を補給する
+  </div>
+
+  <div class="warn-box">
+    ⚠️ <b>日米和親条約はまだ「貿易」ではありません！</b><br>
+    補給基地として港を開いただけです。自由な貿易（売り買い）ができる条約はこの後の「日米修好通商条約」になります。
+  </div>
+</div>
+
+<!-- ========== S3: ハリスの要求と日米修好通商条約 ========== -->
+<div class="section">
+  <h2>３．ハリスの開国要求と日米修好通商条約</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">ハリスが下田領事として着任（1856）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">「アロー号事件」を例に武力で脅す</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">井伊直弼が天皇の許可なく調印（1858）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">日米修好通商条約（不平等条約）</div>
+  </div>
+
+  <p>
+    1856年、静岡県下田のアメリカ領事として着任した
+    <span class="kw" onclick="showPopup('harris')">ハリス</span>
+    は、「アロー号事件（イギリスとフランスが清を侵略した事件）」を例に挙げ、「アメリカと条約を結べばイギリス・フランスの侵入を防げる」と説得し、武力を背景に強硬な姿勢で開国を要求しました。
+  </p>
+
+  <p>
+    1858年、孝明天皇の勅許（許可）が得られないまま、大老
+    <span class="kw" onclick="showPopup('ii_naosuke')">井伊直弼</span>
+    はアメリカと
+    <span class="blank kw-blank" data-id="I">日米修好通商</span>
+    条約を結びました。ここに日本の鎖国は終わりました。同じ条件の条約をオランダ・ロシア・イギリス・フランスとも結びました。
+  </p>
+
+  <div class="point-box">
+    <b>🔑 日米修好通商条約の内容</b><br>
+    ① 神奈川（横浜）・長崎・新潟・兵庫・箱館の<b>5港を開港</b>（下田は閉じる）<br>
+    ② 通商は<b>自由貿易</b>とする<br>
+    ③ <span class="blank kw-blank" data-id="J" onclick="showTerm('chigai_hoken')">治外法権</span>（領事裁判権）を認める<br>
+    ④ 日本に<span class="blank kw-blank" data-id="K" onclick="showTerm('kanzei_jishu')">関税自主権</span>がない
+  </div>
+
+  <div class="warn-box">
+    ⚠️ <b>なぜ「不平等」条約なのか？</b><br>
+    <b>治外法権（領事裁判権）</b>：日本国内でイギリス人が犯罪を犯しても日本では裁けない→外国人が日本の法律に縛られない<br>
+    <b>関税自主権なし</b>：外国からの輸入品にいくらの関税をかけるか日本が決めることができない→安い外国製品が大量に入ってきても防げない
+  </div>
+</div>
+
+<!-- ========== S4: 開国の影響 ========== -->
+<div class="section">
+  <h2>４．開国の影響</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">開国・貿易開始</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">生糸・茶が大量輸出</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">国内で品不足</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">物価高・民衆の不満高まる</div>
+  </div>
+
+  <p>開国後の最大の貿易相手国はアメリカではなく<b>イギリス</b>でした。アメリカとの条約を結んだものの、アメリカでは1861年に<b>南北戦争</b>が起き、日本との貿易どころではなかったからです。</p>
+
+  <p>
+    日本の輸出品の大半は
+    <span class="blank kw-blank" data-id="L">生糸</span>
+    と
+    <span class="blank kw-blank" data-id="M">茶</span>
+    でした。当時フランス・イタリアの蚕が病気で全滅しており、日本の生糸が飛ぶように売れました。また欧州では紅茶ブームで日本の茶も人気でした。しかし輸出が急増したため国内では品不足が生じ、<b>物価が大きく上がりました</b>。
+  </p>
+
+  <div class="trade-wrap">
+    <div class="trade-box">
+      <h4>📤 輸出品（1856年）</h4>
+      <div class="trade-bar-row"><span class="trade-label">生糸</span><div class="trade-bar export" style="width:79%"></div><span>79.4%</span></div>
+      <div class="trade-bar-row"><span class="trade-label">茶</span><div class="trade-bar export" style="width:11%"></div><span>10.5%</span></div>
+      <div class="trade-bar-row"><span class="trade-label">蚕卵紙</span><div class="trade-bar export" style="width:4%"></div><span>4%</span></div>
+      <div class="trade-bar-row"><span class="trade-label">その他</span><div class="trade-bar export" style="width:6%"></div><span>6.1%</span></div>
+    </div>
+    <div class="trade-box">
+      <h4>📥 輸入品（1856年）</h4>
+      <div class="trade-bar-row"><span class="trade-label">毛織物</span><div class="trade-bar import" style="width:40%"></div><span>40.3%</span></div>
+      <div class="trade-bar-row"><span class="trade-label">綿織物</span><div class="trade-bar import" style="width:36%"></div><span>35.5%</span></div>
+      <div class="trade-bar-row"><span class="trade-label">武器</span><div class="trade-bar import" style="width:7%"></div><span>7%</span></div>
+      <div class="trade-bar-row"><span class="trade-label">艦船</span><div class="trade-bar import" style="width:6%"></div><span>6.3%</span></div>
+      <div class="trade-bar-row"><span class="trade-label">その他</span><div class="trade-bar import" style="width:11%"></div><span>10.9%</span></div>
+    </div>
+  </div>
+
+  <table class="nenpyo">
+    <tr><th>年</th><th>できごと</th><th>原因・結果</th></tr>
+    <tr><td class="year">1853年</td><td>ペリー来航（浦賀）</td><td>黒船4隻で開国要求。幕府は翌年回答と追い返す</td></tr>
+    <tr><td class="year">1854年</td><td>日米和親条約</td><td>下田・箱館の2港開港。まだ貿易はできない</td></tr>
+    <tr><td class="year">1856年</td><td>ハリス着任（下田）</td><td>アロー号事件を例に強硬に通商条約を要求</td></tr>
+    <tr><td class="year">1858年</td><td>日米修好通商条約</td><td>井伊直弼が天皇の許可なく調印。5港開港・不平等条約</td></tr>
+    <tr><td class="year">1861年</td><td>アメリカ南北戦争勃発</td><td>アメリカは日本との貿易どころではなく→最大貿易相手はイギリスに</td></tr>
+  </table>
+</div>
+
+<!-- フッター -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button class="challenge-btn" onclick="startChallenge()">✏️ チャレンジ開始</button>
+      <button onclick="checkAnswers()">✅ 判定</button>
+      <button class="secondary" onclick="location.reload()">🔄 やり直す</button>
+      <button onclick="location.href='ch18.html'">次へ ⑱ ▶</button>
+      <button onclick="location.href='ch17_18_drill.html'">確認ドリルへ</button>
+    </div>
+    <div class="timer-info" id="timer-display">⏱ 経過時間：---</div>
+  </div>
+</div>
+
+<!-- 語句ポップアップ（黄） -->
+<div class="term-popup-overlay" id="term-popup-overlay" onclick="closeTermOutside(event)">
+  <div class="term-popup-box">
+    <span class="term-popup-close" onclick="closeTerm()">✕</span>
+    <h3 id="t-name"></h3>
+    <div id="t-body"></div>
+  </div>
+</div>
+
+<!-- 人物ポップアップ（白） -->
+<div class="popup-overlay" id="popup-overlay" onclick="closePopupOutside(event)">
+  <div class="popup-box">
+    <span class="popup-close" onclick="closePopup()">✕</span>
+    <h3 id="popup-name"></h3>
+    <div class="popup-sub" id="popup-sub"></div>
+    <div id="popup-body"></div>
+  </div>
+</div>
+
+<script>
+const answers = {
+  B:"浦賀", C:"神奈川", D:"日米和親", E:"下田", F:"箱館",
+  I:"日米修好通商", J:"治外法権", K:"関税自主権",
+  L:"生糸", M:"茶"
+};
+let startTime, timerId, selectedChip = null;
+
+function renderBank() {
+  const bank = document.getElementById('word-bank');
+  bank.style.display = "flex"; bank.innerHTML = "";
+  [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
+    const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
+    chip.onclick = () => {
+      document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip'));
+      selectedChip = chip; chip.classList.add('selected-chip');
+    };
+    bank.appendChild(chip);
+  });
+}
+function startChallenge() {
+  document.querySelectorAll('.kw-blank').forEach(b => {
+    b.textContent = "　　　"; b.classList.remove('correct');
+    b.dataset.savedOnclick = b.getAttribute('onclick') || '';
+    b.removeAttribute('onclick');
+  });
+  renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
+  timerId = setInterval(() => {
+    document.getElementById('timer-display').textContent = `⏱ 経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;
+  }, 1000);
+}
+document.querySelectorAll('.kw-blank').forEach(blank => {
+  blank.onclick = (e) => {
+    e.stopPropagation();
+    if (selectedChip) {
+      const old = blank.textContent.trim();
+      if (old && old !== '　　　') document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent===old) c.classList.remove('used'); });
+      blank.textContent = selectedChip.textContent;
+      selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
+    } else if (blank.textContent.trim() && blank.textContent.trim() !== '　　　') {
+      const txt = blank.textContent.trim();
+      document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent===txt) c.classList.remove('used'); });
+      blank.textContent = "　　　";
+    }
+  };
+});
+function checkAnswers() {
+  let ok = true;
+  document.querySelectorAll('.kw-blank').forEach(b => {
+    if (b.textContent.trim() === answers[b.dataset.id]) b.classList.add('correct');
+    else ok = false;
+    if (b.dataset.savedOnclick) b.setAttribute('onclick', b.dataset.savedOnclick);
+  });
+  if (ok) { clearInterval(timerId); alert("🎉 全問正解！すばらしい！"); }
+  else alert("まだ間違いがあります。黄色くなっていない語句を確認しよう。");
+}
+
+const termData = {
+  chigai_hoken: {
+    name: "治外法権（ちがいほうけん）／領事裁判権",
+    tags: ["不平等条約","外交用語"],
+    body: `<p>外国人が日本国内で犯罪を犯しても、<b>日本の法律で裁くことができず</b>、その外国人の国の領事が裁判を行う権利のことです。</p>
+    <p>例えば、イギリス人が日本で事件を起こしても、日本の裁判所ではなくイギリスの領事が裁判をします。つまり日本の法律が外国人に通用しない、非常に屈辱的な内容でした。</p>
+    <p>🔑 この権利を撤廃するまで日本は長年苦労しました。陸奥宗光が1894年に撤廃に成功します。</p>`
+  },
+  kanzei_jishu: {
+    name: "関税自主権（かんぜいじしゅけん）",
+    tags: ["不平等条約","貿易用語"],
+    body: `<p><b>関税</b>とは、外国から輸入するものにかける税金のことです。高い関税をかけると輸入品が高くなり、国内産業を守れます。</p>
+    <p>日米修好通商条約では<b>日本が関税率を自分で決める権利（関税自主権）がない</b>とされました。つまり安い外国製品が大量に入ってきても、日本は何もできない状態でした。</p>
+    <p>🔑 関税自主権の完全回復は1911年、小村寿太郎の交渉によって実現しました。</p>`
+  }
+};
+
+function showTerm(key) {
+  const d = termData[key]; if (!d) return;
+  document.getElementById('t-name').textContent = d.name;
+  document.getElementById('t-body').innerHTML =
+    d.tags.map(t=>`<span class="t-tag">${t}</span>`).join('') + d.body;
+  document.getElementById('term-popup-overlay').classList.add('show');
+}
+function closeTerm() { document.getElementById('term-popup-overlay').classList.remove('show'); }
+function closeTermOutside(e) { if(e.target===document.getElementById('term-popup-overlay')) closeTerm(); }
+
+const popupData = {
+  perry: {
+    name: "マシュー・ペリー",
+    sub: "1794〜1858年｜アメリカ海軍提督",
+    tags: ["黒船来航","日米和親条約","開国"],
+    body: `<p>アメリカ海軍の提督（司令官）。東インド洋艦隊司令長官として1853年、蒸気船を含む4隻の軍艦（黒船）を率いて浦賀に来航し、開国を要求しました。</p>
+    <p>空砲を撃って脅しをかける強引な手法でしたが、江戸幕府は圧倒的な軍事力の差を前に翌1854年に<b>日米和親条約</b>を結ぶことになります。</p>
+    <p>💡 「黒船」とは黒く塗られた蒸気船のことで、日本人はその巨大さと黒煙に非常に驚いたとされています。</p>`
+  },
+  harris: {
+    name: "タウンゼント・ハリス",
+    sub: "1804〜1878年｜アメリカの外交官",
+    tags: ["下田領事","日米修好通商条約","強硬交渉"],
+    body: `<p>1856年、静岡県下田にアメリカ初代総領事として着任した外交官です。日本語もわからない中、粘り強く幕府と交渉を続けました。</p>
+    <p>「アロー号事件（英仏が清を攻撃した事件）」を例に挙げ、「アメリカと条約を結べば日本への侵略を防げる」と説得しつつ、武力を背景に強硬な態度で通商条約を要求しました。</p>
+    <p>⚠️ ハリスの説得は半分脅しでしたが、井伊直弼はアメリカの軍事力を恐れ、天皇の許可なく1858年に<b>日米修好通商条約</b>を調印しました。</p>`
+  },
+  ii_naosuke: {
+    name: "井伊直弼（いい なおすけ）",
+    sub: "1815〜1860年｜江戸幕府大老",
+    tags: ["大老","日米修好通商条約","安政の大獄","桜田門外の変"],
+    body: `<p>江戸幕府の大老（最高権力者）。1858年、孝明天皇の勅許（許可）が得られないままアメリカとの<b>日米修好通商条約</b>を強行調印しました。</p>
+    <p>この強引な判断に反発した尊王攘夷派を<b>安政の大獄（1859年）</b>で大弾圧。吉田松陰らを処刑しました。しかし1860年、その報復として水戸藩の浪士たちに江戸城桜田門外で暗殺されました（<b>桜田門外の変</b>）。</p>
+    <p>⚠️ 「開国」という歴史の大きな転換点を決断した人物でしたが、その強権的なやり方が幕府崩壊のきっかけのひとつになりました。</p>`
+  }
+};
+
+function showPopup(key) {
+  const d = popupData[key]; if (!d) return;
+  document.getElementById('popup-name').textContent = d.name;
+  document.getElementById('popup-sub').textContent = d.sub;
+  document.getElementById('popup-body').innerHTML =
+    d.tags.map(t=>`<span class="popup-tag">${t}</span>`).join('') + d.body;
+  document.getElementById('popup-overlay').classList.add('show');
+}
+function closePopup() { document.getElementById('popup-overlay').classList.remove('show'); }
+function closePopupOutside(e) { if(e.target===document.getElementById('popup-overlay')) closePopup(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：⑳ 日清・日露戦争</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:2px solid #d32f2f;padding-bottom:8px;font-size:24px;color:#1a1a2e}
+  h2{margin-top:18px;margin-bottom:8px;font-size:19px;border-left:5px solid #d32f2f;padding-left:10px;color:#1a1a2e}
+  .step-bar{display:flex;gap:6px;margin:16px 0 20px 0;flex-wrap:wrap}
+  .step{flex:1;min-width:70px;text-align:center;padding:6px 4px;border-radius:999px;background-color:#ddd;font-size:11px;cursor:pointer}
+  .step.active{background-color:#ffe0e0;border:2px solid #d32f2f;font-weight:bold}
+  .step:hover:not(.active){background-color:#eee}
+  .word-bank-sticky-container{position:sticky;top:0;z-index:1001;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc}
+  .word-bank{border:2px solid #d32f2f;border-radius:8px;padding:12px;min-height:60px;display:none;flex-wrap:wrap;gap:8px;background-color:#fff}
+  .word-chip{padding:8px 12px;border:1px solid #666;border-radius:18px;background-color:#fff;cursor:pointer;font-size:14px}
+  .word-chip.used{opacity:0.3}
+  .word-chip.selected-chip{border-color:#1976d2;background-color:#e3f2fd;box-shadow:0 0 0 2px #bbdefb}
+  .section{background-color:#fff;border-radius:8px;padding:20px 24px;border:1px solid #ccc;margin-bottom:16px}
+  .blank{display:inline-block;min-width:90px;min-height:26px;border-bottom:2px solid #d32f2f;margin:0 3px;text-align:center;vertical-align:middle;cursor:pointer;font-weight:bold;color:#d32f2f}
+  .blank.correct{background-color:#ffeb3b}
+  .kw{color:#d32f2f;font-weight:bold;cursor:pointer;border-bottom:2px dotted #d32f2f}
+  .kw:hover{background-color:#fff3e0;border-radius:3px}
+  .popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);z-index:2000;justify-content:center;align-items:center}
+  .popup-overlay.show{display:flex}
+  .popup-box{background:#fff;border-radius:14px;padding:28px 32px;max-width:540px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,0.25);position:relative;max-height:80vh;overflow-y:auto}
+  .popup-box h3{margin:0 0 6px;font-size:20px;color:#d32f2f;border-bottom:2px solid #d32f2f;padding-bottom:6px}
+  .popup-box .popup-sub{font-size:13px;color:#888;margin-bottom:12px}
+  .popup-box p{margin:8px 0;font-size:15px;line-height:1.85}
+  .popup-box .popup-tag{display:inline-block;background:#d32f2f;color:#fff;border-radius:6px;padding:1px 10px;font-size:12px;margin-right:6px;margin-bottom:6px}
+  .popup-close{position:absolute;top:14px;right:18px;font-size:22px;cursor:pointer;color:#888;font-weight:bold}
+  .popup-close:hover{color:#d32f2f}
+  .cause-flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px;background:#fff8f0;border:1px solid #ffcc80;border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14px}
+  .cause-flow .cf-box{background:#fff3e0;border:1px solid #ffb74d;border-radius:8px;padding:4px 12px;font-weight:bold;color:#5d4037}
+  .cause-flow .cf-box.result{background:#fce4ec;border-color:#e91e63;color:#880e4f}
+  .cause-flow .cf-arrow{font-size:18px;color:#d32f2f;font-weight:bold}
+  .point-box{background:#e8f5e9;border-left:5px solid #388e3c;border-radius:0 8px 8px 0;padding:10px 16px;margin:10px 0;font-size:15px}
+  .point-box b{color:#2e7d32}
+  .warn-box{background:#fff3e0;border-left:5px solid #f57c00;border-radius:0 8px 8px 0;padding:10px 16px;margin:10px 0;font-size:15px}
+  .nenpyo{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .nenpyo th{background:#d32f2f;color:#fff;padding:8px 12px;text-align:left}
+  .nenpyo td{padding:8px 12px;border-bottom:1px solid #eee;vertical-align:top}
+  .nenpyo tr:nth-child(even) td{background:#fafafa}
+  .nenpyo .year{font-weight:bold;color:#d32f2f;white-space:nowrap}
+  .hyo{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .hyo th{background:#424242;color:#fff;padding:8px 12px;text-align:center}
+  .hyo td{padding:8px 12px;border:1px solid #ddd;vertical-align:top}
+  .hantai-box{background:#f3f0ff;border:1px solid #7c3aed;border-radius:10px;padding:14px 16px;margin:10px 0}
+  .hantai-box h4{color:#4c1d95;margin:0 0 8px;font-size:15px}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#007bff;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #0056b3}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button.challenge-btn{background-color:#d32f2f;box-shadow:0 3px 0 #b71c1c}
+  .timer-info{margin-top:8px;padding:4px 15px;font-size:15px;border:1px solid #007bff;background-color:#fff;display:inline-block}
+</style>
+</head>
+<body>
+<h1>⚔️ ⑳ 日清・日露戦争</h1>
+<p style="color:#555;font-size:14px;">【学習のポイント】甲午農民戦争→日清戦争→三国干渉→日露戦争→韓国併合という「東アジアをめぐる争い」の流れをつかもう。<br>🔴 赤い人物名はタップで人物紹介</p>
+
+<div class="step-bar">
+  <div class="step" onclick="location.href='ch18.html'">⑱ 幕府滅亡</div>
+  <div class="step" onclick="location.href='ch19.html'">⑲ 明治維新</div>
+  <div class="step active">⑳ 日清日露</div>
+  <div class="step" onclick="location.href='ch15_20_drill.html'">確認ドリル</div>
+  <div class="step" onclick="location.href='index.html'">← 一覧へ</div>
+</div>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】</div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- S1: 帝国主義と条約改正 -->
+<div class="section">
+  <h2>１．帝国主義と条約改正への努力</h2>
+  <p>19世紀後半、イギリス・フランス・ドイツ・ロシアの列強は、資源や市場を求めて武力でアジア・アフリカを侵略し植民地を拡大しました。このような動きを<span class="blank kw-blank" data-id="A">帝国主義</span>といいます。</p>
+
+  <p>1883年、外相<b>井上馨</b>は東京・日比谷に洋式建築の<span class="blank kw-blank" data-id="B">鹿鳴館</span>を建て舞踏会を開き、日本の文明開化をアピールする<span class="blank kw-blank" data-id="C">欧化</span>政策をとりました。しかし1886年の<b>ノルマントン号事件</b>（日本人乗客23名が見捨てられて全員水死。イギリス領事が裁判→船長無罪）で条約改正を急ぐ世論が高まり、井上馨は辞職しました。</p>
+</div>
+
+<!-- S2: 日清戦争 -->
+<div class="section">
+  <h2>２．日清戦争（1894〜1895年）</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">朝鮮で甲午農民戦争（1894）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">清・日本が朝鮮に出兵</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">日英通商航海条約（治外法権撤廃）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">日清戦争→下関条約</div>
+  </div>
+
+  <p>1894年、朝鮮で東学信徒を中心とした農民の反乱（<b>甲午農民戦争</b>）が起こり、清・日本両国が出兵しました。乱は鎮圧されましたが両軍が朝鮮に残留し、対立が高まりました。</p>
+
+  <p>同年、外相<span class="kw" onclick="showPopup('munemitsu')">陸奥宗光</span>がイギリスと<b>日英通商航海条約</b>を結び<b>治外法権の撤廃</b>に成功。国際情勢が日本に有利となり、1894年に<span class="blank kw-blank" data-id="D">日清</span>戦争が始まりました。戦争は日本の圧勝に終わり、1895年に<span class="blank kw-blank" data-id="E">下関</span>条約が結ばれました。</p>
+
+  <div class="point-box">
+    <b>🔑 下関条約の内容（3点）</b><br>
+    ① 清は朝鮮の独立を認める（朝鮮は<b>大韓帝国</b>と改名）<br>
+    ② <span class="blank kw-blank" data-id="F">遼東</span>半島・<span class="blank kw-blank" data-id="G">台湾</span>・澎湖諸島を日本に割譲<br>
+    ③ 賠償金2億テール（約3億1000万円）を支払う
+  </div>
+
+  <p>しかし直後、満州進出を狙うロシアがドイツ・フランスと組んで遼東半島の返還を日本に迫りました（<span class="blank kw-blank" data-id="H">三国干渉</span>）。日本は軍事力が不十分なため受け入れましたが、「臥薪嘗胆」（屈辱に耐えてロシアに備える）という国民感情が高まりました。</p>
+
+  <div class="warn-box">
+    ⚠️ <b>賠償金の使い道が重要！</b><br>
+    下関条約の賠償金をもとに1901年、福岡県に官営の<span class="blank kw-blank" data-id="T">八幡製鉄所</span>が建設されました。重工業が盛んになり、日本で産業革命が本格化しました。
+  </div>
+</div>
+
+<!-- S3: 日露戦争 -->
+<div class="section">
+  <h2>３．日露戦争（1904〜1905年）</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">義和団の乱（1899）→ロシアが満州に駐留</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">日英同盟締結（1902）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">日露戦争（1904）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">ポーツマス条約（1905）</div>
+  </div>
+
+  <p>1899年、清国内で外国の侵略に反発した<span class="blank kw-blank" data-id="I">義和団</span>が北京の列国公使館を包囲する乱が起きました。8ヶ国連合軍が鎮圧しましたが、その後ロシア軍が満州に駐留し朝鮮半島に南下する動きをみせました。</p>
+
+  <p>1902年、外相<span class="kw" onclick="showPopup('komura')">小村寿太郎</span>はロシアの南下を共に警戒するイギリスと<span class="blank kw-blank" data-id="J">日英同盟</span>を締結しました。</p>
+
+  <p>1904年、<span class="blank kw-blank" data-id="K">日露</span>戦争が始まりました。日本はロシアのバルチック艦隊を日本海で破り（日本海海戦）、奉天会戦でも勝利しました。しかし国力は限界に達し、ロシア国内でも革命が起こり、両国とも戦争継続が困難になりました。</p>
+
+  <div class="hantai-box">
+    <h4>🕊️ 日露戦争に反対した人々</h4>
+    <table style="font-size:14px;width:100%;border-collapse:collapse">
+      <tr><td style="padding:4px 8px"><span class="kw" onclick="showPopup('uchimura')">内村鑑三</span></td><td>キリスト教的立場から反対（「万朝報」記者）</td></tr>
+      <tr><td style="padding:4px 8px">幸徳秋水</td><td>社会主義の立場から反対（「平民新聞」）</td></tr>
+      <tr><td style="padding:4px 8px"><span class="kw" onclick="showPopup('yosano')">与謝野晶子</span></td><td>「明星」で「君死にたまふことなかれ」を発表</td></tr>
+    </table>
+  </div>
+
+  <p>1905年、アメリカの<b>セオドア＝ルーズベルト</b>大統領の仲介で<span class="blank kw-blank" data-id="L">ポーツマス</span>条約が結ばれました。</p>
+
+  <div class="point-box">
+    <b>🔑 ポーツマス条約の内容</b><br>
+    ① 韓国における日本の指導監督権を認める<br>
+    ② 遼東半島南部（旅順・大連）の租借権と東清鉄道の権利を日本に<br>
+    ③ 北緯50度以南の<span class="blank kw-blank" data-id="M">樺太</span>を日本に割譲<br>
+    ⚠️ <b>賠償金なし</b>→国民の不満が爆発し<span class="blank kw-blank" data-id="N">日比谷焼打</span>事件へ
+  </div>
+</div>
+
+<!-- S4: 韓国併合と辛亥革命 -->
+<div class="section">
+  <h2>４．韓国併合と辛亥革命</h2>
+
+  <p>1905年、日本は韓国の外交権を奪い漢城（現ソウル）に<b>統監府</b>をおき、初代統監に<span class="kw" onclick="showPopup('ito_korea')">伊藤博文</span>が就任しました。1909年に伊藤博文が安重根に暗殺されると、1910年に日本は<span class="blank kw-blank" data-id="O">韓国併合</span>を行い朝鮮を植民地としました。京城（現ソウル）に<span class="blank kw-blank" data-id="P">朝鮮総督府</span>をおきました。</p>
+
+  <p>1911年、中国革命同盟会の<span class="kw" onclick="showPopup('sun')">孫文</span>を中心に<span class="blank kw-blank" data-id="Q">辛亥革命</span>が起こり、<span class="blank kw-blank" data-id="R">孫文</span>を臨時総統とする<span class="blank kw-blank" data-id="S">中華民国</span>が建てられました。孫文は<b>三民主義</b>（民族・民権・民生）を唱えました。清の役人の袁世凱が清の皇帝を退位させ、清が滅亡しました。</p>
+</div>
+
+<!-- S5: 条約改正の完成と近代文化 -->
+<div class="section">
+  <h2>５．条約改正の完成と近代文化</h2>
+
+  <table class="hyo">
+    <tr><th>年</th><th>内容</th><th>担当外相</th></tr>
+    <tr><td>1894年</td><td><b>治外法権の撤廃</b>（日英通商航海条約）</td><td><span class="kw" onclick="showPopup('munemitsu')">陸奥宗光</span></td></tr>
+    <tr><td>1911年</td><td><b>関税自主権の回復</b></td><td><span class="kw" onclick="showPopup('komura')">小村寿太郎</span></td></tr>
+  </table>
+
+  <div class="point-box">
+    <b>💡 明治の科学者・文化人</b><br>
+    北里柴三郎（ペスト菌発見）／野口英世（黄熱病研究）／長岡半太郎（原子物理学）<br>
+    夏目漱石（「坊ちゃん」「吾輩は猫である」）／森鴎外（「舞姫」）／樋口一葉（「にごりえ」）<br>
+    横山大観（「無我」：日本画）／黒田清輝（「読書」：日本洋画）<br>
+    滝廉太郎（「荒城の月」作曲）／岡倉天心・フェノロサ（日本文化の紹介）
+  </div>
+
+  <p>1901年、栃木県の足尾銅山から流出した鉱毒による渡良瀬川流域の公害問題（<b>足尾銅山鉱毒事件</b>）で、代議士の<b>田中正造</b>が天皇に直訴しました。日本初の公害問題として重要です。</p>
+
+  <table class="nenpyo">
+    <tr><th>年</th><th>できごと</th><th>ポイント</th></tr>
+    <tr><td class="year">1894年</td><td>日清戦争・治外法権撤廃</td><td>陸奥宗光が日英通商航海条約で撤廃に成功</td></tr>
+    <tr><td class="year">1895年</td><td>下関条約・三国干渉</td><td>遼東半島・台湾割譲・賠償金2億テール</td></tr>
+    <tr><td class="year">1901年</td><td>八幡製鉄所開設・足尾銅山鉱毒事件</td><td>日清戦争賠償金で建設。田中正造が直訴</td></tr>
+    <tr><td class="year">1902年</td><td>日英同盟</td><td>小村寿太郎が締結。ロシア南下への対抗</td></tr>
+    <tr><td class="year">1904年</td><td>日露戦争</td><td>内村鑑三・幸徳秋水・与謝野晶子が反戦</td></tr>
+    <tr><td class="year">1905年</td><td>ポーツマス条約・日比谷焼打事件</td><td>賠償金なし→国民が暴動</td></tr>
+    <tr><td class="year">1910年</td><td>韓国併合</td><td>伊藤博文暗殺を口実に。朝鮮総督府設置</td></tr>
+    <tr><td class="year">1911年</td><td>辛亥革命・関税自主権回復</td><td>孫文が中華民国建設。小村寿太郎が回復達成</td></tr>
+  </table>
+</div>
+
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button class="challenge-btn" onclick="startChallenge()">✏️ チャレンジ開始</button>
+      <button onclick="checkAnswers()">✅ 判定</button>
+      <button class="secondary" onclick="location.reload()">🔄 やり直す</button>
+      <button onclick="location.href='ch19.html'">◀ ⑲ 明治維新</button>
+      <button onclick="location.href='ch15_20_drill.html'">確認ドリルへ</button>
+    </div>
+    <div class="timer-info" id="timer-display">⏱ 経過時間：---</div>
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup-overlay" onclick="closePopupOutside(event)">
+  <div class="popup-box">
+    <span class="popup-close" onclick="closePopup()">✕</span>
+    <h3 id="popup-name"></h3>
+    <div class="popup-sub" id="popup-sub"></div>
+    <div id="popup-body"></div>
+  </div>
+</div>
+
+<script>
+const answers={
+  A:"帝国主義",B:"鹿鳴館",C:"欧化",
+  D:"日清",E:"下関",F:"遼東",G:"台湾",H:"三国干渉",
+  I:"義和団",J:"日英同盟",K:"日露",L:"ポーツマス",M:"樺太",
+  N:"日比谷焼打",O:"韓国併合",P:"朝鮮総督府",
+  Q:"辛亥革命",R:"孫文",S:"中華民国",T:"八幡製鉄所"
+};
+let startTime,timerId,selectedChip=null;
+function renderBank(){
+  const bank=document.getElementById('word-bank');
+  bank.style.display="flex";bank.innerHTML="";
+  [...new Set(Object.values(answers))].sort(()=>Math.random()-0.5).forEach(word=>{
+    const chip=document.createElement('div');chip.className='word-chip';chip.textContent=word;
+    chip.onclick=()=>{document.querySelectorAll('.word-chip').forEach(c=>c.classList.remove('selected-chip'));selectedChip=chip;chip.classList.add('selected-chip')};
+    bank.appendChild(chip);
+  });
+}
+function startChallenge(){
+  document.querySelectorAll('.kw-blank').forEach(b=>{b.textContent="　　　";b.classList.remove('correct');b.dataset.savedOnclick=b.getAttribute('onclick')||'';b.removeAttribute('onclick')});
+  renderBank();startTime=Date.now();if(timerId)clearInterval(timerId);
+  timerId=setInterval(()=>{document.getElementById('timer-display').textContent=`⏱ 経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`},1000);
+}
+document.querySelectorAll('.kw-blank').forEach(blank=>{
+  blank.onclick=(e)=>{
+    e.stopPropagation();
+    if(selectedChip){
+      const old=blank.textContent.trim();
+      if(old&&old!=='　　　')document.querySelectorAll('.word-chip').forEach(c=>{if(c.textContent===old)c.classList.remove('used')});
+      blank.textContent=selectedChip.textContent;selectedChip.classList.add('used');selectedChip.classList.remove('selected-chip');selectedChip=null;
+    }else if(blank.textContent.trim()&&blank.textContent.trim()!=='　　　'){
+      const txt=blank.textContent.trim();
+      document.querySelectorAll('.word-chip').forEach(c=>{if(c.textContent===txt)c.classList.remove('used')});
+      blank.textContent="　　　";
+    }
+  };
+});
+function checkAnswers(){
+  let ok=true;
+  document.querySelectorAll('.kw-blank').forEach(b=>{
+    if(b.textContent.trim()===answers[b.dataset.id])b.classList.add('correct');
+    else ok=false;
+    if(b.dataset.savedOnclick)b.setAttribute('onclick',b.dataset.savedOnclick);
+  });
+  if(ok){clearInterval(timerId);alert("🎉 全問正解！すばらしい！")}
+  else alert("まだ間違いがあります。黄色くなっていない語句を確認しよう。");
+}
+const popupData={
+  munemitsu:{name:"陸奥宗光（むつ むねみつ）",sub:"1844〜1897年｜外務大臣",tags:["治外法権撤廃","日英通商航海条約","日清戦争"],body:`<p>和歌山藩出身の外交官・政治家。1894年、イギリスとの<b>日英通商航海条約</b>を結び、日本が1858年以来苦しんできた<b>治外法権の撤廃</b>に成功しました。これがきっかけで日清戦争への踏み切りが可能になりました。著書「蹇蹇録（けんけんろく）」に外交の記録が残ります。</p>`},
+  komura:{name:"小村寿太郎（こむら じゅたろう）",sub:"1855〜1911年｜外務大臣",tags:["日英同盟","ポーツマス条約","関税自主権回復"],body:`<p>宮崎県出身の外交官。1902年に<b>日英同盟</b>を締結し、日露戦争への外交的基盤をつくりました。1905年にはポーツマス条約（賠償金なし）の日本代表を務め、国民から激しく批判されました。1911年にはアメリカとの交渉で<b>関税自主権の完全回復</b>を達成し、幕末以来50年以上の外交的悲願を実現しました。</p>`},
+  uchimura:{name:"内村鑑三（うちむら かんぞう）",sub:"1861〜1930年｜キリスト教思想家",tags:["日露戦争反対","万朝報","非戦論"],body:`<p>札幌農学校（現・北海道大学）卒業のキリスト教徒。「万朝報」の記者として活躍し、日露戦争に対してキリスト教的平和主義の立場から<b>非戦論</b>を唱えました。幸徳秋水と並んで反戦の象徴的人物です。</p>`},
+  yosano:{name:"与謝野晶子（よさの あきこ）",sub:"1878〜1942年｜歌人",tags:["君死にたまふことなかれ","明星","日露戦争反対"],body:`<p>堺市出身の歌人。雑誌「明星」に発表した詩「<b>君死にたまふことなかれ</b>」（旅順口包囲軍の中にいる弟に宛てた反戦詩）で有名です。「ああをとうとよ、君を泣く…」という一節が知られています。与謝野鉄幹の妻。</p><p>🔑 試験では「明星」「君死にたまふことなかれ」「日露戦争反対」のセットで問われます。</p>`},
+  sun:{name:"孫文（そん ぶん）",sub:"1866〜1925年｜中国の革命家",tags:["辛亥革命","三民主義","中華民国"],body:`<p>広東省出身の革命家。中国革命同盟会を組織し、1911年に<b>辛亥革命</b>を起こして清朝を打倒、<b>中華民国</b>の初代臨時大統領となりました。<b>三民主義</b>（①民族主義＝植民支配からの解放、②民権主義＝人民主権、③民生主義＝地主制廃止）を唱えました。「中国革命の父」と呼ばれます。</p>`},
+  ito_korea:{name:"伊藤博文（いとう ひろぶみ）",sub:"1841〜1909年｜初代内閣総理大臣・初代韓国統監",tags:["韓国統監府","安重根に暗殺","韓国併合"],body:`<p>日露戦争後の1905年、韓国の外交権を奪って設置された<b>統監府</b>の初代統監に就任しました。しかし1909年、満州ハルビン駅で韓国の独立運動家<b>安重根</b>に暗殺されました。この暗殺が翌1910年の<b>韓国併合</b>の口実となりました。</p>`}
+};
+function showPopup(key){
+  const d=popupData[key];if(!d)return;
+  document.getElementById('popup-name').textContent=d.name;
+  document.getElementById('popup-sub').textContent=d.sub;
+  document.getElementById('popup-body').innerHTML=d.tags.map(t=>`<span class="popup-tag">${t}</span>`).join('')+d.body;
+  document.getElementById('popup-overlay').classList.add('show');
+}
+function closePopup(){document.getElementById('popup-overlay').classList.remove('show')}
+function closePopupOutside(e){if(e.target===document.getElementById('popup-overlay'))closePopup()}
+</script>
+</body>
+</html>

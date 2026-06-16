@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：⑮ 欧米の歴史と開国①</title>
+<style>
+  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.9; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
+  h1 { border-bottom: 2px solid #d32f2f; padding-bottom: 8px; font-size: 24px; color: #1a1a2e; }
+  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 19px; border-left: 5px solid #d32f2f; padding-left: 10px; color: #1a1a2e; }
+  .step-bar { display: flex; gap: 6px; margin: 16px 0 20px 0; flex-wrap: wrap; }
+  .step { flex: 1; min-width: 80px; text-align: center; padding: 6px 4px; border-radius: 999px; background-color: #ddd; font-size: 12px; cursor: pointer; }
+  .step.active { background-color: #ffe0e0; border: 2px solid #d32f2f; font-weight: bold; }
+  .step:hover:not(.active) { background-color: #eee; }
+  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
+  .word-bank { border: 2px solid #d32f2f; border-radius: 8px; padding: 12px; min-height: 60px; display: none; flex-wrap: wrap; gap: 8px; background-color: #fff; }
+  .word-chip { padding: 8px 12px; border: 1px solid #666; border-radius: 18px; background-color: #fff; cursor: pointer; font-size: 14px; }
+  .word-chip.used { opacity: 0.3; }
+  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
+  .section { background-color: #fff; border-radius: 8px; padding: 20px 24px; border: 1px solid #ccc; margin-bottom: 16px; }
+  .blank { display: inline-block; min-width: 90px; min-height: 26px; border-bottom: 2px solid #d32f2f; margin: 0 3px; text-align: center; vertical-align: middle; cursor: pointer; font-weight: bold; color: #d32f2f; }
+  .blank.correct { background-color: #ffeb3b; }
+
+  /* ── 人物・語句 共通ポップアップ ── */
+  .kw {
+    color: #d32f2f; font-weight: bold; cursor: pointer;
+    border-bottom: 2px dotted #d32f2f;
+    display: inline-block; position: relative;
+  }
+  .kw:hover { background-color: #fff3e0; border-radius: 3px; }
+
+  /* 語句ポップアップ（黄色テーマ） */
+  .term-popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 2000; justify-content: center; align-items: center; }
+  .term-popup-overlay.show { display: flex; }
+  .term-popup-box { background: #fffde7; border: 3px solid #f9a825; border-radius: 14px; padding: 24px 28px; max-width: 500px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,0.2); position: relative; max-height: 80vh; overflow-y: auto; }
+  .term-popup-box h3 { margin: 0 0 4px; font-size: 20px; color: #e65100; }
+  .term-popup-box .t-yomi { font-size: 13px; color: #bf360c; margin-bottom: 10px; font-weight: bold; }
+  .term-popup-box p { margin: 7px 0; font-size: 14px; line-height: 1.85; color: #333; }
+  .term-popup-box .t-tag { display: inline-block; background: #f9a825; color: #fff; border-radius: 6px; padding: 1px 9px; font-size: 11px; margin-right: 5px; margin-bottom: 5px; }
+  .term-popup-close { position: absolute; top: 12px; right: 16px; font-size: 20px; cursor: pointer; color: #999; font-weight: bold; }
+  .term-popup-close:hover { color: #e65100; }
+
+  /* 人物ポップアップ（赤テーマ） */
+  .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 2000; justify-content: center; align-items: center; }
+  .popup-overlay.show { display: flex; }
+  .popup-box { background: #fff; border-radius: 14px; padding: 28px 32px; max-width: 540px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,0.25); position: relative; max-height: 80vh; overflow-y: auto; }
+  .popup-box h3 { margin: 0 0 6px; font-size: 20px; color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 6px; }
+  .popup-box .popup-sub { font-size: 13px; color: #888; margin-bottom: 12px; }
+  .popup-box p { margin: 8px 0; font-size: 15px; line-height: 1.85; }
+  .popup-box .popup-tag { display: inline-block; background: #d32f2f; color: #fff; border-radius: 6px; padding: 1px 10px; font-size: 12px; margin-right: 6px; margin-bottom: 6px; }
+  .popup-close { position: absolute; top: 14px; right: 18px; font-size: 22px; cursor: pointer; color: #888; font-weight: bold; }
+  .popup-close:hover { color: #d32f2f; }
+
+  .cause-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; background: #fff8f0; border: 1px solid #ffcc80; border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .cause-flow .cf-box { background: #fff3e0; border: 1px solid #ffb74d; border-radius: 8px; padding: 4px 12px; font-weight: bold; color: #5d4037; }
+  .cause-flow .cf-box.result { background: #fce4ec; border-color: #e91e63; color: #880e4f; }
+  .cause-flow .cf-arrow { font-size: 18px; color: #d32f2f; font-weight: bold; }
+  .point-box { background: #e8f5e9; border-left: 5px solid #388e3c; border-radius: 0 8px 8px 0; padding: 10px 16px; margin: 10px 0; font-size: 15px; }
+  .point-box b { color: #2e7d32; }
+  .nenpyo { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 15px; }
+  .nenpyo th { background: #d32f2f; color: #fff; padding: 8px 12px; text-align: left; }
+  .nenpyo td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .nenpyo tr:nth-child(even) td { background: #fafafa; }
+  .nenpyo .year { font-weight: bold; color: #d32f2f; white-space: nowrap; }
+  .hyo { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+  .hyo th { background: #424242; color: #fff; padding: 8px 12px; text-align: center; }
+  .hyo td { padding: 8px 12px; border: 1px solid #ddd; vertical-align: top; }
+  .hyo .name-cell { font-weight: bold; color: #d32f2f; text-align: center; background: #fff8f0; }
+  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 12px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #007bff; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #0056b3; }
+  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
+  button.challenge-btn { background-color: #d32f2f; box-shadow: 0 3px 0 #b71c1c; }
+  .timer-info { margin-top: 8px; padding: 4px 15px; font-size: 15px; border: 1px solid #007bff; background-color: #fff; display: inline-block; }
+</style>
+</head>
+<body>
+
+<h1>🌍 ⑮ 欧米の歴史と開国①</h1>
+<p style="color:#555;font-size:14px;">【学習のポイント】絶対王政への不満 → 啓蒙思想 → 市民革命、という「原因→思想→行動」の流れをつかもう。<br>🔴 赤い語句はタップすると人物紹介　🟡 太字の語句はタップすると意味が出ます。</p>
+
+<div class="step-bar">
+  <div class="step active">⑮ 欧米①</div>
+  <div class="step" onclick="location.href='ch16.html'">⑯ 欧米②</div>
+  <div class="step" onclick="location.href='ch15_16_drill.html'">確認ドリル</div>
+  <div class="step" onclick="location.href='ch15_16_check.html'">過去問チェック</div>
+  <div class="step" onclick="location.href='index.html'">← 一覧へ</div>
+</div>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】</div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== S1: 絶対王政と啓蒙思想 ========== -->
+<div class="section">
+  <h2>１．絶対王政と啓蒙思想</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">16〜17世紀：国王が議会を無視して支配</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">民衆の不満が高まる</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">啓蒙思想が広まる</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">市民革命へ</div>
+  </div>
+
+  <p>
+    16世紀から17世紀にかけて、ヨーロッパでは国王が強力な軍隊をもち、議会を無視して思いのままに政治を行っていました。これを
+    <span class="blank kw-blank" data-id="A">絶対王政</span>
+    といいます。
+  </p>
+
+  <div class="point-box">
+    <b>💡 なぜ絶対王政が生まれた？</b><br>
+    十字軍の失敗で諸侯・教会の力が衰え、代わりに国王の力が強まりました。大商人と手を結び、海外進出で富を得た国王が「誰にも縛られない絶対的な権力」を持つようになりました。
+  </div>
+
+  <p>
+    18世紀になると、中世以来のキリスト教会の権威や不合理な思想を批判し、<b>理性</b>によって人間生活の改善を図ろうとする
+    <span class="blank kw-blank" data-id="B">啓蒙思想</span>
+    がおこります。代表的な思想家は次の3人です。
+  </p>
+
+  <table class="hyo">
+    <tr>
+      <th>思想家</th><th>国籍</th><th>主な主張</th><th>著書</th>
+    </tr>
+    <tr>
+      <td class="name-cell"><span class="kw" onclick="showPopup('lock')">ロック</span></td>
+      <td style="text-align:center">イギリス</td>
+      <td>
+        <span class="kw" onclick="showTerm('shakai_keiyaku')">社会契約論</span>・
+        <span class="kw" onclick="showTerm('kokumin_shuken')">国民主権</span>・
+        <span class="kw" onclick="showTerm('teiko_ken')">抵抗権</span>
+      </td>
+      <td>「市民政府二論」</td>
+    </tr>
+    <tr>
+      <td class="name-cell"><span class="kw" onclick="showPopup('rousseau')">ルソー</span></td>
+      <td style="text-align:center">フランス</td>
+      <td>
+        <span class="kw" onclick="showTerm('shakai_keiyaku')">社会契約論</span>・
+        <span class="kw" onclick="showTerm('jinmin_shuken')">人民主権</span>
+        （人は生まれながら自由で平等な権利を持つ）
+      </td>
+      <td>「社会契約論」</td>
+    </tr>
+    <tr>
+      <td class="name-cell"><span class="kw" onclick="showPopup('montesquieu')">モンテスキュー</span></td>
+      <td style="text-align:center">フランス</td>
+      <td>
+        独裁を防ぐために
+        <span class="kw" onclick="showTerm('sankenbunritsu')">三権分立</span>
+        が必要（司法・行政・立法）
+      </td>
+      <td>「法の精神」</td>
+    </tr>
+  </table>
+
+  <div class="point-box">
+    <b>🔑 ここが試験に出る！</b><br>
+    ロックとルソーはともに「社会契約論」を主張しましたが、<br>
+    ロック＝「<b>国民主権・抵抗権</b>」／ルソー＝「<b>人民主権</b>」と区別して覚えましょう。
+  </div>
+</div>
+
+<!-- ========== S2: イギリス市民革命 ========== -->
+<div class="section">
+  <h2>２．イギリスの市民革命</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">国王が議会を無視・増税</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">ピューリタン革命（1642）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">クロムウェルの独裁→王政復古</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">名誉革命（1688）→立憲君主制へ</div>
+  </div>
+
+  <p><b>① <span class="kw" onclick="showTerm('puritan_kakumei')">ピューリタン（清教徒）革命</span> ── 1642年</b></p>
+  <p>
+    国王と議会が対立し、
+    <span class="kw" onclick="showPopup('cromwell')">クロムウェル</span>
+    の指導で<b>議会軍が勝利</b>。国王は処刑され、人々が最高決定権をもつ
+    <span class="blank kw-blank" data-id="C">共和制</span>
+    となりました。
+    ※議会派にピューリタン（清教徒）が多かったことから「ピューリタン革命」と呼ばれます。
+  </p>
+  <div class="point-box">
+    <b>⚠️ その後の混乱</b><br>
+    クロムウェルは共和制を守るはずが独裁政治を行い、民衆の反感を買いました。クロムウェルの死後、再び王政に戻ります。しかしその国王も議会を無視したため…
+  </div>
+
+  <p><b>② <span class="kw" onclick="showTerm('meiyo_kakumei')">名誉革命</span> ── 1688年</b></p>
+  <p>
+    再び革命がおこりましたが、今度は国王が<b>逃亡</b>し、<u>血が一滴も流れなかった</u>ため
+    <span class="blank kw-blank" data-id="D">名誉</span>
+    革命と呼ばれます。
+    新しい国王は議会の承認なしに法律や課税を決めることができないという
+    <span class="blank kw-blank" data-id="E" onclick="showTerm('kenri_shoten')">権利の章典</span>
+    を認めました。
+    これ以降、憲法に従って国王が政治を行う
+    <span class="blank kw-blank" data-id="F" onclick="showTerm('rikkenkun')">立憲君主制</span>
+    が確立しました。
+  </p>
+
+  <table class="nenpyo">
+    <tr><th>年</th><th>できごと</th><th>結果・意味</th></tr>
+    <tr><td class="year">1642年</td><td>ピューリタン革命</td><td>国王処刑・共和制に。クロムウェルが指導</td></tr>
+    <tr><td class="year">1649年</td><td>クロムウェルが独裁へ</td><td>共和制のはずが独裁→民衆の反感</td></tr>
+    <tr><td class="year">1660年</td><td>王政復古</td><td>クロムウェル死後、再び国王制に戻る</td></tr>
+    <tr><td class="year">1688年</td><td>名誉革命</td><td>血が流れない革命。国王が逃亡</td></tr>
+    <tr><td class="year">1689年</td><td>権利の章典</td><td>「国王は議会の承認なく課税できない」→立憲君主制</td></tr>
+  </table>
+</div>
+
+<!-- ========== S3: アメリカ独立 ========== -->
+<div class="section">
+  <h2>３．アメリカの独立</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">イギリスがフランスと戦争（出費増大）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">アメリカ13州に重税を課す</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">「代表なくして課税なし！」反発</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">独立戦争（1775）→独立宣言（1776）</div>
+  </div>
+
+  <p>
+    イギリスはフランスとの戦争で費用がかさみ、植民地であったアメリカ東部の
+    <span class="blank kw-blank" data-id="G">13</span>
+    州に増税しました。東部13州の人々は「自分たちが選んだ代表者もいないのに税だけ取られるのはおかしい」と反発し、
+    1775年に
+    <span class="blank kw-blank" data-id="H">アメリカ独立</span>
+    戦争がおきました。
+  </p>
+
+  <p>
+    1776年、<b>自由・平等・幸福の追求</b>を人間の持つ権利とした
+    <span class="blank kw-blank" data-id="I" onclick="showTerm('dokuritsu_sengen')">独立宣言</span>
+    が発表されました。
+    フランスはイギリスと戦争中だったため、アメリカの独立を<b>援助</b>しました。結果、アメリカはイギリスに勝利。
+  </p>
+
+  <p>
+    1791年、人民主権・連邦制・
+    <span class="kw" onclick="showTerm('sankenbunritsu')">三権分立</span>
+    を柱とする民主的な
+    <span class="blank kw-blank" data-id="J" onclick="showTerm('gasshukoku_kenpo')">合衆国憲法</span>
+    が施行され、初代大統領に
+    <span class="kw" onclick="showPopup('washington')">ワシントン</span>
+    が就任しました。
+  </p>
+
+  <div class="point-box">
+    <b>💡 啓蒙思想との関係</b><br>
+    独立宣言はロックの「自然権・抵抗権」、モンテスキューの「三権分立」など啓蒙思想の影響を強く受けています。思想が現実の政治制度になった初めての例です。
+  </div>
+</div>
+
+<!-- ========== S4: フランス革命 ========== -->
+<div class="section">
+  <h2>４．フランス革命</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">三つの身分制度（聖職者・貴族・平民）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">重税は平民だけ</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">バスチーユ牢獄を打ち破る（1789）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">人権宣言 → ナポレオン台頭</div>
+  </div>
+
+  <p>
+    フランスでは
+    <span class="blank kw-blank" data-id="K">第一</span>身分（聖職者）・<span class="blank kw-blank" data-id="L">第二</span>身分（貴族）・<span class="blank kw-blank" data-id="M">第三</span>身分（平民）
+    という身分制度がありました。<b>重税は平民だけ</b>が負担する不公平な構造でした。
+  </p>
+
+  <p>
+    1789年、重税に苦しむ平民が政治犯を閉じ込める
+    <span class="blank kw-blank" data-id="N">バスチーユ</span>
+    牢獄を打ち破り、
+    <span class="blank kw-blank" data-id="O" onclick="showTerm('france_kakumei')">フランス革命</span>
+    がおきました。国王
+    <span class="kw" onclick="showPopup('louis16')">ルイ16世</span>
+    は処刑され、
+    <span class="kw" onclick="showTerm('kyowase')">共和制</span>
+    となりました。
+  </p>
+
+  <p>
+    同年、すべての人の<b>平等・自由・人民主権</b>などを認めた
+    <span class="blank kw-blank" data-id="P" onclick="showTerm('jinken_sengen')">フランス人権宣言</span>
+    が発表されました。
+  </p>
+
+  <div class="point-box">
+    <b>⚠️ 革命後の混乱とナポレオンの登場</b><br>
+    革命の影響が自国に及ぶことを恐れたイギリスを中心に各国がフランスを包囲。混乱の中、エジプト遠征から帰国した
+    <span class="kw" onclick="showPopup('napoleon')">ナポレオン</span>
+    が政権を掌握。ヨーロッパを征服しましたが、ロシア遠征に失敗し、<b>セントヘレナ島</b>に流されました。
+  </div>
+
+  <table class="nenpyo">
+    <tr><th>年</th><th>できごと</th><th>意味</th></tr>
+    <tr><td class="year">1789年</td><td>フランス革命・バスチーユ牢獄占領</td><td>平民が立ち上がり国王の権力を打ち倒した</td></tr>
+    <tr><td class="year">1789年</td><td>フランス人権宣言</td><td>平等・自由・人民主権を宣言</td></tr>
+    <tr><td class="year">1799年</td><td>ナポレオンが政権掌握</td><td>革命の混乱を収拾・ヨーロッパ征服へ</td></tr>
+    <tr><td class="year">1804年</td><td>ナポレオン1世、皇帝即位</td><td>選挙で皇帝に。革命の理念と矛盾する皮肉</td></tr>
+    <tr><td class="year">1812年</td><td>ロシア遠征失敗・失脚</td><td>セントヘレナ島に流され没</td></tr>
+  </table>
+
+  <div class="point-box" style="background:#fff3e0;border-left-color:#f57c00;">
+    <b>🌏 日本との同時代比較　ここが重要ポイント！</b><br>
+    フランス革命が起きた<b>1789年</b>、日本では江戸幕府の老中・<b>松平定信</b>が<b>寛政の改革（1787〜1793年）</b>を行っていました。<br><br>
+    <span style="display:inline-block;background:#f57c00;color:#fff;border-radius:6px;padding:2px 10px;font-size:13px;margin-bottom:6px;">フランス</span>　1789年　バスチーユ牢獄襲撃 → フランス革命<br>
+    <span style="display:inline-block;background:#1a3a5c;color:#fff;border-radius:6px;padding:2px 10px;font-size:13px;margin-bottom:6px;">日　本</span>　1787〜1793年　寛政の改革（松平定信）<br><br>
+    ヨーロッパで市民が国王の権力を打ち倒していたまさにその頃、日本は幕府による厳しい統制が続いていました。この「同時代のずれ」が、のちに欧米列強とのあつれきにつながっていきます。<br>
+    <span style="font-size:13px;color:#795548;">※ 寛政の改革は「田沼意次の政治（わいろ政治）」への反省から行われた質素・倹約・学問奨励を中心とした改革です。</span>
+  </div>
+</div>
+
+<!-- フッター -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button class="challenge-btn" onclick="startChallenge()">✏️ チャレンジ開始</button>
+      <button onclick="checkAnswers()">✅ 判定</button>
+      <button class="secondary" onclick="location.reload()">🔄 やり直す</button>
+      <button onclick="location.href='ch16.html'">次へ ⑯ ▶</button>
+      <button onclick="location.href='ch15_16_drill.html'">確認ドリルへ</button>
+    </div>
+    <div class="timer-info" id="timer-display">⏱ 経過時間：---</div>
+  </div>
+</div>
+
+<!-- 語句ポップアップ（黄色） -->
+<div class="term-popup-overlay" id="term-popup-overlay" onclick="closeTermOutside(event)">
+  <div class="term-popup-box">
+    <span class="term-popup-close" onclick="closeTerm()">✕</span>
+    <h3 id="t-name"></h3>
+    <div class="t-yomi" id="t-yomi"></div>
+    <div id="t-body"></div>
+  </div>
+</div>
+
+<!-- 人物ポップアップ（白） -->
+<div class="popup-overlay" id="popup-overlay" onclick="closePopupOutside(event)">
+  <div class="popup-box">
+    <span class="popup-close" onclick="closePopup()">✕</span>
+    <h3 id="popup-name"></h3>
+    <div class="popup-sub" id="popup-sub"></div>
+    <div id="popup-body"></div>
+  </div>
+</div>
+
+<script>
+/* ===== 穴埋め ===== */
+const answers = {
+  A:"絶対王政", B:"啓蒙思想", C:"共和制", D:"名誉", E:"権利の章典",
+  F:"立憲君主制", G:"13", H:"アメリカ独立", I:"独立宣言",
+  J:"合衆国憲法", K:"第一", L:"第二", M:"第三",
+  N:"バスチーユ", O:"フランス革命", P:"フランス人権宣言"
+};
+let startTime, timerId, selectedChip = null;
+
+function renderBank() {
+  const bank = document.getElementById('word-bank');
+  bank.style.display = "flex"; bank.innerHTML = "";
+  [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
+    const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
+    chip.onclick = () => {
+      document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip'));
+      selectedChip = chip; chip.classList.add('selected-chip');
+    };
+    bank.appendChild(chip);
+  });
+}
+function startChallenge() {
+  document.querySelectorAll('.kw-blank').forEach(b => {
+    b.textContent = "　　　";
+    b.classList.remove('correct');
+    b.dataset.savedOnclick = b.getAttribute('onclick') || '';
+    b.removeAttribute('onclick');
+  });
+  renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
+  timerId = setInterval(() => {
+    document.getElementById('timer-display').textContent = `⏱ 経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;
+  }, 1000);
+}
+document.querySelectorAll('.kw-blank').forEach(blank => {
+  blank.onclick = (e) => {
+    e.stopPropagation();
+    if (selectedChip) {
+      const old = blank.textContent.trim();
+      if (old && old !== '　　　') document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent===old) c.classList.remove('used'); });
+      blank.textContent = selectedChip.textContent;
+      selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
+    } else if (blank.textContent.trim() && blank.textContent.trim() !== '　　　') {
+      const txt = blank.textContent.trim();
+      document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent===txt) c.classList.remove('used'); });
+      blank.textContent = "　　　";
+    }
+  };
+});
+function checkAnswers() {
+  let ok = true;
+  document.querySelectorAll('.kw-blank').forEach(b => {
+    if (b.textContent.trim() === answers[b.dataset.id]) b.classList.add('correct');
+    else ok = false;
+    if (b.dataset.savedOnclick) b.setAttribute('onclick', b.dataset.savedOnclick);
+  });
+  if (ok) { clearInterval(timerId); alert("🎉 全問正解！すばらしい！"); }
+  else alert("まだ間違いがあります。黄色くなっていない語句を確認しよう。");
+}
+
+/* ===== 語句ポップアップデータ ===== */
+const termData = {
+  zettai_osei: {
+    name: "絶対王政", yomi: "ぜったいおうせい",
+    tags: ["政治のしくみ","16〜17世紀","ヨーロッパ"],
+    body: `<p>国王が議会や貴族・教会の制限を受けず、<b>「絶対的な」権力</b>を持って国を支配した政治のしくみです。</p>
+    <p>「絶対」というのは「誰にも縛られない」という意味。国王の命令がそのまま法律になり、国民は従うしかありませんでした。</p>
+    <p>🔑 代表例：フランスのルイ14世（「朕は国家なり」という言葉で有名）</p>`
+  },
+  keimo_shiso: {
+    name: "啓蒙思想", yomi: "けいもうしそう",
+    tags: ["思想","18世紀","理性"],
+    body: `<p>「<b>啓蒙</b>」とは「無知をひらいて、正しい知識を与える」という意味。</p>
+    <p>18世紀のヨーロッパで広まった、<b>理性（じぶんで考える力）</b>を使って社会をよりよくしようという考え方です。</p>
+    <p>中世以来の「教会が言うことが正しい」「国王の言葉は絶対」という考えを批判し、人間が理性で判断することが大切だと説きました。</p>
+    <p>🔑 代表的な思想家：ロック・ルソー・モンテスキュー</p>`
+  },
+  shakai_keiyaku: {
+    name: "社会契約論", yomi: "しゃかいけいやくろん",
+    tags: ["思想","ロック","ルソー"],
+    body: `<p>「社会（国家）は、人々がたがいに<b>契約</b>して作ったものだ」という考え方です。</p>
+    <p>つまり「国王が神から権力を与えられた」のではなく、<b>「国民が合意して政府に権力を預けた」</b>のだという発想の転換です。</p>
+    <p>だから、国民の意思に反する政府は「契約違反」として倒してよい（＝抵抗権）、という考えにつながります。</p>`
+  },
+  kokumin_shuken: {
+    name: "国民主権", yomi: "こくみんしゅけん",
+    tags: ["政治用語","ロック"],
+    body: `<p>「主権（国の最高決定権）は<b>国民にある</b>」という考え方です。</p>
+    <p>国王や貴族ではなく、国民が政治の主役だという発想です。ロックがこれを主張しました。</p>
+    <p>💡 日本国憲法でも「主権は国民にある」と定められています（第１条）。</p>`
+  },
+  teiko_ken: {
+    name: "抵抗権", yomi: "ていこうけん",
+    tags: ["政治用語","ロック"],
+    body: `<p>「国民の意思に反する政治を行う政府は、<b>倒してもよい</b>」という権利です。</p>
+    <p>ロックが主張しました。「国民が政府に権力を預けたのだから、その信頼を裏切る政府には抵抗できる」という考えです。</p>
+    <p>⚠️ この考えがアメリカ独立宣言（1776年）に直接影響を与えました。</p>`
+  },
+  jinmin_shuken: {
+    name: "人民主権", yomi: "じんみんしゅけん",
+    tags: ["思想","ルソー"],
+    body: `<p>「主権は<b>人民（すべての人）</b>にある」というルソーの考えです。</p>
+    <p>ロックの「国民主権」と似ていますが、ルソーはより広く「すべての人が生まれながらに自由で平等な権利を持つ」と主張しました。</p>
+    <p>フランス革命の「自由・平等・博愛」という理念の根本となっています。</p>`
+  },
+  sankenbunritsu: {
+    name: "三権分立", yomi: "さんけんぶんりつ",
+    tags: ["政治のしくみ","モンテスキュー"],
+    body: `<p>国の権力を<b>司法・行政・立法</b>の３つに分け、互いに監視させるしくみです。</p>
+    <ul style="font-size:14px;margin:8px 0;padding-left:20px;line-height:2">
+      <li><b>立法権</b>（りっぽうけん）＝法律を作る → 国会</li>
+      <li><b>行政権</b>（ぎょうせいけん）＝法律を実行する → 内閣</li>
+      <li><b>司法権</b>（しほうけん）＝法律に基づき裁く → 裁判所</li>
+    </ul>
+    <p>一か所に権力が集まると独裁になるため、モンテスキューが「分けることが大切」と説きました。日本・アメリカ・フランスなど現代のほぼすべての民主主義国家が採用しています。</p>`
+  },
+  kyowase: {
+    name: "共和制", yomi: "きょうわせい",
+    tags: ["政治のしくみ"],
+    body: `<p>国王・皇帝などの君主を置かず、<b>国民や国民が選んだ代表者が主権を持つ</b>政治のしくみです。</p>
+    <p>「共和」とは「みんなで治める」という意味。アメリカ・フランスなどが共和制の代表例です。</p>
+    <p>対義語は「君主制」（国王がいる制度）。王様がいても議会が中心なら「立憲君主制」と呼びます。</p>`
+  },
+  kenri_shoten: {
+    name: "権利の章典", yomi: "けんりのしょうてん",
+    tags: ["歴史文書","1689年","イギリス"],
+    body: `<p>1689年、名誉革命の後にイギリス議会が制定した文書です。</p>
+    <p>主な内容：<b>「国王は議会の承認なしに法律を停止したり、課税したりできない」</b>など、国王の権力を憲法（法律）で制限することを定めました。</p>
+    <p>これにより国王が好き勝手に政治できなくなり、イギリスは<b>立憲君主制</b>の国になりました。議会制民主主義の出発点として非常に重要な文書です。</p>`
+  },
+  rikkenkun: {
+    name: "立憲君主制", yomi: "りっけんくんしゅせい",
+    tags: ["政治のしくみ","イギリス","日本"],
+    body: `<p>国王（君主）がいる国でも、<b>憲法（法律）に従って</b>政治を行う制度です。</p>
+    <p>国王の権力を憲法で制限するため、実際の政治は議会や内閣が行います。</p>
+    <p>💡 日本も立憲君主制の国です。天皇陛下はいますが、実際の政治は内閣・国会が行います。イギリス・スウェーデン・オランダなども同じです。</p>`
+  },
+  dokuritsu_sengen: {
+    name: "独立宣言", yomi: "どくりつせんげん",
+    tags: ["歴史文書","1776年","アメリカ"],
+    body: `<p>1776年7月4日、アメリカがイギリスからの独立を宣言した文書です。</p>
+    <p>「<b>すべての人間は平等に作られている。生命・自由・幸福の追求は奪うことのできない権利だ</b>」という有名な一節があります。</p>
+    <p>ロックの「自然権」やルソーの「自由・平等」という啓蒙思想の影響を強く受けています。</p>
+    <p>💡 7月4日はアメリカの「独立記念日」（Independence Day）です。</p>`
+  },
+  gasshukoku_kenpo: {
+    name: "合衆国憲法", yomi: "がっしゅうこくけんぽう",
+    tags: ["歴史文書","1791年","アメリカ"],
+    body: `<p>1791年に施行されたアメリカ合衆国の憲法です。</p>
+    <p>主な柱：<b>人民主権・連邦制・三権分立</b>の３点です。</p>
+    <p>モンテスキューの「三権分立」の考えを世界で初めて本格的に憲法に取り入れました。現在の世界の憲法の手本となっています。</p>`
+  },
+  puritan_kakumei: {
+    name: "ピューリタン革命", yomi: "ピューリタンかくめい",
+    tags: ["歴史事件","1642年","イギリス"],
+    body: `<p>1642年、イギリスで国王と議会が対立し起きた内戦・革命です。</p>
+    <p>「ピューリタン（清教徒）」とは、カトリック的な儀式を嫌い、聖書に忠実な信仰を求めたキリスト教（プロテスタント）の一派です。議会側にこのピューリタンが多かったため「ピューリタン革命」と呼ばれます。</p>
+    <p>クロムウェルの指導で議会軍が国王軍を破り、<b>国王チャールズ１世が処刑</b>されました。ヨーロッパで初めて国王が処刑された歴史的な事件です。</p>`
+  },
+  meiyo_kakumei: {
+    name: "名誉革命", yomi: "めいよかくめい",
+    tags: ["歴史事件","1688年","イギリス"],
+    body: `<p>1688年、イギリスで議会が国王ジェームズ２世を追放し、新しい国王を迎えた革命です。</p>
+    <p>「名誉」とは「血が流れなかった（＝名誉ある）」という意味です。国王が逃亡しただけで戦闘は起きませんでした。</p>
+    <p>翌1689年に<b>権利の章典</b>が制定され、議会を中心とした<b>立憲君主制</b>が確立しました。</p>
+    <p>🔑 ロックはこの名誉革命を「社会契約論」で正当化しました。</p>`
+  },
+  france_kakumei: {
+    name: "フランス革命", yomi: "フランスかくめい",
+    tags: ["歴史事件","1789年","フランス"],
+    body: `<p>1789年、フランスで重税に苦しむ平民（第三身分）が立ち上がり、旧体制（アンシャン・レジーム）を打ち倒した革命です。</p>
+    <p>バスチーユ牢獄の占領（7月14日）が革命の始まりとされ、この日はフランスの<b>革命記念日（パリ祭）</b>として今も祝われています。</p>
+    <p>「自由・平等・博愛」という理念を掲げ、<b>フランス人権宣言</b>が発表されました。この革命はヨーロッパ全体に大きな影響を与えました。</p>`
+  },
+  jinken_sengen: {
+    name: "フランス人権宣言", yomi: "フランスじんけんせんげん",
+    tags: ["歴史文書","1789年","フランス"],
+    body: `<p>1789年のフランス革命の中で発表された、人間の権利を宣言した文書です。</p>
+    <p>主な内容：<b>「すべての人間は、生まれながらにして自由であり、権利において平等である」</b></p>
+    <p>自由・平等・人民主権・言論の自由・所有権の保護などを宣言しており、現代の人権思想の原点となっています。</p>
+    <p>ルソーの「人民主権」やロックの「自然権」の影響を強く受けています。</p>`
+  }
+};
+
+function showTerm(key) {
+  const d = termData[key]; if (!d) return;
+  document.getElementById('t-name').textContent = d.name;
+  document.getElementById('t-yomi').textContent = '読み方：' + d.yomi;
+  document.getElementById('t-body').innerHTML =
+    d.tags.map(t=>`<span class="t-tag">${t}</span>`).join('') + d.body;
+  document.getElementById('term-popup-overlay').classList.add('show');
+}
+function closeTerm() { document.getElementById('term-popup-overlay').classList.remove('show'); }
+function closeTermOutside(e) { if(e.target===document.getElementById('term-popup-overlay')) closeTerm(); }
+
+/* ===== 人物ポップアップ ===== */
+const popupData = {
+  lock: {
+    name: "ジョン・ロック",
+    sub: "1632〜1704年｜イギリスの哲学者・政治思想家",
+    tags: ["啓蒙思想","社会契約論","国民主権","抵抗権"],
+    body: `<p>イギリス生まれの哲学者。著書<b>「市民政府二論（統治二論）」</b>で、政治権力は国民との契約によって成り立つという社会契約論を展開しました。</p>
+    <p>「政治の権力は国民にある（<b>国民主権</b>）」「国民の意思に反する政府は倒してもよい（<b>抵抗権</b>）」という考えは、その後の名誉革命を正当化し、アメリカ独立宣言にも大きな影響を与えました。</p>
+    <p>🔑 試験では「<b>抵抗権</b>」「<b>国民主権</b>」がロックのキーワードです。</p>`
+  },
+  rousseau: {
+    name: "ジャン＝ジャック・ルソー",
+    sub: "1712〜1778年｜フランスの哲学者・思想家",
+    tags: ["啓蒙思想","社会契約論","人民主権","自由・平等"],
+    body: `<p>フランスで活躍した啓蒙思想家。著書<b>「社会契約論」</b>で「人は生まれながら自由で、平等な権利を持つ」という人民主権を主張しました。</p>
+    <p>国民は税金を納め、政府は国民の自由を守るという相互契約があると説きました。この考えはフランス革命の精神的な柱となりました。</p>
+    <p>⚠️ ロックとの違い：ロックは「<b>国民主権</b>」、ルソーは「<b>人民主権</b>」。どちらも社会契約論ですが微妙に異なります。</p>`
+  },
+  montesquieu: {
+    name: "モンテスキュー",
+    sub: "1689〜1755年｜フランスの法学者・思想家",
+    tags: ["啓蒙思想","三権分立","法の精神"],
+    body: `<p>フランスの法学者・思想家。著書<b>「法の精神」</b>で、権力の独裁を防ぐため司法・行政・立法の<b>三権分立</b>が必要と主張しました。</p>
+    <p>この考えはアメリカ合衆国憲法の骨格となり、現代の民主主義国家の政治制度の基礎になっています。日本の憲法にも三権分立は取り入れられています。</p>
+    <p>🔑 試験では「<b>三権分立</b>」「法の精神」がモンテスキューのキーワードです。</p>`
+  },
+  cromwell: {
+    name: "オリバー・クロムウェル",
+    sub: "1599〜1658年｜イギリスの軍人・政治家",
+    tags: ["ピューリタン革命","議会派指導者","独裁政治"],
+    body: `<p>イギリスのピューリタン革命を指導した軍人・政治家。議会派の指揮官として国王軍を打ち破り、<b>国王チャールズ1世を処刑</b>して共和制を樹立しました。</p>
+    <p>しかし共和制を守るはずが、次第に独裁的な政治を行うようになりました。アイルランドを武力制圧するなど強権的な面もあり、民衆の反感を買います。</p>
+    <p>⚠️ 歴史の皮肉：「自由のための革命」を起こした人物が、結局「独裁者」になってしまった例として重要です。</p>`
+  },
+  washington: {
+    name: "ジョージ・ワシントン",
+    sub: "1732〜1799年｜アメリカ合衆国初代大統領",
+    tags: ["独立戦争指導者","初代大統領","建国の父"],
+    body: `<p>アメリカ独立戦争を率いた軍人・政治家で、アメリカ合衆国の<b>初代大統領（1789〜1797年）</b>です。「建国の父」と呼ばれ、アメリカ人から最も尊敬される人物のひとりです。</p>
+    <p>3期目を望む声がありましたが自ら2期で退き、「大統領の任期は2期まで」という慣例を作りました。</p>
+    <p>⚠️ 混同注意：リンカン（第16代大統領）とは別人。ワシントン＝初代、リンカン＝南北戦争・奴隷解放で区別しましょう。</p>`
+  },
+  louis16: {
+    name: "ルイ16世",
+    sub: "1754〜1793年｜フランス国王",
+    tags: ["フランス革命","処刑された国王","絶対王政"],
+    body: `<p>フランス・ブルボン朝の国王。財政難と重税問題を解決できず、民衆の怒りを招きました。</p>
+    <p>1789年のフランス革命でバスチーユ牢獄が占領されたあと、1792年に廃位。1793年1月に<b>ギロチンで処刑</b>されました。妻はオーストリア出身の<b>マリー・アントワネット</b>です（同年10月処刑）。</p>
+    <p>💡 フランスで「国王が処刑される」という衝撃がヨーロッパ各国を震え上がらせ、各国がフランスを包囲する原因になりました。</p>`
+  },
+  napoleon: {
+    name: "ナポレオン・ボナパルト",
+    sub: "1769〜1821年｜フランス皇帝・軍人",
+    tags: ["フランス皇帝","ナポレオン法典","ロシア遠征失敗"],
+    body: `<p>コルシカ島生まれの軍人。フランス革命後の混乱を収拾し、1804年に<b>国民投票で皇帝（ナポレオン1世）</b>に即位。ヨーロッパのほぼ全土を制覇しました。</p>
+    <p><b>ナポレオン法典</b>（民法典）を制定し、「法の下の平等」「私有財産の保護」など革命の理念を法律として整備。現在のヨーロッパの法律の基礎にもなっています。</p>
+    <p>1812年のロシア遠征は冬将軍と補給不足で大失敗。セントヘレナ島に流され、1821年に亡くなりました。</p>`
+  }
+};
+
+function showPopup(key) {
+  const d = popupData[key]; if (!d) return;
+  document.getElementById('popup-name').textContent = d.name;
+  document.getElementById('popup-sub').textContent = d.sub;
+  document.getElementById('popup-body').innerHTML =
+    d.tags.map(t=>`<span class="popup-tag">${t}</span>`).join('') + d.body;
+  document.getElementById('popup-overlay').classList.add('show');
+}
+function closePopup() { document.getElementById('popup-overlay').classList.remove('show'); }
+function closePopupOutside(e) { if(e.target===document.getElementById('popup-overlay')) closePopup(); }
+</script>
+</body>
+</html>

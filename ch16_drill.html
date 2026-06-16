@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：⑯ 欧米の歴史と開国② 確認ドリル</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:120px}
+  h1{border-bottom:3px solid #3d2b00;padding-bottom:8px;font-size:22px;color:#2c1800}
+  .step-bar{display:flex;gap:6px;margin:14px 0 18px 0;flex-wrap:wrap}
+  .step{flex:1;min-width:70px;text-align:center;padding:6px 4px;border-radius:999px;background-color:#ddd;font-size:11px;cursor:pointer}
+  .step.active{background-color:#ffe0e0;border:2px solid #3d2b00;font-weight:bold}
+  .step:hover:not(.active){background-color:#eee}
+  .score-bar{background:#fff;border:2px solid #3d2b00;border-radius:10px;padding:10px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .score-label{font-weight:bold;color:#3d2b00;font-size:15px}
+  .score-val{font-size:22px;font-weight:bold;color:#a0522d}
+  .progress-wrap{flex:1;min-width:140px;background:#eee;border-radius:20px;height:12px;overflow:hidden}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#a0522d,#d4831a);border-radius:20px;transition:width 0.4s}
+  .reset-btn{background:#6c757d;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:bold;cursor:pointer}
+  .q-card{background:#fff;border-radius:10px;border:2px solid #ddd;padding:18px 20px;margin-bottom:12px;transition:border-color 0.2s}
+  .q-card.answered-ok{border-color:#27ae60}
+  .q-card.answered-ng{border-color:#e74c3c}
+  .q-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .q-num{background:#3d2b00;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:bold}
+  .q-type-badge{border-radius:6px;padding:2px 9px;font-size:11px;font-weight:bold}
+  .badge-4{background:#1565c0;color:#fff}
+  .badge-ox{background:#6a1b9a;color:#fff}
+  .q-text{font-size:15px;line-height:2;margin-bottom:12px;color:#222}
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:600px){.choices{grid-template-columns:1fr}}
+  .choice-btn{background:#f5f0e8;border:2px solid #c9b89a;border-radius:8px;padding:9px 13px;font-size:14px;cursor:pointer;text-align:left;transition:0.15s;line-height:1.6}
+  .choice-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .choice-btn:disabled{cursor:default}
+  .choice-btn.selected-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35;font-weight:bold}
+  .choice-btn.selected-ng{background:#fadbd8;border-color:#e74c3c;color:#7b241c;font-weight:bold}
+  .choice-btn.reveal-ok{background:#d5f5e3;border-color:#27ae60;color:#1a5c35}
+  .ox-wrap{display:flex;gap:14px;margin-top:4px}
+  .ox-btn{flex:1;padding:12px;border-radius:10px;border:2px solid #c9b89a;background:#f5f0e8;font-size:26px;cursor:pointer;transition:0.15s;text-align:center}
+  .ox-btn:hover:not(:disabled){background:#fff3e0;border-color:#a0522d}
+  .ox-btn:disabled{cursor:default}
+  .ox-btn.selected-ok{background:#d5f5e3;border-color:#27ae60}
+  .ox-btn.selected-ng{background:#fadbd8;border-color:#e74c3c}
+  .feedback{display:none;margin-top:9px;padding:9px 13px;border-radius:8px;font-size:14px;line-height:1.85}
+  .feedback.ok{background:#eafaf1;border-left:4px solid #27ae60;color:#1a5c35}
+  .feedback.ng{background:#fdf3f0;border-left:4px solid #e74c3c;color:#7b241c}
+  .feedback.show{display:block}
+  .finish-banner{display:none;background:linear-gradient(135deg,#3d2b00,#a0522d);color:#fff;border-radius:12px;padding:26px;text-align:center;margin-top:26px}
+  .finish-banner h2{margin:0 0 8px;font-size:22px}
+  .finish-score{font-size:40px;font-weight:bold;color:#ffd700;margin:8px 0}
+  .finish-msg{font-size:15px;margin-bottom:14px}
+  .finish-btn{background:#fff;color:#3d2b00;border:none;border-radius:8px;padding:10px 22px;font-size:14px;font-weight:bold;cursor:pointer;margin:4px}
+  .finish-btn:hover{background:#fff3e0}
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:10px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:9px 18px;border-radius:8px;border:none;background-color:#3d2b00;color:#fff;cursor:pointer;font-size:14px;font-weight:bold;box-shadow:0 3px 0 #2c1800}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+</style>
+</head>
+<body>
+<h1>🏭 ⑯ 欧米の歴史と開国② 確認ドリル</h1>
+
+<div class="step-bar">
+<div class="step" onclick="location.href='ch15_drill.html'">⑮ 欧米①</div>
+<div class="step active">⑯ 欧米②</div>
+<div class="step" onclick="location.href='ch17_drill.html'">⑰ 開国</div>
+<div class="step" onclick="location.href='ch18_drill.html'">⑱ 幕府滅亡</div>
+<div class="step" onclick="location.href='ch19_drill.html'">⑲ 明治維新</div>
+<div class="step" onclick="location.href='ch20_drill.html'">⑳ 日清日露</div>
+</div>
+
+<div class="score-bar">
+  <span class="score-label">正解数：</span>
+  <span class="score-val" id="score-val">0 / 8</span>
+  <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  <button class="reset-btn" onclick="location.reload()">🔄 やり直す</button>
+</div>
+
+
+<div class="q-card" id="q1">
+  <div class="q-meta"><span class="q-num">Q1</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">18世紀にイギリスで起きた産業革命について正しく説明しているものはどれか？</div>
+  <div class="choices"><button class="choice-btn" onclick="a4(this,'q1',false)">農業技術が革新されて農村の生産量が劇的に増えた</button>
+<button class="choice-btn" onclick="a4(this,'q1',true)">ワットによる蒸気機関の発明を機に工場制機械工業が始まり産業構造が大きく変化した</button>
+<button class="choice-btn" onclick="a4(this,'q1',false)">国王主導で貿易を拡大し植民地を増やして富を得た</button>
+<button class="choice-btn" onclick="a4(this,'q1',false)">職人の手工業がさらに発達し高品質な製品を少量生産した</button>
+</div>
+  <div class="feedback" id="q1-fb"></div>
+</div>
+
+<div class="q-card" id="q2">
+  <div class="q-meta"><span class="q-num">Q2</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">アヘン戦争のきっかけとなった「三角貿易」で、インドから清（中国）へ密輸されていたものは何か？</div>
+  <div class="choices"><button class="choice-btn" onclick="a4(this,'q2',false)">綿製品</button>
+<button class="choice-btn" onclick="a4(this,'q2',false)">茶・絹</button>
+<button class="choice-btn" onclick="a4(this,'q2',true)">アヘン（麻薬）</button>
+<button class="choice-btn" onclick="a4(this,'q2',false)">銀貨</button>
+</div>
+  <div class="feedback" id="q2-fb"></div>
+</div>
+
+<div class="q-card" id="q3">
+  <div class="q-meta"><span class="q-num">Q3</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">アヘン戦争後の南京条約（1842年）は不平等条約であった。その不平等な内容として正しいものを選べ。</div>
+  <div class="choices"><button class="choice-btn" onclick="a4(this,'q3',false)">清が巨額の賠償金を支払う義務だけがあった</button>
+<button class="choice-btn" onclick="a4(this,'q3',true)">清に関税自主権がなく、領事裁判権を認める内容だった</button>
+<button class="choice-btn" onclick="a4(this,'q3',false)">香港が清の領土として永久に保証された</button>
+<button class="choice-btn" onclick="a4(this,'q3',false)">清がイギリスの植民地になることを認めた</button>
+</div>
+  <div class="feedback" id="q3-fb"></div>
+</div>
+
+<div class="q-card" id="q4">
+  <div class="q-meta"><span class="q-num">Q4</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">1861年に始まったアメリカ南北戦争で、南部が主張していたことはどれか？</div>
+  <div class="choices"><button class="choice-btn" onclick="a4(this,'q4',false)">北部と同じく産業革命を進め保護貿易を行うこと</button>
+<button class="choice-btn" onclick="a4(this,'q4',true)">黒人奴隷制度を維持しながら自由貿易を続け独立すること</button>
+<button class="choice-btn" onclick="a4(this,'q4',false)">リンカーンを支持し奴隷制を廃止すること</button>
+<button class="choice-btn" onclick="a4(this,'q4',false)">イギリスから完全に独立した国家を作ること</button>
+</div>
+  <div class="feedback" id="q4-fb"></div>
+</div>
+
+<div class="q-card" id="q5">
+  <div class="q-meta"><span class="q-num">Q5</span><span class="q-type-badge badge-4">4択</span></div>
+  <div class="q-text">ドイツを統一した「鉄血宰相」ビスマルクが行ったこととして正しいものはどれか？</div>
+  <div class="choices"><button class="choice-btn" onclick="a4(this,'q5',false)">フランス革命を支持し共和制をドイツに導入した</button>
+<button class="choice-btn" onclick="a4(this,'q5',true)">産業革命を支援・富国強兵を行い1871年フランスとの戦争に勝ちドイツ帝国を成立させた</button>
+<button class="choice-btn" onclick="a4(this,'q5',false)">アメリカと同盟を結びロシアの南下を阻止した</button>
+<button class="choice-btn" onclick="a4(this,'q5',false)">社会主義革命を起こし労働者の政権を樹立した</button>
+</div>
+  <div class="feedback" id="q5-fb"></div>
+</div>
+
+<div class="q-card" id="q6">
+  <div class="q-meta"><span class="q-num">Q6</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">産業革命後のイギリスでは、炭鉱で子どもや婦人が長時間働かされ、平均寿命が約30歳という状況が生まれた。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q6',true)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q6',false)">×</button>
+  </div>
+  <div class="feedback" id="q6-fb"></div>
+</div>
+
+<div class="q-card" id="q7">
+  <div class="q-meta"><span class="q-num">Q7</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">日米修好通商条約（1858年）を結んだ後、日本の最大の貿易相手国はアメリカだった。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q7',true)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q7',false)">×</button>
+  </div>
+  <div class="feedback" id="q7-fb"></div>
+</div>
+
+<div class="q-card" id="q8">
+  <div class="q-meta"><span class="q-num">Q8</span><span class="q-type-badge badge-ox">○×</span></div>
+  <div class="q-text">マルクスは著書「共産党宣言」で、資本主義を批判し労働者が政権を取って平等な社会をつくる社会主義を提唱した。</div>
+  <div class="ox-wrap">
+    <button class="ox-btn" onclick="aOX(this,'q8',true)">○</button>
+    <button class="ox-btn" onclick="aOX(this,'q8',false)">×</button>
+  </div>
+  <div class="feedback" id="q8-fb"></div>
+</div>
+
+
+<div class="finish-banner" id="finish-banner">
+  <h2>🎉 ドリル完了！</h2>
+  <div class="finish-score" id="finish-score"></div>
+  <div class="finish-msg" id="finish-msg"></div>
+  <button class="finish-btn" onclick="location.reload()">🔄 もう一度</button>
+  <button class="finish-btn" onclick="location.href='ch16.html'">📖 学習ページへ</button>
+  <button class="finish-btn" onclick="location.href='ch17_drill.html'">次の章のドリルへ ▶</button>
+</div>
+
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+<button onclick="location.href='ch16.html'">📖 学習ページへ</button>
+<button class="secondary" onclick="location.href='ch15_drill.html'">◀ 前の章</button>
+<button onclick="location.href='ch17_drill.html'">次の章 ▶</button>
+<button class="secondary" onclick="location.reload()">🔄 やり直す</button>
+<button class="secondary" onclick="location.href='index.html'">← 一覧へ</button>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const TOTAL=8; let answered={};
+function upd(){
+  const ok=Object.values(answered).filter(v=>v).length;
+  const done=Object.keys(answered).length;
+  document.getElementById('score-val').textContent=`${ok} / 8`;
+  document.getElementById('progress-bar').style.width=`${done/8*100}%`;
+  if(done===8)setTimeout(()=>fin(ok),400);
+}
+function fin(ok){
+  const b=document.getElementById('finish-banner');b.style.display='block';
+  document.getElementById('finish-score').textContent=`${ok} / 8 問正解`;
+  document.getElementById('finish-msg').textContent=ok===8?'🏆 満点！完璧です！':ok>=7?'⭐ すばらしい！':ok>=5?'👍 よくできました。まちがえた問題を復習しよう！':'📖 学習ページに戻って流れを確認しましょう。';
+  b.scrollIntoView({behavior:'smooth'});
+}
+const FB={
+  q1:`産業革命の核心は「手→機械」「少量→大量」の変化です。ワットの蒸気機関が動力となり綿織物の大量生産が始まりました。イギリスは「世界の工場」と呼ばれました。`,
+  q2:`三角貿易の流れ：①イギリスが清から茶・絹を輸入→銀が流出 ②インドでアヘンを作り清に密輸 ③清でアヘン患者が激増→清がアヘン禁止→アヘン戦争へ`,
+  q3:`南京条約の不平等な2点：①領事裁判権（清国内でイギリス人が犯罪を犯しても清が裁けない）②関税自主権なし（輸入関税を清が決められない）。加えて香港割譲。`,
+  q4:`南部は黒人奴隷を使った綿花農業を中心にヨーロッパへ輸出する自由貿易を求め、奴隷制に賛成。北部は産業革命中で保護貿易を求め奴隷制に反対。この対立が内戦になりました。`,
+  q5:`ビスマルクは「鉄（軍事力）と血（兵士の犠牲）による統一」を掲げ、1871年にフランスとの戦争に勝利してドイツ帝国を成立させました。`,
+  q6:`○ 正解。産業革命は豊かさをもたらした一方で深刻な労働問題を生みました。この問題を解決しようとマルクスが社会主義を提唱しました。`,
+  q7:`× 不正解。最大の貿易相手国はイギリスでした。アメリカは1861年に南北戦争が起こり日本との貿易どころではなかったからです。`,
+  q8:`○ 正解。ドイツの経済学者マルクスは産業革命後の貧富の差を批判し、社会主義を提唱しました。この考えは後のロシア革命（1917年）につながります。`
+};
+function a4(btn,qId,ok){
+  if(answered[qId]!==undefined)return;
+  const card=document.getElementById(qId);
+  card.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);
+  if(!ok)card.querySelectorAll('.choice-btn').forEach(b=>{if(b.onclick.toString().includes(',true)'))b.classList.add('reveal-ok')});
+  const fb=document.getElementById(qId+'-fb');
+  if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FB[qId]||''}`;answered[qId]=true;}
+  else{btn.classList.add('selected-ng');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FB[qId]||''}`;answered[qId]=false;}
+  upd();
+}
+function aOX(btn,qId,ok){
+  if(answered[qId]!==undefined)return;
+  const card=document.getElementById(qId);
+  card.querySelectorAll('.ox-btn').forEach(b=>b.disabled=true);
+  const fb=document.getElementById(qId+'-fb');
+  if(ok){btn.classList.add('selected-ok');card.classList.add('answered-ok');fb.className='feedback ok show';fb.innerHTML=`<b>✅ 正解！</b> ${FB[qId]||''}`;answered[qId]=true;}
+  else{btn.classList.add('selected-ng');card.classList.add('answered-ng');fb.className='feedback ng show';fb.innerHTML=`<b>❌ 不正解</b> ${FB[qId]||''}`;answered[qId]=false;}
+  upd();
+}
+</script>
+</body>
+</html>

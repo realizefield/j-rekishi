@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：⑱ 江戸幕府の滅亡</title>
+<style>
+  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.9; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
+  h1 { border-bottom: 2px solid #d32f2f; padding-bottom: 8px; font-size: 24px; color: #1a1a2e; }
+  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 19px; border-left: 5px solid #d32f2f; padding-left: 10px; color: #1a1a2e; }
+  .step-bar { display: flex; gap: 6px; margin: 16px 0 20px 0; flex-wrap: wrap; }
+  .step { flex: 1; min-width: 80px; text-align: center; padding: 6px 4px; border-radius: 999px; background-color: #ddd; font-size: 12px; cursor: pointer; }
+  .step.active { background-color: #ffe0e0; border: 2px solid #d32f2f; font-weight: bold; }
+  .step:hover:not(.active) { background-color: #eee; }
+  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
+  .word-bank { border: 2px solid #d32f2f; border-radius: 8px; padding: 12px; min-height: 60px; display: none; flex-wrap: wrap; gap: 8px; background-color: #fff; }
+  .word-chip { padding: 8px 12px; border: 1px solid #666; border-radius: 18px; background-color: #fff; cursor: pointer; font-size: 14px; }
+  .word-chip.used { opacity: 0.3; }
+  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
+  .section { background-color: #fff; border-radius: 8px; padding: 20px 24px; border: 1px solid #ccc; margin-bottom: 16px; }
+  .blank { display: inline-block; min-width: 90px; min-height: 26px; border-bottom: 2px solid #d32f2f; margin: 0 3px; text-align: center; vertical-align: middle; cursor: pointer; font-weight: bold; color: #d32f2f; }
+  .blank.correct { background-color: #ffeb3b; }
+  .kw { color: #d32f2f; font-weight: bold; cursor: pointer; border-bottom: 2px dotted #d32f2f; }
+  .kw:hover { background-color: #fff3e0; border-radius: 3px; }
+  .term-popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 2000; justify-content: center; align-items: center; }
+  .term-popup-overlay.show { display: flex; }
+  .term-popup-box { background: #fffde7; border: 3px solid #f9a825; border-radius: 14px; padding: 24px 28px; max-width: 500px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,0.2); position: relative; max-height: 80vh; overflow-y: auto; }
+  .term-popup-box h3 { margin: 0 0 10px; font-size: 20px; color: #e65100; border-bottom: 2px solid #f9a825; padding-bottom: 6px; }
+  .term-popup-box p { margin: 7px 0; font-size: 14px; line-height: 1.85; }
+  .term-popup-box .t-tag { display: inline-block; background: #f9a825; color: #fff; border-radius: 6px; padding: 1px 9px; font-size: 11px; margin-right: 5px; margin-bottom: 6px; }
+  .term-popup-close { position: absolute; top: 12px; right: 16px; font-size: 20px; cursor: pointer; color: #999; font-weight: bold; }
+  .term-popup-close:hover { color: #e65100; }
+  .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 2000; justify-content: center; align-items: center; }
+  .popup-overlay.show { display: flex; }
+  .popup-box { background: #fff; border-radius: 14px; padding: 28px 32px; max-width: 540px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,0.25); position: relative; max-height: 80vh; overflow-y: auto; }
+  .popup-box h3 { margin: 0 0 6px; font-size: 20px; color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 6px; }
+  .popup-box .popup-sub { font-size: 13px; color: #888; margin-bottom: 12px; }
+  .popup-box p { margin: 8px 0; font-size: 15px; line-height: 1.85; }
+  .popup-box .popup-tag { display: inline-block; background: #d32f2f; color: #fff; border-radius: 6px; padding: 1px 10px; font-size: 12px; margin-right: 6px; margin-bottom: 6px; }
+  .popup-close { position: absolute; top: 14px; right: 18px; font-size: 22px; cursor: pointer; color: #888; font-weight: bold; }
+  .popup-close:hover { color: #d32f2f; }
+  .cause-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; background: #fff8f0; border: 1px solid #ffcc80; border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .cause-flow .cf-box { background: #fff3e0; border: 1px solid #ffb74d; border-radius: 8px; padding: 4px 12px; font-weight: bold; color: #5d4037; }
+  .cause-flow .cf-box.result { background: #fce4ec; border-color: #e91e63; color: #880e4f; }
+  .cause-flow .cf-arrow { font-size: 18px; color: #d32f2f; font-weight: bold; }
+  .point-box { background: #e8f5e9; border-left: 5px solid #388e3c; border-radius: 0 8px 8px 0; padding: 10px 16px; margin: 10px 0; font-size: 15px; }
+  .point-box b { color: #2e7d32; }
+  .warn-box { background: #fff3e0; border-left: 5px solid #f57c00; border-radius: 0 8px 8px 0; padding: 10px 16px; margin: 10px 0; font-size: 15px; }
+  /* 薩長比較 */
+  .han-compare { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; }
+  .han-box { flex: 1; min-width: 220px; border-radius: 10px; padding: 14px 16px; font-size: 14px; line-height: 1.8; }
+  .han-box.satsuma { background: #e3f2fd; border: 2px solid #1565c0; }
+  .han-box.choshu  { background: #fce4ec; border: 2px solid #c62828; }
+  .han-box h4 { margin: 0 0 8px; font-size: 15px; }
+  .han-box.satsuma h4 { color: #1565c0; }
+  .han-box.choshu  h4 { color: #c62828; }
+  .nenpyo { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+  .nenpyo th { background: #d32f2f; color: #fff; padding: 8px 12px; text-align: left; }
+  .nenpyo td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .nenpyo tr:nth-child(even) td { background: #fafafa; }
+  .nenpyo .year { font-weight: bold; color: #d32f2f; white-space: nowrap; }
+  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 12px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #007bff; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #0056b3; }
+  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
+  button.challenge-btn { background-color: #d32f2f; box-shadow: 0 3px 0 #b71c1c; }
+  .timer-info { margin-top: 8px; padding: 4px 15px; font-size: 15px; border: 1px solid #007bff; background-color: #fff; display: inline-block; }
+</style>
+</head>
+<body>
+
+<h1>⚔️ ⑱ 江戸幕府の滅亡</h1>
+<p style="color:#555;font-size:14px;">【学習のポイント】開国への反発（尊王攘夷）→薩摩・長州の倒幕運動→大政奉還→江戸無血開城、という幕末の流れをつかもう。<br>🔴 赤い太字の人物名はタップで人物紹介 　🟡 太字の語句はタップで意味が出ます。</p>
+
+<div class="step-bar">
+  <div class="step" onclick="location.href='ch15.html'">⑮ 欧米①</div>
+  <div class="step" onclick="location.href='ch16.html'">⑯ 欧米②</div>
+  <div class="step" onclick="location.href='ch17.html'">⑰ 開国</div>
+  <div class="step active">⑱ 幕府滅亡</div>
+  <div class="step" onclick="location.href='ch17_18_drill.html'">確認ドリル</div>
+  <div class="step" onclick="location.href='index.html'">← 一覧へ</div>
+</div>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】</div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== S1: 尊王攘夷と安政の大獄 ========== -->
+<div class="section">
+  <h2>１．尊王攘夷運動と安政の大獄</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">開国→物価高・民衆の不満</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">尊王攘夷運動の高まり</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">井伊直弼が弾圧（安政の大獄）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">桜田門外の変で井伊が暗殺</div>
+  </div>
+
+  <p>
+    1858年、孝明天皇の許可なく日米修好通商条約を結んだことへの批判が高まり、「幕府ではなく天皇中心の政治を行い、外国人を追い出そう」という
+    <span class="blank kw-blank" data-id="A">尊王攘夷</span>
+    運動が活発化しました。
+  </p>
+
+  <p>
+    1859年、大老
+    <span class="kw" onclick="showPopup('ii_naosuke')">井伊直弼</span>
+    はこの批判に対して
+    <span class="blank kw-blank" data-id="B">安政の大獄</span>
+    を起こし、反対派を大弾圧しました。長州藩の松下村塾の塾長
+    <span class="kw" onclick="showPopup('yoshida_shoin')">吉田松陰</span>
+    を処刑するなど、100名以上が処罰されました。
+  </p>
+
+  <p>
+    1860年、この弾圧に怒った水戸藩浪士らが、江戸城の
+    <span class="blank kw-blank" data-id="D">桜田門外</span>
+    で井伊直弼を暗殺しました（<b>桜田門外の変</b>）。幕府の権威は大きく失墜しました。
+  </p>
+
+  <div class="point-box">
+    <b>💡 尊王攘夷（そんのうじょうい）とは？</b><br>
+    「尊王」＝天皇を尊ぶ　「攘夷」＝外国人を打ち払う<br>
+    開国による物価高や外国人への反感から、天皇中心の政治に戻し外国を追い出そうという運動です。武士や公家の間で急速に広まりました。
+  </div>
+
+  <p>
+    幕府は尊王攘夷派の批判をかわすため、孝明天皇の妹・皇女和宮を14代将軍徳川家茂と結婚させるという
+    <span class="blank kw-blank" data-id="E">公武合体</span>
+    政策（公＝朝廷、武＝幕府）を実行しました。
+  </p>
+</div>
+
+<!-- ========== S2: 薩摩藩と長州藩の動き ========== -->
+<div class="section">
+  <h2>２．薩摩藩と長州藩の動き</h2>
+
+  <div class="han-compare">
+    <div class="han-box satsuma">
+      <h4>🔵 薩摩藩（現：鹿児島県）</h4>
+      沖縄との密貿易で力を蓄えた外様大名<br>
+      当初は<b>公武合体</b>政策を推進<br>
+      → 生麦事件 → 薩英戦争で敗北<br>
+      → <b>倒幕運動</b>に転換<br>
+      実権者：<span class="kw" onclick="showPopup('saigo')">西郷隆盛</span>・<span class="kw" onclick="showPopup('okubo')">大久保利通</span>
+    </div>
+    <div class="han-box choshu">
+      <h4>🔴 長州藩（現：山口県）</h4>
+      ろうそく原料の栽培で力をつけた外様大名<br>
+      当初から<b>尊王攘夷</b>運動を強力に推進<br>
+      → 蛤御門の変で薩摩藩に敗北<br>
+      → 四国艦隊に敗北<br>
+      → 奇兵隊を創設し<b>倒幕運動</b>に転換<br>
+      実権者：<span class="kw" onclick="showPopup('takasugi')">高杉晋作</span>・<span class="kw" onclick="showPopup('kido')">木戸孝允</span>
+    </div>
+  </div>
+
+  <p><b>◎ 薩摩藩の動き</b></p>
+  <p>
+    1862年、島津久光の大名行列を馬に乗って横切ったイギリス人記者を無礼として殺害した
+    <span class="blank kw-blank" data-id="F">生麦</span>
+    事件が起きました。イギリスは犯人引き渡しを要求。拒否したため翌1863年、イギリス海軍が鹿児島を砲撃した
+    <span class="blank kw-blank" data-id="G">薩英戦争</span>
+    が起きました。
+  </p>
+
+  <div class="warn-box">
+    ⚠️ <b>薩英戦争の大きな転換点</b><br>
+    砲撃で鹿児島が焼け野原になり「欧米列強には軍事力で勝てない」と悟った薩摩藩は、攘夷（外国を追い出す）は不可能と判断し、<b>倒幕運動</b>に藩論を変えました。
+  </div>
+
+  <p><b>◎ 長州藩の動き</b></p>
+  <p>
+    長州藩は朝廷内の尊王攘夷派を増やし、幕府に攘夷実行を約束させました。しかし薩摩藩・会津藩に朝廷内の尊王攘夷派を追い出され（蛤御門の変）、敗北しました。さらに1864年の四国艦隊下関砲撃事件で、イギリス・フランス・アメリカ・オランダの連合艦隊に大敗しました。
+  </p>
+
+  <p>
+    <span class="kw" onclick="showPopup('takasugi')">高杉晋作</span>
+    と
+    <span class="kw" onclick="showPopup('kido')">木戸孝允（桂小五郎）</span>
+    は、身分を問わない志願制の近代的軍隊
+    <span class="blank kw-blank" data-id="J">奇兵隊</span>
+    を創設し、武力で長州藩の実権を握り、藩論を<b>倒幕運動</b>に切り替えました。
+  </p>
+</div>
+
+<!-- ========== S3: 薩長同盟と大政奉還 ========== -->
+<div class="section">
+  <h2>３．薩長同盟から大政奉還・江戸無血開城へ</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">薩長同盟成立（1866）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">大政奉還（1867）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">王政復古の大号令（1867）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">江戸城無血開城（1868）→戊辰戦争</div>
+  </div>
+
+  <p>
+    1866年、土佐藩浪士
+    <span class="kw" onclick="showPopup('sakamoto')">坂本龍馬</span>
+    の仲介により、対立していた薩摩藩と長州藩が手を結ぶ
+    <span class="blank kw-blank" data-id="N">薩長同盟</span>
+    が成立しました。
+  </p>
+
+  <div class="point-box">
+    <b>💡 なぜ犬猿の仲の薩摩と長州が手を結べたのか？</b><br>
+    坂本龍馬が物々交換を提案しました。<br>
+    薩摩藩は凶作で米が不足 → 長州の米がほしい<br>
+    長州藩は第二次長州征伐に備えて武器が必要 → 薩摩の武器がほしい<br>
+    この「お互いの利害が一致した取引」が同盟の実質的な理由でした。
+  </div>
+
+  <p>
+    1867年、15代将軍
+    <span class="kw" onclick="showPopup('tokugawa_yoshinobu')">徳川慶喜</span>
+    は、これまで幕府が担ってきた政権を朝廷に返上する
+    <span class="blank kw-blank" data-id="O">大政奉還</span>
+    を行いました。
+  </p>
+
+  <div class="warn-box">
+    ⚠️ <b>大政奉還は慶喜の計算があった</b><br>
+    坂本龍馬の提案を前土佐藩主・山内豊信が進言。慶喜は「朝廷に政権を返しても、いきなり朝廷だけでは政治できないから幕府の政治システムは残る」と計算して受け入れました。しかし薩摩の西郷隆盛はそうはさせませんでした。
+  </div>
+
+  <p>
+    大政奉還後、
+    <span class="kw" onclick="showPopup('saigo')">西郷隆盛</span>
+    は公家の岩倉具視とともに、1867年、明治天皇に「幕府に頼らず天皇を中心とした新しい政治を行う」という
+    <span class="blank kw-blank" data-id="Q">王政復古</span>
+    の大号令を出させました。徳川慶喜は明治政府に入れず、官位と領地をすべて返すことになりました。
+  </p>
+
+  <p>
+    その後、西郷隆盛の策略で旧幕臣が薩摩藩邸を焼き打ちし、慶喜が京都に攻め上りますが明治政府軍に敗北。明治政府軍が江戸へ進軍する中、新政府軍代表
+    <span class="kw" onclick="showPopup('saigo')">西郷隆盛</span>
+    と旧幕府軍代表
+    <span class="kw" onclick="showPopup('katsu')">勝海舟</span>
+    が会談し、1868年に江戸城を<b>無血開城</b>しました。
+  </p>
+
+  <p>
+    無血開城に不服とした旧幕臣が最後まで抵抗し、
+    <span class="blank kw-blank" data-id="S">戊辰</span>
+    戦争（1868〜1869年）が起こりましたが、函館で明治政府軍に降伏しました。
+  </p>
+
+  <table class="nenpyo">
+    <tr><th>年</th><th>できごと</th><th>ポイント</th></tr>
+    <tr><td class="year">1858年</td><td>日米修好通商条約（井伊直弼）</td><td>勅許なしの強行→尊王攘夷運動激化</td></tr>
+    <tr><td class="year">1859年</td><td>安政の大獄</td><td>吉田松陰らを処刑。100名以上を弾圧</td></tr>
+    <tr><td class="year">1860年</td><td>桜田門外の変</td><td>井伊直弼が水戸藩浪士に暗殺</td></tr>
+    <tr><td class="year">1861年</td><td>公武合体政策</td><td>皇女和宮と将軍家茂の結婚</td></tr>
+    <tr><td class="year">1862年</td><td>生麦事件</td><td>イギリス人記者を殺傷→薩英戦争へ</td></tr>
+    <tr><td class="year">1863年</td><td>薩英戦争・長州藩外国船砲撃</td><td>両藩とも欧米の力を知り攘夷が不可能と悟る</td></tr>
+    <tr><td class="year">1864年</td><td>蛤御門の変・四国艦隊下関砲撃</td><td>長州藩が敗北→高杉晋作が奇兵隊を創設</td></tr>
+    <tr><td class="year">1866年</td><td>薩長同盟</td><td>坂本龍馬の仲介で成立</td></tr>
+    <tr><td class="year">1867年</td><td>大政奉還・王政復古の大号令</td><td>徳川慶喜が政権返上→明治政府が独立</td></tr>
+    <tr><td class="year">1868年</td><td>江戸城無血開城</td><td>西郷隆盛 vs 勝海舟の会談で実現</td></tr>
+    <tr><td class="year">1868〜69年</td><td>戊辰戦争</td><td>旧幕臣が最後まで抵抗→函館で降伏</td></tr>
+  </table>
+</div>
+
+<!-- フッター -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button class="challenge-btn" onclick="startChallenge()">✏️ チャレンジ開始</button>
+      <button onclick="checkAnswers()">✅ 判定</button>
+      <button class="secondary" onclick="location.reload()">🔄 やり直す</button>
+      <button onclick="location.href='ch17.html'">◀ ⑰ 開国</button>
+      <button onclick="location.href='ch17_18_drill.html'">確認ドリルへ</button>
+    </div>
+    <div class="timer-info" id="timer-display">⏱ 経過時間：---</div>
+  </div>
+</div>
+
+<!-- 語句ポップアップ（黄） -->
+<div class="term-popup-overlay" id="term-popup-overlay" onclick="closeTermOutside(event)">
+  <div class="term-popup-box">
+    <span class="term-popup-close" onclick="closeTerm()">✕</span>
+    <h3 id="t-name"></h3>
+    <div id="t-body"></div>
+  </div>
+</div>
+
+<!-- 人物ポップアップ（白） -->
+<div class="popup-overlay" id="popup-overlay" onclick="closePopupOutside(event)">
+  <div class="popup-box">
+    <span class="popup-close" onclick="closePopup()">✕</span>
+    <h3 id="popup-name"></h3>
+    <div class="popup-sub" id="popup-sub"></div>
+    <div id="popup-body"></div>
+  </div>
+</div>
+
+<script>
+const answers = {
+  A:"尊王攘夷", B:"安政の大獄",
+  D:"桜田門外", E:"公武合体", F:"生麦",
+  G:"薩英戦争", J:"奇兵隊",
+  N:"薩長同盟", O:"大政奉還",
+  Q:"王政復古", S:"戊辰"
+};
+let startTime, timerId, selectedChip = null;
+
+function renderBank() {
+  const bank = document.getElementById('word-bank');
+  bank.style.display = "flex"; bank.innerHTML = "";
+  [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
+    const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
+    chip.onclick = () => {
+      document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip'));
+      selectedChip = chip; chip.classList.add('selected-chip');
+    };
+    bank.appendChild(chip);
+  });
+}
+function startChallenge() {
+  document.querySelectorAll('.kw-blank').forEach(b => {
+    b.textContent = "　　　"; b.classList.remove('correct');
+    b.dataset.savedOnclick = b.getAttribute('onclick') || '';
+    b.removeAttribute('onclick');
+  });
+  renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
+  timerId = setInterval(() => {
+    document.getElementById('timer-display').textContent = `⏱ 経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;
+  }, 1000);
+}
+document.querySelectorAll('.kw-blank').forEach(blank => {
+  blank.onclick = (e) => {
+    e.stopPropagation();
+    if (selectedChip) {
+      const old = blank.textContent.trim();
+      if (old && old !== '　　　') document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent===old) c.classList.remove('used'); });
+      blank.textContent = selectedChip.textContent;
+      selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
+    } else if (blank.textContent.trim() && blank.textContent.trim() !== '　　　') {
+      const txt = blank.textContent.trim();
+      document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent===txt) c.classList.remove('used'); });
+      blank.textContent = "　　　";
+    }
+  };
+});
+function checkAnswers() {
+  let ok = true;
+  document.querySelectorAll('.kw-blank').forEach(b => {
+    if (b.textContent.trim() === answers[b.dataset.id]) b.classList.add('correct');
+    else ok = false;
+    if (b.dataset.savedOnclick) b.setAttribute('onclick', b.dataset.savedOnclick);
+  });
+  if (ok) { clearInterval(timerId); alert("🎉 全問正解！すばらしい！"); }
+  else alert("まだ間違いがあります。黄色くなっていない語句を確認しよう。");
+}
+
+const popupData = {
+  ii_naosuke: {
+    name: "井伊直弼（いい なおすけ）",
+    sub: "1815〜1860年｜江戸幕府大老",
+    tags: ["大老","安政の大獄","桜田門外の変"],
+    body: `<p>江戸幕府の大老（最高権力者）。日米修好通商条約を天皇の許可なく強行調印し、反対派を<b>安政の大獄</b>で大弾圧しました。</p>
+    <p>1860年、江戸城桜田門外で水戸藩浪士に暗殺されました（<b>桜田門外の変</b>）。開国という歴史の転換点を決断した強引な政治家でしたが、その弾圧が幕府崩壊の引き金となりました。</p>`
+  },
+  yoshida_shoin: {
+    name: "吉田松陰（よしだ しょういん）",
+    sub: "1830〜1859年｜長州藩の思想家・教育者",
+    tags: ["松下村塾","尊王攘夷","安政の大獄で処刑"],
+    body: `<p>長州藩の思想家・教育者。山口県の<b>松下村塾</b>で多くの志士を育てました。弟子には伊藤博文・山県有朋・高杉晋作など、のちの明治政府を作る人物が多数います。</p>
+    <p>ペリー来航の際、密航でアメリカへ渡ろうとして失敗し投獄。1859年、安政の大獄で<b>処刑</b>されました。29歳の若さでした。</p>
+    <p>💡 「諸君、狂いたまえ」という言葉が有名。強い情熱と行動力で多くの若者に影響を与えました。</p>`
+  },
+  saigo: {
+    name: "西郷隆盛（さいごう たかもり）",
+    sub: "1828〜1877年｜薩摩藩の武将・明治政府の中心人物",
+    tags: ["薩長同盟","倒幕運動","江戸無血開城","西南戦争"],
+    body: `<p>薩摩藩の実力者。大久保利通とともに薩摩藩の倒幕運動を主導しました。</p>
+    <p>1868年、明治政府軍代表として旧幕府軍代表・勝海舟と会談し、<b>江戸城の無血開城</b>を実現。多くの命を救いました。</p>
+    <p>明治政府に入りましたが、征韓論争に敗れて下野。1877年に<b>西南戦争</b>を起こしましたが敗北し、自刃しました。「敬天愛人（天を敬い人を愛する）」という言葉を座右の銘としました。</p>`
+  },
+  okubo: {
+    name: "大久保利通（おおくぼ としみち）",
+    sub: "1830〜1878年｜薩摩藩出身・明治政府の最高実力者",
+    tags: ["薩摩藩","倒幕運動","明治政府","暗殺"],
+    body: `<p>薩摩藩の実力者で、西郷隆盛とともに倒幕運動を主導しました。明治政府では初代内務卿として絶大な権力を持ち、「明治の独裁者」とも呼ばれました。</p>
+    <p>岩倉使節団に参加して欧米を視察し、近代国家の建設に力を注ぎました。</p>
+    <p>⚠️ 1878年、西南戦争で西郷が亡くなった翌年、紀尾井坂で不満士族に暗殺されました。47歳でした。</p>`
+  },
+  takasugi: {
+    name: "高杉晋作（たかすぎ しんさく）",
+    sub: "1839〜1867年｜長州藩の志士",
+    tags: ["奇兵隊","長州藩","倒幕運動"],
+    body: `<p>長州藩の志士。吉田松陰の弟子で、師の遺志を受け継ぎ倒幕運動を推進しました。</p>
+    <p>四国艦隊下関砲撃事件で攘夷の不可能を悟り、身分に関係なく志願者を集めた近代的軍隊<b>奇兵隊</b>を創設しました。この奇兵隊が第二次長州征伐で幕府軍を撃退します。</p>
+    <p>⚠️ 倒幕が実現する前、1867年に肺結核で27歳の若さで亡くなりました。「おもしろき こともなき世を おもしろく」という辞世の句が有名です。</p>`
+  },
+  kido: {
+    name: "木戸孝允（きど たかよし）／桂小五郎（かつら こごろう）",
+    sub: "1833〜1877年｜長州藩の志士・明治政府の重鎮",
+    tags: ["長州藩","薩長同盟","明治政府"],
+    body: `<p>長州藩の志士で、後に木戸孝允と名乗りました。吉田松陰の弟子。蛤御門の変の後、幕府の追手を逃れながら各地を転々とした（「逃げの小五郎」とも）後、薩長同盟を推進しました。</p>
+    <p>明治政府では岩倉使節団に参加し、欧米の近代化を学びました。西郷隆盛・大久保利通とともに「維新の三傑」と呼ばれます。</p>
+    <p>💡 1877年、西南戦争の最中に病死しました。「西郷、もう謀反を…」という言葉を残したと伝わります。</p>`
+  },
+  sakamoto: {
+    name: "坂本龍馬（さかもと りょうま）",
+    sub: "1836〜1867年｜土佐藩浪士・維新の仲介者",
+    tags: ["薩長同盟","大政奉還","暗殺"],
+    body: `<p>土佐藩（高知県）出身の浪士。武士として脱藩し、自由に活動しました。犬猿の仲だった薩摩藩と長州藩の仲介をして1866年の<b>薩長同盟</b>を成立させた立役者です。</p>
+    <p>また内戦による外国侵略を恐れ、大政奉還を提案して前土佐藩主・山内豊信を通じて徳川慶喜に進言させました。</p>
+    <p>⚠️ 1867年11月、大政奉還のわずか1か月後に京都の近江屋で暗殺されました。31歳。犯人はいまも謎のままです。</p>`
+  },
+  tokugawa_yoshinobu: {
+    name: "徳川慶喜（とくがわ よしのぶ）",
+    sub: "1837〜1913年｜江戸幕府第15代・最後の将軍",
+    tags: ["大政奉還","最後の将軍","明治時代まで生存"],
+    body: `<p>江戸幕府第15代・最後の将軍。非常に聡明で「一橋慶喜」と呼ばれた当時から将軍候補として注目されていました。</p>
+    <p>1867年、坂本龍馬の提案を受け<b>大政奉還</b>を行い、260年続いた江戸幕府の政権を朝廷に返しました。「幕府のシステムは残る」と計算していましたが、王政復古の大号令で完全に政権を失いました。</p>
+    <p>💡 歴史の皮肉：江戸城が無血開城され、戊辰戦争も終結すると、慶喜は謹慎・蟄居して静かに余生を送りました。明治時代に写真・自転車・狩猟など新しいものを楽しみ、1913年（大正2年）まで長生きしました。</p>`
+  },
+  katsu: {
+    name: "勝海舟（かつ かいしゅう）",
+    sub: "1823〜1899年｜江戸幕府の軍人・政治家",
+    tags: ["江戸無血開城","咸臨丸","旧幕府代表"],
+    body: `<p>江戸幕府の軍人・政治家。1860年、咸臨丸でアメリカへ渡り（日本初の太平洋横断）、先進的な考えを持つ人物でした。</p>
+    <p>1868年、明治政府軍が江戸城総攻撃を前にした時、新政府軍代表・西郷隆盛との会談で「江戸城を血を流さずに明け渡す」ことを決断しました（<b>江戸無血開城</b>）。</p>
+    <p>この会談で勝海舟は「江戸城を焼いても外国軍が入ってくるだけ」と説得。西郷もこれを受け入れました。100万人の都市・江戸を戦火から救った歴史的な決断です。</p>`
+  }
+};
+
+function showPopup(key) {
+  const d = popupData[key]; if (!d) return;
+  document.getElementById('popup-name').textContent = d.name;
+  document.getElementById('popup-sub').textContent = d.sub;
+  document.getElementById('popup-body').innerHTML =
+    d.tags.map(t=>`<span class="popup-tag">${t}</span>`).join('') + d.body;
+  document.getElementById('popup-overlay').classList.add('show');
+}
+function closePopup() { document.getElementById('popup-overlay').classList.remove('show'); }
+function closePopupOutside(e) { if(e.target===document.getElementById('popup-overlay')) closePopup(); }
+
+const termData = {};
+function showTerm(key) {
+  const d = termData[key]; if (!d) return;
+  document.getElementById('t-name').textContent = d.name;
+  document.getElementById('t-body').innerHTML = d.tags.map(t=>`<span class="t-tag">${t}</span>`).join('') + d.body;
+  document.getElementById('term-popup-overlay').classList.add('show');
+}
+function closeTerm() { document.getElementById('term-popup-overlay').classList.remove('show'); }
+function closeTermOutside(e) { if(e.target===document.getElementById('term-popup-overlay')) closeTerm(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：⑯ 欧米の歴史と開国②</title>
+<style>
+  body { font-family: "Meiryo", sans-serif; max-width: 960px; margin: 20px auto; line-height: 1.9; background-color: #f4f4f9; font-size: 16px; padding-bottom: 300px; }
+  h1 { border-bottom: 2px solid #d32f2f; padding-bottom: 8px; font-size: 24px; color: #1a1a2e; }
+  h2 { margin-top: 18px; margin-bottom: 8px; font-size: 19px; border-left: 5px solid #d32f2f; padding-left: 10px; color: #1a1a2e; }
+
+  .step-bar { display: flex; gap: 6px; margin: 16px 0 20px 0; flex-wrap: wrap; }
+  .step { flex: 1; min-width: 80px; text-align: center; padding: 6px 4px; border-radius: 999px; background-color: #ddd; font-size: 12px; cursor: pointer; }
+  .step.active { background-color: #ffe0e0; border: 2px solid #d32f2f; font-weight: bold; }
+  .step:hover:not(.active) { background-color: #eee; }
+
+  .word-bank-sticky-container { position: sticky; top: 0; z-index: 1001; background-color: #f4f4f9; padding: 10px 0; border-bottom: 2px solid #ccc; }
+  .word-bank { border: 2px solid #d32f2f; border-radius: 8px; padding: 12px; min-height: 60px; display: none; flex-wrap: wrap; gap: 8px; background-color: #fff; }
+  .word-chip { padding: 8px 12px; border: 1px solid #666; border-radius: 18px; background-color: #fff; cursor: pointer; font-size: 14px; }
+  .word-chip.used { opacity: 0.3; }
+  .word-chip.selected-chip { border-color: #1976d2; background-color: #e3f2fd; box-shadow: 0 0 0 2px #bbdefb; }
+
+  .section { background-color: #fff; border-radius: 8px; padding: 20px 24px; border: 1px solid #ccc; margin-bottom: 16px; }
+
+  .blank { display: inline-block; min-width: 90px; min-height: 26px; border-bottom: 2px solid #d32f2f; margin: 0 3px; text-align: center; vertical-align: middle; cursor: pointer; font-weight: bold; color: #d32f2f; }
+  .blank.correct { background-color: #ffeb3b; }
+
+  .kw { color: #d32f2f; font-weight: bold; cursor: pointer; border-bottom: 2px dotted #d32f2f; }
+  .kw:hover { background-color: #fff3e0; }
+
+  .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 2000; justify-content: center; align-items: center; }
+  .popup-overlay.show { display: flex; }
+  .popup-box { background: #fff; border-radius: 14px; padding: 28px 32px; max-width: 540px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,0.25); position: relative; max-height: 80vh; overflow-y: auto; }
+  .popup-box h3 { margin: 0 0 6px; font-size: 20px; color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 6px; }
+  .popup-box .popup-sub { font-size: 13px; color: #888; margin-bottom: 12px; }
+  .popup-box p { margin: 8px 0; font-size: 15px; line-height: 1.85; }
+  .popup-box .popup-tag { display: inline-block; background: #d32f2f; color: #fff; border-radius: 6px; padding: 1px 10px; font-size: 12px; margin-right: 6px; margin-bottom: 6px; }
+  .popup-close { position: absolute; top: 14px; right: 18px; font-size: 22px; cursor: pointer; color: #888; font-weight: bold; }
+  .popup-close:hover { color: #d32f2f; }
+
+  .cause-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; background: #fff8f0; border: 1px solid #ffcc80; border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .cause-flow .cf-box { background: #fff3e0; border: 1px solid #ffb74d; border-radius: 8px; padding: 4px 12px; font-weight: bold; color: #5d4037; }
+  .cause-flow .cf-box.result { background: #fce4ec; border-color: #e91e63; color: #880e4f; }
+  .cause-flow .cf-arrow { font-size: 18px; color: #d32f2f; font-weight: bold; }
+
+  .point-box { background: #e8f5e9; border-left: 5px solid #388e3c; border-radius: 0 8px 8px 0; padding: 10px 16px; margin: 10px 0; font-size: 15px; }
+  .point-box b { color: #2e7d32; }
+
+  /* 比較テーブル（南北戦争） */
+  .compare-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  .compare-table th { padding: 10px; text-align: center; color: #fff; }
+  .compare-table th.north { background: #1565c0; }
+  .compare-table th.south { background: #c62828; }
+  .compare-table th.item { background: #424242; }
+  .compare-table td { padding: 8px 12px; border: 1px solid #ddd; text-align: center; vertical-align: top; }
+  .compare-table td.item { font-weight: bold; background: #f5f5f5; text-align: left; }
+
+  /* 三角貿易図 */
+  .sankaku { display: flex; align-items: center; justify-content: center; gap: 0; margin: 16px auto; max-width: 600px; flex-wrap: wrap; }
+  .sankaku .s-box { background: #1a3a5c; color: #fff; border-radius: 10px; padding: 10px 18px; font-weight: bold; font-size: 15px; text-align: center; min-width: 100px; }
+  .sankaku .s-arrow { display: flex; flex-direction: column; align-items: center; padding: 0 8px; font-size: 12px; color: #555; }
+  .sankaku .s-arrow span { font-size: 20px; color: #d32f2f; line-height: 1; }
+
+  .nenpyo { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 15px; }
+  .nenpyo th { background: #d32f2f; color: #fff; padding: 8px 12px; text-align: left; }
+  .nenpyo td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .nenpyo tr:nth-child(even) td { background: #fafafa; }
+  .nenpyo .year { font-weight: bold; color: #d32f2f; white-space: nowrap; }
+
+  .fixed-footer-controls { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; border-top: 2px solid #ccc; padding: 12px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+  .footer-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; text-align: center; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  button { padding: 10px 20px; border-radius: 8px; border: none; background-color: #007bff; color: #fff; cursor: pointer; font-size: 15px; font-weight: bold; box-shadow: 0 3px 0 #0056b3; }
+  button.secondary { background-color: #6c757d; box-shadow: 0 3px 0 #495057; }
+  button.challenge-btn { background-color: #d32f2f; box-shadow: 0 3px 0 #b71c1c; }
+  .timer-info { margin-top: 8px; padding: 4px 15px; font-size: 15px; border: 1px solid #007bff; background-color: #fff; display: inline-block; }
+</style>
+</head>
+<body>
+
+<h1>🏭 ⑯ 欧米の歴史と開国②</h1>
+<p style="color:#555;font-size:14px;">【学習のポイント】産業革命が生んだ「豊かさ」と「格差」、そしてヨーロッパがアジアへ進出していく流れをつかもう。赤い語句はタップすると詳しく調べられます。</p>
+
+<div class="step-bar">
+  <div class="step" onclick="location.href='ch15.html'">⑮ 欧米①</div>
+  <div class="step active">⑯ 欧米②</div>
+  <div class="step" onclick="location.href='ch15_16_drill.html'">確認ドリル</div>
+  <div class="step" onclick="location.href='ch15_16_check.html'">過去問チェック</div>
+  <div class="step" onclick="location.href='index.html'">← 一覧へ</div>
+</div>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】</div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== S1: 産業革命 ========== -->
+<div class="section">
+  <h2>１．産業革命</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">インド産綿織物の人気上昇</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">ワットが蒸気機関を改良（18世紀）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">工場制機械工業で大量生産</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">イギリス＝「世界の工場」へ</div>
+  </div>
+
+  <p>
+    18世紀、いち早く市民革命をおこしていたイギリスでは、
+    <span class="kw" onclick="showPopup('watt')">ワット</span>
+    による
+    <span class="blank kw-blank" data-id="A">蒸気</span>
+    機関の発明や紡績機などの発明がなされ、蒸気機関を動力とした綿織物の大量生産が始まりました。この生産方法を
+    <span class="blank kw-blank" data-id="B">工場制機械</span>
+    工業といいます。
+  </p>
+  <p>
+    このような産業構造が大きく変化したことを
+    <span class="blank kw-blank" data-id="C">産業革命</span>
+    といいます。製鉄や鉄道・蒸気船が発達し、イギリスは
+    <span class="blank kw-blank" data-id="D">世界の工場</span>
+    と呼ばれました。19世紀にはフランス・ドイツ・アメリカにも広がりました。
+  </p>
+
+  <div class="point-box">
+    <b>💡 産業革命とは「手→機械」の大変化</b><br>
+    それまで人の手で少しずつ作っていたものを、機械で一度に大量に安く作れるようになりました。これにより経済の仕組み全体が変わりました。
+  </div>
+</div>
+
+<!-- ========== S2: 資本主義と社会主義 ========== -->
+<div class="section">
+  <h2>２．資本主義と社会主義</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">産業革命で工場が増える</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">資本家が労働者を雇う（資本主義）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">過酷な労働・貧富の差（社会問題）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">社会主義の登場（マルクス）</div>
+  </div>
+
+  <p>
+    資本家が労働者を雇って生産を行う経済のしくみを
+    <span class="blank kw-blank" data-id="E">資本主義</span>
+    といいます。
+  </p>
+  <p>
+    しかし産業革命後、イギリスでは深刻な労働問題が発生しました。蒸気機関の燃料となる<b>石炭</b>を掘る炭鉱では、坑道が狭いため<b>子どもや婦人</b>が働かされ、長時間の過酷な労働により<b>平均寿命は約30歳</b>でした。貧富の差が拡大し、大きな社会問題となりました。
+  </p>
+  <p>
+    こうした問題を批判したドイツの経済学者
+    <span class="kw" onclick="showPopup('marx')">マルクス</span>
+    は、著書<b>「共産党宣言」</b>で
+    <span class="blank kw-blank" data-id="F">社会主義</span>
+    を提唱。「労働者が政権を取り、生産手段を共有して平等な社会をつくろう」と呼びかけました。
+  </p>
+
+  <div class="point-box">
+    <b>🔑 資本主義 vs 社会主義</b><br>
+    資本主義＝「稼ぎたい人が自由に工場を持ち、労働者を雇う」→格差が生まれやすい<br>
+    社会主義＝「みんなで工場を共有して平等に分ける」→マルクスが提唱
+  </div>
+</div>
+
+<!-- ========== S3: 南北戦争 ========== -->
+<div class="section">
+  <h2>３．アメリカ南北戦争</h2>
+
+  <table class="compare-table">
+    <tr>
+      <th class="item">比較項目</th>
+      <th class="north">北 部</th>
+      <th class="south">南 部</th>
+    </tr>
+    <tr>
+      <td class="item">産業・経済</td>
+      <td>産業革命が始まったばかり<br>イギリス製品に対抗したい</td>
+      <td>綿花栽培が中心<br>ヨーロッパへ輸出</td>
+    </tr>
+    <tr>
+      <td class="item">貿易方針</td>
+      <td>国内産業を守る<br><b>保護貿易</b></td>
+      <td>自由に海外と取引したい<br><b>自由貿易</b></td>
+    </tr>
+    <tr>
+      <td class="item">奴隷制度</td>
+      <td><b>反対</b>（宗教的・道義的理由）</td>
+      <td><b>賛成</b>（綿花農業に必要）<br>黒人奴隷をアフリカから強制連行</td>
+    </tr>
+  </table>
+
+  <div class="cause-flow">
+    <div class="cf-box">リンカンが第16代大統領に就任（1861）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">南部が「アメリカ連合国」として独立宣言</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">南北戦争勃発</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">奴隷解放宣言（1863）→北軍勝利（1865）</div>
+  </div>
+
+  <p>
+    1861年、北部出身の
+    <span class="kw" onclick="showPopup('lincoln')">リンカン</span>
+    が第16代大統領になったことをきっかけに、南部が「
+    <span class="blank kw-blank" data-id="G">アメリカ連合国</span>
+    」として独立しようとし、
+    <span class="blank kw-blank" data-id="H">南北</span>
+    戦争がおこりました。
+  </p>
+  <p>
+    1863年、リンカン大統領は
+    <span class="blank kw-blank" data-id="I">奴隷解放宣言</span>
+    を発表。大義名分を得た北軍はヨーロッパの支持も集め、1865年に
+    <span class="blank kw-blank" data-id="J">北</span>
+    軍が勝利し、国の分裂は避けられました。
+  </p>
+</div>
+
+<!-- ========== S4: ドイツ統一 ========== -->
+<div class="section">
+  <h2>４．ドイツの統一</h2>
+
+  <div class="cause-flow">
+    <div class="cf-box">三十年戦争後（1648）ドイツが分裂</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">プロイセン王国のビスマルクが「鉄血政策」</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">フランスとの戦争に勝利（1871）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">ドイツ帝国として統一</div>
+  </div>
+
+  <p>
+    ドイツは三十年戦争（1618〜1648年）後、完全に分裂していました。諸侯の一つ、プロイセン王国の首相
+    <span class="kw" onclick="showPopup('bismarck')">ビスマルク</span>
+    は「
+    <span class="blank kw-blank" data-id="K">鉄血</span>
+    宰相」と呼ばれ、産業革命を支援して富国強兵を行い、1871年のフランスとの戦争に勝利して
+    <span class="blank kw-blank" data-id="L">ドイツ帝国</span>
+    としてドイツを統一しました。
+  </p>
+</div>
+
+<!-- ========== S5: アジア侵略（中国） ========== -->
+<div class="section">
+  <h2>５．ヨーロッパのアジア侵略①　中国（清）へ</h2>
+
+  <p><b>◎ 三角貿易のしくみ</b></p>
+
+  <div class="sankaku">
+    <div class="s-box">イギリス</div>
+    <div class="s-arrow">
+      <div>綿製品↓</div>
+      <span>→</span>
+      <div>茶・絹↑</div>
+    </div>
+    <div class="s-box">清（中国）</div>
+    <div class="s-arrow">
+      <div>↑アヘン密輸</div>
+      <span>↑</span>
+    </div>
+    <div class="s-box">インド</div>
+  </div>
+
+  <div class="cause-flow">
+    <div class="cf-box">イギリスが清から茶・絹を大量輸入→銀が流出</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">インドでアヘン生産→清に密輸（三角貿易）</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">清がアヘン輸入を禁止</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">アヘン戦争（1840）→南京条約（不平等条約）</div>
+  </div>
+
+  <p>
+    イギリスは清から茶・絹・陶磁器を大量に輸入していたため銀が流出。銀を取り戻すため、インドで作らせた麻薬の
+    <span class="blank kw-blank" data-id="M">アヘン</span>
+    を清に密輸する
+    <span class="blank kw-blank" data-id="N">三角</span>
+    貿易を行いました。清国内にアヘン患者が急増したため清はアヘン輸入を禁止。イギリスは艦隊を送り込み、1840年に
+    <span class="blank kw-blank" data-id="O">アヘン</span>
+    戦争がおきました。
+  </p>
+  <p>
+    圧倒的なイギリスの勝利により、1842年
+    <span class="blank kw-blank" data-id="P">南京</span>
+    条約が結ばれました。この条約は清にとって不利な<b>不平等条約</b>でした。
+  </p>
+
+  <div class="point-box">
+    <b>⚠️ 南京条約の「不平等」な内容２点</b><br>
+    ①
+    <span class="blank kw-blank" data-id="Q">領事裁判権</span>
+    ：清国内でイギリス人が犯罪を犯しても、清は裁判できない<br>
+    ②
+    <span class="blank kw-blank" data-id="R">関税自主権</span>
+    なし：イギリスからの輸入品の関税率を清が決められない<br>
+    ③ 香港（
+    <span class="blank kw-blank" data-id="S">ホンコン</span>
+    ）をイギリスに割譲（1997年に中国へ返還）
+  </div>
+
+  <p>
+    アヘン戦争後の重税に苦しむ民衆を率いて、
+    <span class="kw" onclick="showPopup('hong')">洪秀全</span>
+    が「
+    <span class="blank kw-blank" data-id="T">太平天国</span>
+    の乱」（1851〜1864年）を起こしました。土地の平等分配・男女平等などを訴えた大規模な反乱でしたが、最終的に鎮圧されました。
+  </p>
+</div>
+
+<!-- ========== S6: アジア侵略（インド・ロシア） ========== -->
+<div class="section">
+  <h2>６．ヨーロッパのアジア侵略②　インドとロシア</h2>
+
+  <p><b>◎ インドの大反乱（1857〜1859年）</b></p>
+
+  <div class="cause-flow">
+    <div class="cf-box">イギリスがインドを植民地化→綿工業を没落させる</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box">インド人傭兵シパーヒーが反乱</div>
+    <div class="cf-arrow">→</div>
+    <div class="cf-box result">イギリスが鎮圧→インドをイギリス領インド帝国に</div>
+  </div>
+
+  <p>
+    イギリスは綿花の生産地・綿製品の販売地としてインドを植民地支配しようとしました。イギリスからの安い綿布がインドの綿工業を壊滅させ、不満が高まった結果、イギリスに雇われていたインド人傭兵
+    <span class="blank kw-blank" data-id="U">シパーヒー</span>
+    が1857年に反乱を起こしました。
+    イギリスはこれを鎮圧し、ムガール帝国を滅ぼして<b>インドをイギリスの植民地</b>としました。
+  </p>
+
+  <p><b>◎ ロシアの南下政策</b></p>
+  <p>
+    ロシアは皇帝による専制政治が続いていましたが、1861年に
+    <span class="blank kw-blank" data-id="V">農奴</span>
+    の解放が行われ近代化が進みました。
+    <span class="blank kw-blank" data-id="W">南下</span>
+    政策をとりシベリアや沿海州に進出し、シベリア鉄道が開通するなど発展しました。この南下政策は、のちに<b>日露戦争（1904年）</b>へとつながります。
+  </p>
+
+  <table class="nenpyo">
+    <tr><th>年</th><th>できごと</th><th>意味・結果</th></tr>
+    <tr><td class="year">1840年</td><td>アヘン戦争勃発</td><td>イギリスvs清。イギリスが勝利</td></tr>
+    <tr><td class="year">1842年</td><td>南京条約</td><td>不平等条約。香港割譲・領事裁判権・関税自主権なし</td></tr>
+    <tr><td class="year">1851年</td><td>太平天国の乱</td><td>洪秀全が指導。14年後に鎮圧</td></tr>
+    <tr><td class="year">1857年</td><td>インドの大反乱</td><td>シパーヒーが蜂起。鎮圧後インドは英国領に</td></tr>
+    <tr><td class="year">1861年</td><td>農奴解放令（ロシア）</td><td>ロシアが近代化へ。南下政策を進める</td></tr>
+    <tr><td class="year">1861年</td><td>アメリカ南北戦争</td><td>リンカン大統領→奴隷解放宣言（1863）→北軍勝利（1865）</td></tr>
+    <tr><td class="year">1871年</td><td>ドイツ帝国成立</td><td>ビスマルクがフランスに勝利→ドイツ統一</td></tr>
+  </table>
+</div>
+
+<!-- フッター -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button class="challenge-btn" onclick="startChallenge()">✏️ チャレンジ開始</button>
+      <button onclick="checkAnswers()">✅ 判定</button>
+      <button class="secondary" onclick="location.reload()">🔄 やり直す</button>
+      <button onclick="location.href='ch15.html'">◀ ⑮ 欧米①</button>
+      <button onclick="location.href='ch15_16_drill.html'">確認ドリルへ</button>
+    </div>
+    <div class="timer-info" id="timer-display">⏱ 経過時間：---</div>
+  </div>
+</div>
+
+<!-- 人物ポップアップ -->
+<div class="popup-overlay" id="popup-overlay" onclick="closePopupOutside(event)">
+  <div class="popup-box" id="popup-box">
+    <span class="popup-close" onclick="closePopup()">✕</span>
+    <h3 id="popup-name"></h3>
+    <div class="popup-sub" id="popup-sub"></div>
+    <div id="popup-body"></div>
+  </div>
+</div>
+
+<script>
+const answers = {
+  A:"蒸気", B:"工場制機械", C:"産業革命", D:"世界の工場",
+  E:"資本主義", F:"社会主義",
+  G:"アメリカ連合国", H:"南北", I:"奴隷解放宣言", J:"北",
+  K:"鉄血", L:"ドイツ帝国",
+  M:"アヘン", N:"三角", O:"アヘン", P:"南京",
+  Q:"領事裁判権", R:"関税自主権", S:"ホンコン", T:"太平天国",
+  U:"シパーヒー", V:"農奴", W:"南下"
+};
+
+let startTime, timerId, selectedChip = null;
+
+function renderBank() {
+  const bank = document.getElementById('word-bank');
+  bank.style.display = "flex"; bank.innerHTML = "";
+  [...new Set(Object.values(answers))].sort(() => Math.random() - 0.5).forEach(word => {
+    const chip = document.createElement('div'); chip.className = 'word-chip'; chip.textContent = word;
+    chip.onclick = () => {
+      document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected-chip'));
+      selectedChip = chip; chip.classList.add('selected-chip');
+    };
+    bank.appendChild(chip);
+  });
+}
+
+function startChallenge() {
+  document.querySelectorAll('.kw-blank').forEach(b => { b.textContent = "　　　"; b.classList.remove('correct'); });
+  renderBank(); startTime = Date.now(); if (timerId) clearInterval(timerId);
+  timerId = setInterval(() => {
+    document.getElementById('timer-display').textContent = `⏱ 経過時間：${Math.floor((Date.now()-startTime)/1000)}秒`;
+  }, 1000);
+}
+
+document.querySelectorAll('.kw-blank').forEach(blank => {
+  blank.onclick = () => {
+    if (selectedChip) {
+      const old = blank.textContent.trim();
+      if (old && old !== '　　　') document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent===old) c.classList.remove('used'); });
+      blank.textContent = selectedChip.textContent;
+      selectedChip.classList.add('used'); selectedChip.classList.remove('selected-chip'); selectedChip = null;
+    } else if (blank.textContent.trim() && blank.textContent.trim() !== '　　　') {
+      const txt = blank.textContent.trim();
+      document.querySelectorAll('.word-chip').forEach(c => { if(c.textContent===txt) c.classList.remove('used'); });
+      blank.textContent = "　　　";
+    }
+  };
+});
+
+function checkAnswers() {
+  let ok = true;
+  document.querySelectorAll('.kw-blank').forEach(b => {
+    if (b.textContent.trim() === answers[b.dataset.id]) b.classList.add('correct');
+    else ok = false;
+  });
+  if (ok) { clearInterval(timerId); alert("🎉 全問正解！すばらしい！"); }
+  else alert("まだ間違いがあります。黄色くなっていない語句を確認しよう。");
+}
+
+const popupData = {
+  watt: {
+    name: "ジェームズ・ワット",
+    sub: "1736〜1819年｜イギリスの発明家・技術者",
+    tags: ["蒸気機関","産業革命","18世紀"],
+    body: `
+      <p>スコットランド出身の発明家。既存の蒸気機関を大幅に改良し、<b>実用的な蒸気機関</b>を完成させました（1769年に特許取得）。</p>
+      <p>この蒸気機関が綿工場・炭鉱・製鉄所・蒸気機関車・蒸気船などあらゆる産業に応用され、<b>産業革命の原動力</b>となりました。</p>
+      <p>💡 仕事量の単位「ワット（W）」はワットの名前に由来します。スマートフォンの充電器にも「W（ワット）」が使われています。</p>
+    `
+  },
+  marx: {
+    name: "カール・マルクス",
+    sub: "1818〜1883年｜ドイツの経済学者・思想家",
+    tags: ["社会主義","共産党宣言","資本論"],
+    body: `
+      <p>ドイツ出身の経済学者・哲学者。産業革命後の深刻な労働問題を目の当たりにし、資本主義を根本的に批判しました。</p>
+      <p>友人のエンゲルスとともに著書<b>「共産党宣言」（1848年）</b>を発表し、「万国の労働者よ、団結せよ！」と呼びかけました。晩年には大作<b>「資本論」</b>を著し、資本主義の矛盾を徹底的に分析しました。</p>
+      <p>⚠️ マルクスの思想はその後、ロシア革命（1917年）やソビエト連邦の成立につながります。20世紀の世界を二分した「冷戦」の思想的根拠となった人物です。</p>
+    `
+  },
+  lincoln: {
+    name: "エイブラハム・リンカン",
+    sub: "1809〜1865年｜アメリカ合衆国第16代大統領",
+    tags: ["南北戦争","奴隷解放宣言","暗殺された大統領"],
+    body: `
+      <p>貧しい農家の出身。独学で弁護士となり政界へ。1861年に<b>第16代大統領</b>に就任。「人民の、人民による、人民のための政治」という言葉（ゲティスバーグ演説）で有名です。</p>
+      <p>南北戦争中の1863年に<b>奴隷解放宣言</b>を発表。これにより北軍は道義的な大義名分を得てヨーロッパの支持を集め、1865年に勝利しました。</p>
+      <p>⚠️ 1865年4月、南北戦争終結直後に劇場で暗殺されました。「解放者」として最も尊敬されるアメリカ大統領のひとりです。</p>
+      <p>🔑 混同注意：初代大統領はワシントン。リンカンは第16代です。</p>
+    `
+  },
+  bismarck: {
+    name: "オットー・フォン・ビスマルク",
+    sub: "1815〜1898年｜プロイセン・ドイツの首相",
+    tags: ["鉄血宰相","ドイツ統一","鉄血政策"],
+    body: `
+      <p>プロイセン王国の首相。「鉄（軍事力）と血（兵士の犠牲）によって国を統一する」という<b>鉄血政策</b>を唱えたことから「鉄血宰相」と呼ばれます。</p>
+      <p>産業革命を推進して経済力・軍事力を高め、1866年にオーストリア、1871年にフランスとの戦争に勝利。<b>ドイツ帝国</b>としてドイツを統一しました。</p>
+      <p>💡 ビスマルクは世界初の<b>社会保険制度</b>（健康保険・労働者保険など）も導入しました。労働者の不満を和らげて社会主義の広がりを防ぐための政策でした。現代の社会保障の元祖ともいえます。</p>
+    `
+  },
+  hong: {
+    name: "洪秀全（こうしゅうぜん）",
+    sub: "1814〜1864年｜清末の革命指導者",
+    tags: ["太平天国の乱","清への反乱","キリスト教"],
+    body: `
+      <p>広東省出身。科挙（官僚登用試験）に何度も落ちた後、キリスト教の影響を受け「自分はキリストの弟である」と確信。<b>太平天国</b>という国を建て、清への反乱を指導しました（1851〜1864年）。</p>
+      <p>土地の平等分配・男女平等・租税の軽減を唱え、農民を中心に一時は中国南部を支配しました。この反乱の思想は、のちの中国革命（辛亥革命・孫文）に影響を与えました。</p>
+      <p>⚠️ 反乱は最終的にイギリスの支援を受けた清軍に鎮圧され、洪秀全は病死。<b>アヘン戦争後の重税と社会不安が反乱の温床</b>になったことが重要です。</p>
+    `
+  }
+};
+
+function showPopup(key) {
+  const d = popupData[key]; if (!d) return;
+  document.getElementById('popup-name').textContent = d.name;
+  document.getElementById('popup-sub').textContent = d.sub;
+  document.getElementById('popup-body').innerHTML =
+    d.tags.map(t=>`<span class="popup-tag">${t}</span>`).join('') + d.body;
+  document.getElementById('popup-overlay').classList.add('show');
+}
+function closePopup() { document.getElementById('popup-overlay').classList.remove('show'); }
+function closePopupOutside(e) { if (e.target === document.getElementById('popup-overlay')) closePopup(); }
+</script>
+</body>
+</html>
