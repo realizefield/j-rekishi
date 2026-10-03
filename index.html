@@ -30,6 +30,8 @@ body{font-family:'BIZ UDGothic','Hiragino Kaku Gothic Pro','Meiryo',sans-serif;b
 .unit-hd-meiji   {background:linear-gradient(90deg,#1B3A6B,#1B5E8B)}
 .unit-hd-nisshin {background:linear-gradient(90deg,#5B1B1B,#8B3A3A)}
 .unit-hd-coming  {background:linear-gradient(90deg,#555,#888)}
+.unit-hd-taisho  {background:linear-gradient(90deg,#1a237e,#283593)}
+.unit-hd-showa   {background:linear-gradient(90deg,#7b2d00,#bf360c)}
 .unit-num{background:rgba(255,255,255,.2);border-radius:8px;padding:3px 10px;font-size:13px;font-weight:700;white-space:nowrap}
 .unit-title{font-size:16px;font-weight:700;flex:1}
 .unit-badge{font-size:11px;background:rgba(255,255,255,.3);border-radius:10px;padding:2px 8px;white-space:nowrap;font-weight:700}
@@ -85,7 +87,7 @@ canvas{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;display:none
     <div class="sum-item"><span class="sum-dot sum-dot-a"></span>A OK <span class="sum-count" id="cnt-a">0</span> 単元</div>
     <div class="sum-item"><span class="sum-dot sum-dot-b"></span>B 要復習 <span class="sum-count" id="cnt-b">0</span> 単元</div>
     <div class="sum-item"><span class="sum-dot sum-dot-c"></span>C 何度も復習 <span class="sum-count" id="cnt-c">0</span> 単元</div>
-    <div class="sum-item"><span class="sum-dot sum-dot-n"></span>未実施 <span class="sum-count" id="cnt-n">31</span> 単元</div>
+    <div class="sum-item"><span class="sum-dot sum-dot-n"></span>未実施 <span class="sum-count" id="cnt-n">37</span> 単元</div>
   </div>
 </div>
 <div class="wrap">
@@ -832,24 +834,180 @@ canvas{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;display:none
         </div>
     </div></div>
   </div>
-  <!-- 準備中 -->
+  <!-- 大正・昭和① 第1次世界大戦〜第2次世界大戦 -->
   <div class="unit">
-    <div class="unit-hd unit-hd-coming">
-      <span class="unit-num">大正・昭和</span>
-      <span class="unit-title">大正デモクラシー・戦争と平和</span>
-      <span class="unit-badge">🔜 準備中</span>
+    <div class="unit-hd unit-hd-taisho">
+      <span class="unit-num">大正・昭和①</span>
+      <span class="unit-title">第1次世界大戦〜第2次世界大戦</span>
+      <span class="unit-badge">🌍 全4単元</span>
+    </div>
+    <div class="unit-progress">
+      <div class="unit-prog-bar"><div class="unit-prog-fill" id="prog-taisho1" style="width:0%"></div></div>
+      <div class="unit-prog-label" id="prog-taisho1-label">0 / 4 完了</div>
     </div>
     <div class="unit-body"><div class="sec-grid">
-      <div class="sec-card-coming"><div class="sc-hd-coming"><span class="sc-num-coming">単元①</span><span class="sc-title-coming">大正デモクラシー</span></div><span class="coming-label">🔜 準備中</span></div>
-      <div class="sec-card-coming"><div class="sc-hd-coming"><span class="sc-num-coming">単元②</span><span class="sc-title-coming">第二次世界大戦</span></div><span class="coming-label">🔜 準備中</span></div>
-      <div class="sec-card-coming"><div class="sc-hd-coming"><span class="sc-num-coming">単元③</span><span class="sc-title-coming">戦後の日本と現代</span></div><span class="coming-label">🔜 準備中</span></div>
+
+      <!-- rekishi21 -->
+      <div class="sec-card" data-id="rekishi21">
+        <a href="rekishi21_new.html">
+          <div class="sc-hd"><span class="sc-num">第21章</span><span class="sc-title">第１次世界大戦</span><span class="sc-stars">★★★</span></div>
+          <div class="sc-body"><ul class="sc-topics">
+            <li>三国同盟・三国協商</li>
+            <li>サライエボ事件・日英同盟・二十一カ条の要求</li>
+            <li>ロシア革命・国際連盟・ワシントン会議</li>
+          </ul></div>
+        </a>
+        <div class="sc-body" style="padding-top:0">
+          <div class="sc-btn-row">
+            <a class="sc-btn sc-btn-learn" href="rekishi21_new.html">📖 学習</a>
+            <a class="sc-btn sc-btn-drill" href="rekishi21_drill.html">✏️ 確認問題</a>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('rekishi21','a',this)">A</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('rekishi21','b',this)">B</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('rekishi21','c',this)">C</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- rekishi22 -->
+      <div class="sec-card" data-id="rekishi22">
+        <a href="rekishi22_new.html">
+          <div class="sc-hd"><span class="sc-num">第22章</span><span class="sc-title">大正デモクラシーと大衆文化</span><span class="sc-stars">★★★</span></div>
+          <div class="sc-body"><ul class="sc-topics">
+            <li>吉野作造（民本主義）・美濃部達吉（天皇機関説）</li>
+            <li>米騒動・原敬の政党内閣</li>
+            <li>普通選挙法・治安維持法・全国水平社</li>
+          </ul></div>
+        </a>
+        <div class="sc-body" style="padding-top:0">
+          <div class="sc-btn-row">
+            <a class="sc-btn sc-btn-learn" href="rekishi22_new.html">📖 学習</a>
+            <a class="sc-btn sc-btn-drill" href="rekishi22_drill.html">✏️ 確認問題</a>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('rekishi22','a',this)">A</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('rekishi22','b',this)">B</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('rekishi22','c',this)">C</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- rekishi23 -->
+      <div class="sec-card" data-id="rekishi23">
+        <a href="rekishi23_new.html">
+          <div class="sc-hd"><span class="sc-num">第23章</span><span class="sc-title">世界恐慌と日本の中国侵略</span><span class="sc-stars">★★★</span></div>
+          <div class="sc-body"><ul class="sc-topics">
+            <li>世界恐慌・ニューディール政策・ブロック経済</li>
+            <li>満州事変・五・一五事件・二・二六事件</li>
+            <li>日中戦争・国家総動員法・大政翼賛会</li>
+          </ul></div>
+        </a>
+        <div class="sc-body" style="padding-top:0">
+          <div class="sc-btn-row">
+            <a class="sc-btn sc-btn-learn" href="rekishi23_new.html">📖 学習</a>
+            <a class="sc-btn sc-btn-drill" href="rekishi23_drill.html">✏️ 確認問題</a>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('rekishi23','a',this)">A</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('rekishi23','b',this)">B</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('rekishi23','c',this)">C</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- rekishi24 -->
+      <div class="sec-card" data-id="rekishi24">
+        <a href="rekishi24_new.html">
+          <div class="sc-hd"><span class="sc-num">第24章</span><span class="sc-title">第二次世界大戦</span><span class="sc-stars">★★★</span></div>
+          <div class="sc-body"><ul class="sc-topics">
+            <li>独ソ不可侵条約・ポーランド侵攻・日独伊三国同盟</li>
+            <li>真珠湾攻撃・太平洋戦争・ミッドウェー海戦</li>
+            <li>広島・長崎への原爆・ポツダム宣言・玉音放送</li>
+          </ul></div>
+        </a>
+        <div class="sc-body" style="padding-top:0">
+          <div class="sc-btn-row">
+            <a class="sc-btn sc-btn-learn" href="rekishi24_new.html">📖 学習</a>
+            <a class="sc-btn sc-btn-drill" href="rekishi24_drill.html">✏️ 確認問題</a>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('rekishi24','a',this)">A</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('rekishi24','b',this)">B</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('rekishi24','c',this)">C</button>
+          </div>
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 大正・昭和② 戦後の日本と現代 -->
+  <div class="unit">
+    <div class="unit-hd unit-hd-showa">
+      <span class="unit-num">大正・昭和②</span>
+      <span class="unit-title">戦後の日本と現代</span>
+      <span class="unit-badge">🕊️ 全2単元</span>
+    </div>
+    <div class="unit-progress">
+      <div class="unit-prog-bar"><div class="unit-prog-fill" id="prog-showa1" style="width:0%"></div></div>
+      <div class="unit-prog-label" id="prog-showa1-label">0 / 2 完了</div>
+    </div>
+    <div class="unit-body"><div class="sec-grid">
+
+      <!-- rekishi25 -->
+      <div class="sec-card" data-id="rekishi25">
+        <a href="rekishi25_new.html">
+          <div class="sc-hd"><span class="sc-num">第25章</span><span class="sc-title">第二次世界大戦後の日本と世界①</span><span class="sc-stars">★★★</span></div>
+          <div class="sc-body"><ul class="sc-topics">
+            <li>GHQ・農地改革・財閥解体・教育基本法</li>
+            <li>日本国憲法（三大原則・公布と施行）</li>
+            <li>国際連合・冷戦・朝鮮戦争・サンフランシスコ平和条約</li>
+          </ul></div>
+        </a>
+        <div class="sc-body" style="padding-top:0">
+          <div class="sc-btn-row">
+            <a class="sc-btn sc-btn-learn" href="rekishi25_new.html">📖 学習</a>
+            <a class="sc-btn sc-btn-drill" href="rekishi25_drill.html">✏️ 確認問題</a>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('rekishi25','a',this)">A</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('rekishi25','b',this)">B</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('rekishi25','c',this)">C</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- rekishi26 -->
+      <div class="sec-card" data-id="rekishi26">
+        <a href="rekishi26_new.html">
+          <div class="sc-hd"><span class="sc-num">第26章</span><span class="sc-title">第二次世界大戦後の日本と世界②</span><span class="sc-stars">★★★</span></div>
+          <div class="sc-body"><ul class="sc-topics">
+            <li>バンドン会議・日ソ共同宣言・国連加盟</li>
+            <li>高度経済成長・沖縄返還・日中国交正常化</li>
+            <li>石油危機・冷戦終結・バブル崩壊・東日本大震災</li>
+          </ul></div>
+        </a>
+        <div class="sc-body" style="padding-top:0">
+          <div class="sc-btn-row">
+            <a class="sc-btn sc-btn-learn" href="rekishi26_new.html">📖 学習</a>
+            <a class="sc-btn sc-btn-drill" href="rekishi26_drill.html">✏️ 確認問題</a>
+          </div>
+          <div class="abc-row">
+            <button class="abc-btn abc-btn-a" onclick="setABC('rekishi26','a',this)">A</button>
+            <button class="abc-btn abc-btn-b" onclick="setABC('rekishi26','b',this)">B</button>
+            <button class="abc-btn abc-btn-c" onclick="setABC('rekishi26','c',this)">C</button>
+          </div>
+        </div>
+      </div>
+
     </div></div>
   </div>
 </div>
 <script>
 var STORAGE_KEY = 'gamba_rekishi_status';
 var status = {};
-var ALL_IDS = ["kodai1", "kodai2", "kodai3", "kofun1", "asuka1", "nara1", "heian1", "heian2", "kamakura1", "kamakura2", "muro1", "muro2", "muro3", "muro4", "sen1", "sen2", "sen3", "sen4", "sen5", "sen6", "sen7", "edo1", "edo2", "edo3", "edo4", "ch15", "ch16", "ch17", "ch18", "ch19", "ch20"];
+var ALL_IDS = ["kodai1", "kodai2", "kodai3", "kofun1", "asuka1", "nara1", "heian1", "heian2", "kamakura1", "kamakura2", "muro1", "muro2", "muro3", "muro4", "sen1", "sen2", "sen3", "sen4", "sen5", "sen6", "sen7", "edo1", "edo2", "edo3", "edo4", "ch15", "ch16", "ch17", "ch18", "ch19", "ch20", "rekishi21", "rekishi22", "rekishi23", "rekishi24", "rekishi25", "rekishi26"];
 try { var saved = localStorage.getItem(STORAGE_KEY); if (saved) status = JSON.parse(saved); } catch(e) {}
 
 function applyStoredStatus() {
@@ -930,6 +1088,16 @@ function updateProgress() {
   var _f = document.getElementById('prog-kindai2'); var _l = document.getElementById('prog-kindai2-label');
   if(_f) _f.style.width = pct_prog_kindai2 + '%';
   if(_l) _l.textContent = done_prog_kindai2 + ' / 2 完了';
+  var done_prog_taisho1 = ["rekishi21", "rekishi22", "rekishi23", "rekishi24"].filter(function(id){ return status[id]==='a'; }).length;
+  var pct_prog_taisho1 = Math.round(done_prog_taisho1 / 4 * 100);
+  var _f = document.getElementById('prog-taisho1'); var _l = document.getElementById('prog-taisho1-label');
+  if(_f) _f.style.width = pct_prog_taisho1 + '%';
+  if(_l) _l.textContent = done_prog_taisho1 + ' / 4 完了';
+  var done_prog_showa1 = ["rekishi25", "rekishi26"].filter(function(id){ return status[id]==='a'; }).length;
+  var pct_prog_showa1 = Math.round(done_prog_showa1 / 2 * 100);
+  var _f = document.getElementById('prog-showa1'); var _l = document.getElementById('prog-showa1-label');
+  if(_f) _f.style.width = pct_prog_showa1 + '%';
+  if(_l) _l.textContent = done_prog_showa1 + ' / 2 完了';
 }
 function confetti() {
   var cv=document.getElementById('cc');
