@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：第25章 戦後の日本と国際社会</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #1a6b3c;padding-bottom:8px;font-size:24px;color:#1a1a2e}
+  h2{margin-top:20px;margin-bottom:8px;font-size:18px;border-left:5px solid #1a6b3c;padding-left:10px;color:#1a1a2e}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+
+  /* ── 語群バンク ── */
+  .word-bank-sticky-container{position:sticky;top:0;z-index:1001;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc;overflow:visible}
+  .word-bank{border:2px solid #1a6b3c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none;overflow:visible}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;position:relative}
+  .word-chip.used{opacity:0.3}
+  .word-chip.selected-chip{border-color:#1a6b3c;background-color:#eafaf1;box-shadow:0 0 0 2px #82e0aa}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1a1a2e;color:#fff;border-radius:8px;padding:9px 13px;font-size:12px;line-height:1.7;z-index:3000;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1a1a2e}
+  .word-chip:hover .chip-pop,.word-chip.tip-active .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+
+  /* ── セクション ── */
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px;background:#1a6b3c}
+
+  /* ── 流れボックス ── */
+  .flow-box{display:flex;gap:0;margin:14px 0;flex-wrap:wrap}
+  .flow-item{flex:1;min-width:130px;padding:12px 14px;font-size:13px;line-height:1.7;position:relative}
+  .flow-item:not(:last-child)::after{content:"▶";position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:20px;color:#1a6b3c;z-index:1}
+  .flow-cause{background:#fff3cd;border-radius:8px 0 0 8px;border:2px solid #f0a500}
+  .flow-process{background:#dce9ff;border:2px solid #3a7dce;border-left:none}
+  .flow-result{background:#e2f8e2;border-radius:0 8px 8px 0;border:2px solid #2e7d32;border-left:none}
+  .flow-label{font-weight:bold;font-size:11px;display:block;margin-bottom:4px;letter-spacing:1px}
+  .flow-cause .flow-label{color:#b7770d}
+  .flow-process .flow-label{color:#1a4a9e}
+  .flow-result .flow-label{color:#1b5e20}
+
+  /* ── なぜ？ボックス ── */
+  .why-box{background:#eafaf1;border-left:5px solid #1a6b3c;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px;line-height:1.9}
+  .why-box .label{font-weight:bold;color:#1a6b3c;margin-right:4px}
+
+  /* ── ポイントボックス ── */
+  .key-point{background:#fff8e1;border-left:5px solid #f0a500;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}
+  .key-point strong{color:#1a6b3c}
+
+  /* ── blank（穴埋め）── */
+  .blank{display:inline-block;min-width:90px;min-height:26px;border-bottom:2px solid #1a6b3c;margin:0 3px;text-align:center;cursor:pointer;font-weight:bold;color:#1a6b3c;vertical-align:middle}
+  .blank.correct{background-color:#ffeb3b}
+
+  /* ── person-pop ── */
+  .person-pop{display:inline-block;position:relative;border-bottom:2px dashed #1a6b3c;cursor:pointer;color:#0d3d22;font-weight:bold}
+  .person-pop .pop-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:240px;background:#fff;border:2px solid #1a6b3c;border-radius:12px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,0.18);z-index:2000;text-align:center;font-weight:normal;font-size:13px;color:#222;pointer-events:none}
+  .person-pop .pop-box .pop-name{font-weight:bold;font-size:15px;color:#1a6b3c;margin-bottom:6px;display:block}
+  .person-pop .pop-box .pop-desc{font-size:12px;color:#444;line-height:1.7;text-align:left;display:block}
+  .person-pop .pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:#1a6b3c}
+  .person-pop:hover .pop-box,.person-pop.active .pop-box{display:block}
+
+  /* ── 年表 ── */
+  .timeline{border-left:3px solid #1a6b3c;padding-left:20px;margin:14px 0}
+  .timeline-item{margin-bottom:14px;position:relative}
+  .timeline-item::before{content:'●';position:absolute;left:-27px;color:#1a6b3c;font-size:14px}
+  .timeline-year{font-weight:bold;font-size:13px;color:#1a6b3c;background:#eafaf1;display:inline-block;padding:2px 10px;border-radius:4px;margin-bottom:4px}
+
+  /* ── 改革グリッド ── */
+  .reform-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
+  .reform-card{border-radius:8px;padding:14px;font-size:13px;line-height:1.8;border-left:4px solid #1a6b3c;background:#f4faf7}
+  .reform-card .card-title{font-weight:bold;font-size:14px;color:#1a6b3c;margin-bottom:6px}
+
+  /* ── フッター ── */
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#1a6b3c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #0d3d22}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #1a6b3c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #1a6b3c;background-color:#eafaf1;display:none;text-align:left;font-size:14px;line-height:1.8}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="index.html">← 単元一覧に戻る</a>
+<h1>🕊️ 第25章 戦後の日本と国際社会</h1>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 語句をタップすると説明、もう一度タップで選択</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== ① GHQによる占領と民主化 ========== -->
+<div class="section">
+  <span class="section-label">① GHQによる占領と民主化（1945〜52年）</span>
+  <h2>なぜ日本は戦後こんなに大きく変わったのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    1945年8月の敗戦後、日本はGHQ（連合国総司令部）に占領されました。GHQの最高司令官
+    <span class="person-pop">マッカーサー<span class="pop-box"><span class="pop-name">ダグラス・マッカーサー</span><span class="pop-desc">GHQ最高司令官。「日本の民主化」を主導した。農地改革・財閥解体・日本国憲法制定などを指示。1951年に朝鮮戦争の方針をめぐりトルーマン大統領と対立し解任された。</span></span></span>は「二度と戦争を起こさない国に」という目標で、日本を根本から作り替える改革を次々と実施しました。
+  </div>
+
+  <div class="reform-grid">
+    <div class="reform-card">
+      <div class="card-title">📜 日本国憲法</div>
+      1946年公布・1947年施行。<span class="blank" data-key="主権在民">主権在民</span>・基本的人権の尊重・<span class="blank" data-key="平和主義">平和主義</span>（戦争放棄）の3原則。第9条で戦力を持たないことを定めた
+    </div>
+    <div class="reform-card">
+      <div class="card-title">🏭 財閥解体</div>
+      三井・三菱・住友などの大企業グループ（財閥）を解体。一部の大企業が経済を支配する構造をなくした
+    </div>
+    <div class="reform-card">
+      <div class="card-title">🌾 農地改革</div>
+      地主から農地を買い上げ、農民に安く売り渡した。「小作農」（土地を借りて農業をする人）が自分の土地を持てるようになった
+    </div>
+    <div class="reform-card">
+      <div class="card-title">🎓 教育改革</div>
+      軍国主義的な教育をやめ、民主主義教育へ転換。6・3・3制（小6・中3・高3）に変わった
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 日本国憲法の3原則って？</span>
+    ①<strong>主権在民</strong>：国の主権（最終的な決定権）は国民にある。天皇は「象徴」となった。
+    ②<strong>基本的人権の尊重</strong>：すべての人が生まれながらに持つ権利（言論・思想・生存権など）を保障。
+    ③<strong>平和主義</strong>：戦争を二度と起こさないよう、第9条で戦力の放棄を宣言。
+  </div>
+</div>
+
+<!-- ========== ② 極東国際軍事裁判（東京裁判） ========== -->
+<div class="section">
+  <span class="section-label">② 戦争責任の追及と東京裁判</span>
+  <h2>戦争を起こしたリーダーたちはどうなったのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    第2次世界大戦後、連合国は戦争犯罪人を裁く国際法廷を開きました。ドイツではニュルンベルク裁判、日本では東京裁判（極東国際軍事裁判）が行われ、戦争を主導した指導者たちが裁かれました。「戦争を始めること自体が犯罪」という考え方（平和に対する罪）が初めて適用されました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 目的</span>
+      戦争指導者の責任を追及し、二度と戦争を起こさないための「前例」を作る
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 東京裁判</span>
+      1946〜48年開廷。<span class="blank" data-key="東条英機">東条英機</span>元首相ら7名が絞首刑（A級戦犯として処刑）
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      天皇は「占領統治を円滑にするため」訴追されなかった。戦争責任の範囲・評価は今も議論が続く
+    </div>
+  </div>
+</div>
+
+<!-- ========== ③ 冷戦と朝鮮戦争 ========== -->
+<div class="section">
+  <span class="section-label">③ 冷戦と朝鮮戦争（1950〜53年）</span>
+  <h2>「冷戦」とは何か？なぜ朝鮮半島で戦争が起きたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    第2次世界大戦後、世界は「資本主義・民主主義」のアメリカ陣営と「社会主義・共産主義」のソ連陣営に分かれて対立しました。これを<span class="blank" data-key="冷戦">冷戦</span>（冷たい戦争）といいます。直接は戦わず、軍事力・経済力・影響力を競い合う対立でした。朝鮮半島もこの対立の舞台になりました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 背景</span>
+      朝鮮半島は終戦後、北緯38度線を境に北（ソ連が支援する社会主義）と南（アメリカが支援する資本主義）に分断された
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 戦争</span>
+      1950年、北朝鮮が南に侵攻→<span class="blank" data-key="朝鮮戦争">朝鮮戦争</span>勃発。アメリカ中心の国連軍が南を支援、中国が北を支援して激しく戦った
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      1953年に休戦協定が結ばれたが、現在も平和条約は未締結。朝鮮半島の南北分断は今も続く
+    </div>
+  </div>
+
+  <div class="key-point">
+    <strong>💡 朝鮮戦争と日本の関係</strong>　朝鮮戦争が起きると、アメリカ軍は日本を「前線基地」として活用しました。軍需物資の発注（特需）が日本経済を刺激し、戦後復興の大きなきっかけになりました。また日本は自衛隊の前身となる<span class="blank" data-key="警察予備隊">警察予備隊</span>を創設しました。
+  </div>
+</div>
+
+<!-- ========== ④ サンフランシスコ講和条約と独立回復 ========== -->
+<div class="section">
+  <span class="section-label">④ 独立回復とその後（1951〜56年）</span>
+  <h2>日本はどのようにして占領から抜け出したのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    冷戦が激化する中、アメリカは日本を「西側陣営の同盟国」として早期に独立させることが必要だと判断しました。1951年、日本はサンフランシスコ平和条約に調印し、翌年に独立を回復しました。ただし同時に日米安全保障条約も結び、アメリカ軍が引き続き日本に駐留することになりました。
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1951年</div>
+      <span class="blank" data-key="サンフランシスコ平和条約">サンフランシスコ平和条約</span>に調印（ソ連・中国などは署名せず）。同時に<span class="blank" data-key="日米安全保障条約">日米安全保障条約</span>も締結
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1952年</div>
+      条約発効。GHQによる占領が終わり、日本が独立を回復
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1954年</div>
+      自衛隊が発足（警察予備隊→保安隊→自衛隊と改組）
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1956年</div>
+      <span class="blank" data-key="日ソ共同宣言">日ソ共同宣言</span>で日ソ国交回復。国際連合（UN）に加盟。「国際社会への復帰」が実現
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜソ連と平和条約を結べなかったの？</span>
+    北方領土（択捉島・国後島・色丹島・歯舞群島）の帰属問題で意見が対立し、今日まで日本とロシアの間には正式な平和条約がありません。これは現在も未解決の外交問題です。
+  </div>
+</div>
+
+<!-- ========== ⑤ まとめ ========== -->
+<div class="section">
+  <span class="section-label">⑤ まとめ：戦後日本の歩み</span>
+  <h2>敗戦から独立回復まで、日本はどう変わったのか？</h2>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">🟡 1945〜47年</span>
+      GHQ占領下で民主化改革。<span class="blank" data-key="日本国憲法">日本国憲法</span>制定（主権在民・基本的人権・平和主義）。財閥解体・農地改革・教育改革
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">🔵 1950〜51年</span>
+      朝鮮戦争→警察予備隊創設→特需で経済回復。サンフランシスコ平和条約・日米安保条約に調印
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">🟢 1952〜56年</span>
+      独立回復→自衛隊発足→日ソ共同宣言→<span class="blank" data-key="国際連合">国際連合</span>加盟。「国際社会への復帰」完成
+    </div>
+  </div>
+
+  <div class="key-point">
+    <strong>💡 この章の核心</strong>：戦後の日本は、GHQによる「上からの民主化」で生まれ変わりました。憲法・選挙・教育・農地・経済…すべてを短期間に改革した。その後は冷戦の中でアメリカと同盟を結び、1956年の国連加盟で完全に国際社会に復帰しました。
+  </div>
+</div>
+
+<!-- ========== フッター ========== -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div id="progress-bar-area" style="width:100%;background:#ddd;border-radius:8px;height:10px;margin-bottom:8px">
+      <div id="progress-bar" style="height:10px;background:#1a6b3c;border-radius:8px;width:0%;transition:width 0.3s"></div>
+    </div>
+    <div class="controls">
+      <button id="start-btn" onclick="startChallenge()">🚀 チャレンジ開始</button>
+      <button class="secondary" onclick="resetAll()">🔄 リセット</button>
+      <button id="check-btn" onclick="checkAnswers()" disabled>✅ 答え合わせ</button>
+      <button id="explain-btn" class="secondary" onclick="toggleExplain()">💡 解説を見る</button>
+      <button id="next-btn" onclick="location.href='rekishi25_drill.html'" disabled>次へ ▶</button>
+    </div>
+    <div class="timer-info">⏱ <span id="timer-display">00:00</span>　正解: <span id="score-display">0</span> / <span id="total-display">0</span></div>
+  </div>
+</div>
+
+<div class="explain-box" id="explain-box">
+  <strong>📖 第25章 解説まとめ</strong><br><br>
+  <strong>GHQの民主化改革（1945〜）：</strong>日本国憲法制定（主権在民・基本的人権・平和主義の3原則）／財閥解体／農地改革／教育改革（6・3・3制）。<br><br>
+  <strong>東京裁判（1946〜48年）：</strong>東条英機ら7名が絞首刑。「侵略戦争を起こした罪（平和に対する罪）」が問われた。<br><br>
+  <strong>冷戦：</strong>アメリカ（資本主義）対ソ連（社会主義）の対立。直接戦わず、代理戦争・軍拡競争・宣伝合戦で争った。<br><br>
+  <strong>朝鮮戦争（1950〜53年休戦）：</strong>北朝鮮が南に侵攻→国連軍（アメリカ中心）が介入。日本は特需（軍需物資の注文）で経済回復。警察予備隊を創設。<br><br>
+  <strong>独立回復（1952年）：</strong>サンフランシスコ平和条約（1951年調印）発効。日米安保条約で米軍駐留継続。<br><br>
+  <strong>国際社会への復帰（1956年）：</strong>日ソ共同宣言で国交回復→国際連合加盟。ただし北方領土問題で平和条約は未締結のまま。
+</div>
+
+<script>
+const answers = {
+  "主権在民": "主権在民",
+  "平和主義": "平和主義",
+  "東条英機": "東条英機",
+  "冷戦": "冷戦",
+  "朝鮮戦争": "朝鮮戦争",
+  "警察予備隊": "警察予備隊",
+  "サンフランシスコ平和条約": "サンフランシスコ平和条約",
+  "日米安全保障条約": "日米安全保障条約",
+  "日ソ共同宣言": "日ソ共同宣言",
+  "日本国憲法": "日本国憲法",
+  "国際連合": "国際連合"
+};
+
+const WORD_TIPS = {
+  "主権在民": "国の最高の権力（主権）が国民にあるという原則。天皇は「日本国の象徴」となった",
+  "平和主義": "日本国憲法第9条に定められた原則。戦争の放棄と戦力の不保持を宣言した",
+  "東条英機": "太平洋戦争開戦時の内閣総理大臣兼陸軍大臣。東京裁判でA級戦犯として絞首刑になった",
+  "冷戦": "1945〜91年ごろのアメリカ（西側）とソ連（東側）の対立。直接の戦争はせず「冷たい戦争」と呼ばれた",
+  "朝鮮戦争": "1950年に北朝鮮が韓国へ侵攻して始まった戦争。1953年に休戦。南北分断は現在も続く",
+  "警察予備隊": "1950年、朝鮮戦争を機にGHQの指示で創設された武装組織。のちに自衛隊となった",
+  "サンフランシスコ平和条約": "1951年調印・52年発効。日本が連合国と結んだ講和条約。これで占領が終わり独立を回復した",
+  "日米安全保障条約": "サンフランシスコ平和条約と同時に締結。アメリカ軍の日本駐留を認める条約",
+  "日ソ共同宣言": "1956年、日本とソ連が国交を回復した宣言。これにより日本の国連加盟が実現した",
+  "日本国憲法": "1946年公布・47年施行。主権在民・基本的人権の尊重・平和主義の3原則を柱とする",
+  "国際連合": "第2次世界大戦後に設立された国際平和機構（UN）。日本は1956年に加盟した"
+};
+
+let countMap = {};
+let selectedChip = null;
+let timerInterval = null;
+let seconds = 0;
+let started = false;
+
+function buildCountMap() {
+  countMap = {};
+  document.querySelectorAll('.blank').forEach(b => {
+    const k = b.dataset.key;
+    countMap[k] = (countMap[k] || 0) + 1;
+  });
+}
+
+function renderBank() {
+  const bank = document.getElementById('word-bank');
+  bank.innerHTML = '';
+  bank.style.display = 'flex';
+  const pool = [];
+  Object.keys(countMap).forEach(k => {
+    for (let i = 0; i < countMap[k]; i++) pool.push(k);
+  });
+  pool.sort(() => Math.random() - 0.5);
+  pool.forEach(word => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.dataset.word = word;
+    chip.innerHTML = word;
+    if (WORD_TIPS[word]) {
+      chip.innerHTML += `<div class="chip-pop">${WORD_TIPS[word]}</div>`;
+    }
+    chip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (chip.classList.contains('used')) return;
+      if (chip.classList.contains('tip-active')) {
+        chip.classList.remove('tip-active');
+        if (selectedChip === chip) { selectedChip = null; return; }
+      }
+      if (selectedChip === chip) {
+        chip.classList.remove('selected-chip');
+        selectedChip = null;
+        return;
+      }
+      if (WORD_TIPS[word] && selectedChip !== chip) {
+        document.querySelectorAll('.word-chip.tip-active').forEach(c => c.classList.remove('tip-active'));
+        chip.classList.add('tip-active');
+        if (selectedChip) { selectedChip.classList.remove('selected-chip'); selectedChip = null; }
+        return;
+      }
+      document.querySelectorAll('.word-chip.selected-chip').forEach(c => c.classList.remove('selected-chip'));
+      chip.classList.add('selected-chip');
+      selectedChip = chip;
+    });
+    bank.appendChild(chip);
+  });
+}
+
+function startChallenge() {
+  if (started) return;
+  started = true;
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = '';
+    b.dataset.filled = '';
+  });
+  buildCountMap();
+  renderBank();
+  document.getElementById('start-btn').disabled = true;
+  document.getElementById('check-btn').disabled = false;
+  const total = document.querySelectorAll('.blank').length;
+  document.getElementById('total-display').textContent = total;
+  seconds = 0;
+  timerInterval = setInterval(() => {
+    seconds++;
+    const m = String(Math.floor(seconds/60)).padStart(2,'0');
+    const s = String(seconds%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent = `${m}:${s}`;
+  }, 1000);
+
+  document.querySelectorAll('.blank').forEach(blank => {
+    blank.addEventListener('click', () => {
+      if (!selectedChip) return;
+      const word = selectedChip.dataset.word;
+      blank.textContent = word;
+      blank.dataset.filled = word;
+      selectedChip.classList.add('used');
+      selectedChip.classList.remove('selected-chip');
+      selectedChip = null;
+      updateProgress();
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.word-chip')) {
+      document.querySelectorAll('.word-chip.selected-chip').forEach(c => c.classList.remove('selected-chip'));
+      document.querySelectorAll('.word-chip.tip-active').forEach(c => c.classList.remove('tip-active'));
+      selectedChip = null;
+    }
+  });
+}
+
+function updateProgress() {
+  const blanks = document.querySelectorAll('.blank');
+  const filled = Array.from(blanks).filter(b => b.dataset.filled).length;
+  const pct = blanks.length > 0 ? (filled / blanks.length) * 100 : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function checkAnswers() {
+  let correct = 0;
+  document.querySelectorAll('.blank').forEach(blank => {
+    const key = blank.dataset.key;
+    const filled = blank.dataset.filled || '';
+    if (filled === answers[key]) {
+      blank.classList.add('correct');
+      correct++;
+    }
+  });
+  clearInterval(timerInterval);
+  document.getElementById('score-display').textContent = correct;
+  const total = document.querySelectorAll('.blank').length;
+  if (correct === total) {
+    document.getElementById('next-btn').disabled = false;
+    const saved = JSON.parse(localStorage.getItem('gamba-progress') || '{}');
+    saved['rekishi25'] = { done: true, score: correct, total: total, time: seconds };
+    localStorage.setItem('gamba-progress', JSON.stringify(saved));
+  }
+}
+
+function resetAll() {
+  clearInterval(timerInterval);
+  started = false;
+  selectedChip = null;
+  seconds = 0;
+  document.getElementById('timer-display').textContent = '00:00';
+  document.getElementById('score-display').textContent = '0';
+  document.getElementById('total-display').textContent = '0';
+  document.getElementById('start-btn').disabled = false;
+  document.getElementById('check-btn').disabled = true;
+  document.getElementById('next-btn').disabled = true;
+  document.getElementById('word-bank').style.display = 'none';
+  document.getElementById('word-bank').innerHTML = '';
+  document.getElementById('progress-bar').style.width = '0%';
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = b.dataset.key;
+    b.dataset.filled = '';
+    b.classList.remove('correct');
+  });
+}
+
+function toggleExplain() {
+  const box = document.getElementById('explain-box');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.person-pop').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      el.classList.toggle('active');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.person-pop.active').forEach(el => el.classList.remove('active'));
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：第24章 日中戦争と第二次世界大戦</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #7b1818;padding-bottom:8px;font-size:24px;color:#1a1a2e}
+  h2{margin-top:20px;margin-bottom:8px;font-size:18px;border-left:5px solid #7b1818;padding-left:10px;color:#1a1a2e}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+
+  /* ── 語群バンク ── */
+  .word-bank-sticky-container{position:sticky;top:0;z-index:1001;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc;overflow:visible}
+  .word-bank{border:2px solid #7b1818;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none;overflow:visible}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;position:relative}
+  .word-chip.used{opacity:0.3}
+  .word-chip.selected-chip{border-color:#7b1818;background-color:#fdf2f2;box-shadow:0 0 0 2px #e59898}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1a1a2e;color:#fff;border-radius:8px;padding:9px 13px;font-size:12px;line-height:1.7;z-index:3000;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1a1a2e}
+  .word-chip:hover .chip-pop,.word-chip.tip-active .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+
+  /* ── セクション ── */
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px;background:#7b1818}
+
+  /* ── 流れボックス（原因・過程・結果） ── */
+  .flow-box{display:flex;gap:0;margin:14px 0;flex-wrap:wrap}
+  .flow-item{flex:1;min-width:130px;padding:12px 14px;font-size:13px;line-height:1.7;position:relative}
+  .flow-item:not(:last-child)::after{content:"▶";position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:20px;color:#7b1818;z-index:1}
+  .flow-cause{background:#fff3cd;border-radius:8px 0 0 8px;border:2px solid #f0a500}
+  .flow-process{background:#dce9ff;border:2px solid #3a7dce;border-left:none}
+  .flow-result{background:#e2f8e2;border-radius:0 8px 8px 0;border:2px solid #2e7d32;border-left:none}
+  .flow-label{font-weight:bold;font-size:11px;display:block;margin-bottom:4px;letter-spacing:1px}
+  .flow-cause .flow-label{color:#b7770d}
+  .flow-process .flow-label{color:#1a4a9e}
+  .flow-result .flow-label{color:#1b5e20}
+
+  /* ── なぜ？ボックス ── */
+  .why-box{background:#fdf2f2;border-left:5px solid #7b1818;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px;line-height:1.9}
+  .why-box .label{font-weight:bold;color:#7b1818;margin-right:4px}
+
+  /* ── ポイントボックス ── */
+  .key-point{background:#fff8e1;border-left:5px solid #f0a500;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}
+  .key-point strong{color:#7b1818}
+
+  /* ── blank（穴埋め）── */
+  .blank{display:inline-block;min-width:90px;min-height:26px;border-bottom:2px solid #7b1818;margin:0 3px;text-align:center;cursor:pointer;font-weight:bold;color:#7b1818;vertical-align:middle}
+  .blank.correct{background-color:#ffeb3b}
+
+  /* ── person-pop ── */
+  .person-pop{display:inline-block;position:relative;border-bottom:2px dashed #7b1818;cursor:pointer;color:#5a0f0f;font-weight:bold}
+  .person-pop .pop-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:240px;background:#fff;border:2px solid #7b1818;border-radius:12px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,0.18);z-index:2000;text-align:center;font-weight:normal;font-size:13px;color:#222;pointer-events:none}
+  .person-pop .pop-box .pop-name{font-weight:bold;font-size:15px;color:#7b1818;margin-bottom:6px;display:block}
+  .person-pop .pop-box .pop-desc{font-size:12px;color:#444;line-height:1.7;text-align:left;display:block}
+  .person-pop .pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:#7b1818}
+  .person-pop:hover .pop-box,.person-pop.active .pop-box{display:block}
+
+  /* ── 年表スタイル ── */
+  .timeline{border-left:3px solid #7b1818;padding-left:20px;margin:14px 0}
+  .timeline-item{margin-bottom:14px;position:relative}
+  .timeline-item::before{content:'●';position:absolute;left:-27px;color:#7b1818;font-size:14px}
+  .timeline-year{font-weight:bold;font-size:13px;color:#7b1818;background:#fdf2f2;display:inline-block;padding:2px 10px;border-radius:4px;margin-bottom:4px}
+
+  /* ── フッター ── */
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#7b1818;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #4a0e0e}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #7b1818;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #7b1818;background-color:#fdf2f2;display:none;text-align:left;font-size:14px;line-height:1.8}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="index.html">← 単元一覧に戻る</a>
+<h1>⚔️ 第24章 日中戦争と第二次世界大戦</h1>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 語句をタップすると説明、もう一度タップで選択</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== ① 日中戦争のはじまり ========== -->
+<div class="section">
+  <span class="section-label">① 日中戦争のはじまり</span>
+  <h2>なぜ日本は中国との戦争に突入したのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    満州事変（1931年）で満州を占領した日本軍は、その後も中国大陸への影響力を拡大しようとしました。1937年、北京郊外でたまたま起きた小さな衝突が、日本と中国の全面戦争（日中戦争）へと発展しました。軍部が「短期間で解決できる」と軽く考えたことが、長期戦争の泥沼にはまる原因になりました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ きっかけ</span>
+      1937年7月、北京郊外の<span class="blank" data-key="盧溝橋">盧溝橋</span>で日中両軍が衝突（盧溝橋事件）
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 拡大</span>
+      日本軍が南京（中国の首都）を占領→<span class="blank" data-key="南京事件">南京事件</span>が起こる（多くの中国人民間人が犠牲に）
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      戦争が長期化。日本は「<span class="blank" data-key="日中戦争">日中戦争</span>」の泥沼へ。国内では物資不足・統制経済が強まる
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ長引いたの？</span>
+    中国では<span class="person-pop">蒋介石<span class="pop-box"><span class="pop-name">蒋介石（しょう かいせき）</span><span class="pop-desc">中国国民党の指導者。日本に対抗するため、毛沢東率いる中国共産党と手を組んだ（第2次国共合作）。重慶を拠点に抗戦を続けた。</span></span></span>の国民党と<span class="person-pop">毛沢東<span class="pop-box"><span class="pop-name">毛沢東（もう たくとう）</span><span class="pop-desc">中国共産党の指導者。日本との戦争では国民党と協力。戦後の内戦で国民党を台湾に追い出し、1949年に中華人民共和国を建国した。</span></span></span>の共産党が協力し（第2次国共合作）、日本軍に抵抗しました。中国本土は広大で、占領しても支配できず、戦線が広がるばかりでした。
+  </div>
+
+  <div class="key-point">
+    <strong>💡 国家総動員法（1938年）</strong>　戦争のために政府が議会の承認なしに人・物・お金を自由に動員できる法律。国民の生活は「戦争のため」にすべて制限されるようになった。
+  </div>
+</div>
+
+<!-- ========== ② 第二次世界大戦の始まり ========== -->
+<div class="section">
+  <span class="section-label">② 第二次世界大戦の始まり（1939年）</span>
+  <h2>なぜヨーロッパで第二次世界大戦が起きたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    第1次世界大戦で敗北したドイツは、巨額の賠償金と領土縮小で苦しんでいました。そこに世界恐慌が追い打ちをかけ、ヒトラーのナチス党が「ドイツを再び偉大に」と叫んで政権を握りました。ヒトラーはユダヤ人迫害・軍備拡大を進め、隣国に次々と侵攻しました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      <span class="person-pop">ヒトラー<span class="pop-box"><span class="pop-name">アドルフ・ヒトラー</span><span class="pop-desc">ナチス（国家社会主義ドイツ労働者党）の指導者。1933年首相就任。ユダヤ人を迫害し、領土拡大のため次々と隣国に侵攻。ホロコーストを主導した。</span></span></span>のドイツがポーランドへ侵攻（1939年9月）
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 拡大</span>
+      イギリス・フランスがドイツに宣戦布告。<span class="blank" data-key="第二次世界大戦">第二次世界大戦</span>が始まる。ドイツは西ヨーロッパを次々占領
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      ドイツ・イタリア・日本の「枢軸国」対 イギリス・フランス・ソ連・アメリカの「連合国」という構図に
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 ホロコーストとは？</span>
+    ナチス・ドイツはユダヤ人を「劣った民族」として迫害し、ヨーロッパ各地の強制収容所で組織的に大量虐殺しました（ホロコースト）。犠牲者は約600万人と言われています。これは人類史上最大規模の組織的迫害の一つで、「二度と繰り返してはならない」歴史として、今も世界で学ばれています。
+  </div>
+</div>
+
+<!-- ========== ③ 日本の南進と太平洋戦争 ========== -->
+<div class="section">
+  <span class="section-label">③ 日本の南進と太平洋戦争（1941年）</span>
+  <h2>なぜ日本はアメリカと戦争することになったのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    日本は日中戦争の長期化で資源が不足していました。石油・ゴムなどを求めて東南アジアへ南進しようとしましたが、アメリカが強く反対。アメリカは日本への石油輸出を禁止しました。このままでは軍が動けなくなると判断した日本軍部は、アメリカ・イギリスとの開戦に踏み切りました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      日本がフランス領インドシナに進駐→アメリカが石油輸出を禁止・資産を凍結。<span class="blank" data-key="日独伊三国同盟">日独伊三国同盟</span>（1940年）で枢軸国側に加わる
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 開戦</span>
+      1941年12月8日、日本がハワイの<span class="blank" data-key="真珠湾">真珠湾</span>（パールハーバー）のアメリカ軍基地を奇襲攻撃
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      <span class="blank" data-key="太平洋戦争">太平洋戦争</span>が始まる。日本は当初東南アジア・太平洋に急速に勢力を広げたが、やがて反撃を受ける
+    </div>
+  </div>
+
+  <div class="key-point">
+    <strong>💡 大東亜共栄圏</strong>　日本が掲げたスローガン。「アジアをアジア人の手で欧米から解放する」というもので、東南アジアへの侵攻を正当化した。しかし実際は日本による支配・収奪だった側面が強い。
+  </div>
+</div>
+
+<!-- ========== ④ 戦況の転換と敗戦 ========== -->
+<div class="section">
+  <span class="section-label">④ 戦況の転換と日本の敗戦</span>
+  <h2>なぜ日本は負けたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    アメリカは圧倒的な工業力と物量で反撃。1942年のミッドウェー海戦で日本海軍が大敗し、以後は守勢に転じました。空襲・島の玉砕戦・本土への爆撃が続き、8月には広島・長崎に原子爆弾が投下されました。
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1942年</div>
+      ミッドウェー海戦で日本海軍が大敗。以後、制空権・制海権をアメリカに奪われる
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1944〜45年</div>
+      本土への空襲が激化。東京大空襲（1945年3月）で10万人以上が犠牲に
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1945年8月6日</div>
+      <span class="blank" data-key="広島">広島</span>に世界最初の原子爆弾が投下される（アメリカのB-29爆撃機）
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1945年8月8日</div>
+      ソ連が日ソ中立条約を破って対日宣戦布告し、満州へ侵攻
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1945年8月9日</div>
+      <span class="blank" data-key="長崎">長崎</span>にも原子爆弾が投下される
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1945年8月15日</div>
+      昭和天皇がラジオで<span class="blank" data-key="ポツダム宣言">ポツダム宣言</span>の受諾を国民に伝える（終戦の詔勅）→日本の降伏
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 原子爆弾とは？</span>
+    核分裂反応を利用した爆弾で、一発で都市を壊滅させる威力を持ちます。広島では推定14万人、長崎では推定7万人が当年中に死亡したとされています。放射線による被害は生存者（被爆者）の体と心に長く影響しました。日本は唯一の戦争被爆国として、核兵器廃絶を訴え続けています。
+  </div>
+</div>
+
+<!-- ========== ⑤ まとめ ========== -->
+<div class="section">
+  <span class="section-label">⑤ まとめ：15年戦争の流れ</span>
+  <h2>満州事変から終戦まで、日本はなぜ戦争を止められなかったのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ止められなかったの？</span>
+    軍部が政治を支配し、批判や反対の声を弾圧していました。マスコミも戦争を美化・推進する報道をし、国民も「勝っている」という情報しか知りませんでした。一度始めた戦争を「負け」として終わらせることが、誰にもできなかったのです。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">🟡 1931〜37年</span>
+      満州事変→<span class="person-pop">二・二六事件<span class="pop-box"><span class="pop-name">二・二六事件（1936年）</span><span class="pop-desc">陸軍の青年将校がクーデターを起こし、政府高官を殺害。鎮圧されたが、これ以降軍部が政治を完全に支配するようになった。</span></span></span>（1936年・軍部が実権掌握）→日中戦争
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">🔵 1939〜41年</span>
+      ヨーロッパで第二次世界大戦勃発→日独伊<span class="blank" data-key="三国同盟">三国同盟</span>（1940年）→真珠湾攻撃→太平洋戦争
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">🟢 1945年</span>
+      広島・長崎への原爆投下・ソ連参戦→ポツダム宣言受諾→敗戦。<span class="blank" data-key="GHQ">GHQ</span>（連合国総司令部）による占領統治へ
+    </div>
+  </div>
+
+  <div class="key-point">
+    <strong>💡 この章の核心</strong>：日本の「15年戦争」（満州事変1931年〜終戦1945年）は、軍部の暴走・民主主義の欠如・情報統制によって止められなかった。民主主義と言論の自由の大切さを、この歴史は教えています。
+  </div>
+</div>
+
+<!-- ========== フッター ========== -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div id="progress-bar-area" style="width:100%;background:#ddd;border-radius:8px;height:10px;margin-bottom:8px">
+      <div id="progress-bar" style="height:10px;background:#7b1818;border-radius:8px;width:0%;transition:width 0.3s"></div>
+    </div>
+    <div class="controls">
+      <button id="start-btn" onclick="startChallenge()">🚀 チャレンジ開始</button>
+      <button class="secondary" onclick="resetAll()">🔄 リセット</button>
+      <button id="check-btn" onclick="checkAnswers()" disabled>✅ 答え合わせ</button>
+      <button id="explain-btn" class="secondary" onclick="toggleExplain()">💡 解説を見る</button>
+      <button id="next-btn" onclick="location.href='rekishi24_drill.html'" disabled>次へ ▶</button>
+    </div>
+    <div class="timer-info">⏱ <span id="timer-display">00:00</span>　正解: <span id="score-display">0</span> / <span id="total-display">0</span></div>
+  </div>
+</div>
+
+<div class="explain-box" id="explain-box">
+  <strong>📖 第24章 解説まとめ</strong><br><br>
+  <strong>日中戦争（1937年〜）：</strong>盧溝橋事件をきっかけに日本と中国が全面戦争に。南京事件が起きる。中国は国共合作（国民党＋共産党）で抵抗し、戦争が長期化した。<br><br>
+  <strong>第二次世界大戦（1939年〜）：</strong>ドイツがポーランドに侵攻。英仏が宣戦布告。ドイツ・イタリア・日本の枢軸国 対 英・仏・ソ・米の連合国という構図に。<br><br>
+  <strong>太平洋戦争（1941年〜45年）：</strong>日本が真珠湾を奇襲攻撃→開戦。1942年ミッドウェー海戦で日本が大敗し形勢逆転。1945年8月6日広島・9日長崎に原爆投下。8月15日にポツダム宣言を受諾し敗戦。<br><br>
+  <strong>重要語句整理：</strong><br>
+  ・盧溝橋事件（1937年）→日中戦争のきっかけ<br>
+  ・日独伊三国同盟（1940年）→枢軸国の形成<br>
+  ・真珠湾攻撃（1941年12月8日）→太平洋戦争のきっかけ<br>
+  ・ポツダム宣言（1945年）→連合国が日本に降伏を求めた宣言<br>
+  ・GHQ→戦後、日本を占領統治した連合国総司令部
+</div>
+
+<script>
+const answers = {
+  "盧溝橋": "盧溝橋",
+  "南京事件": "南京事件",
+  "日中戦争": "日中戦争",
+  "第二次世界大戦": "第二次世界大戦",
+  "日独伊三国同盟": "日独伊三国同盟",
+  "真珠湾": "真珠湾",
+  "太平洋戦争": "太平洋戦争",
+  "広島": "広島",
+  "長崎": "長崎",
+  "ポツダム宣言": "ポツダム宣言",
+  "三国同盟": "三国同盟",
+  "GHQ": "GHQ"
+};
+
+const WORD_TIPS = {
+  "盧溝橋": "北京郊外にある橋。1937年7月に日中両軍が衝突した場所で、日中戦争のきっかけになった",
+  "南京事件": "1937年、日本軍が中国の首都・南京を占領した際に多くの中国人民間人が犠牲になった事件",
+  "日中戦争": "1937年〜45年。日本と中国（国民党・共産党）の全面戦争。中国大陸全土に拡大した",
+  "第二次世界大戦": "1939年〜45年。ドイツのポーランド侵攻をきっかけに始まった世界規模の戦争",
+  "日独伊三国同盟": "1940年、日本・ドイツ・イタリアが結んだ軍事同盟。枢軸国の形成",
+  "真珠湾": "ハワイにあるアメリカ海軍の基地。1941年12月8日に日本軍が奇襲攻撃した",
+  "太平洋戦争": "1941年〜45年。日本とアメリカ・イギリスなどの連合国との戦争。太平洋全域で戦闘が行われた",
+  "広島": "1945年8月6日、世界最初の原子爆弾が投下された都市。推定14万人が犠牲になった",
+  "長崎": "1945年8月9日、2発目の原子爆弾が投下された都市。推定7万人が犠牲になった",
+  "ポツダム宣言": "1945年7月、アメリカ・イギリス・中国が日本に降伏を求めた宣言。日本は8月14日に受諾",
+  "三国同盟": "1940年、日本・ドイツ・イタリアが結んだ軍事同盟。お互いを助け合うことを約束した",
+  "GHQ": "General Headquarters（連合国総司令部）。1945〜52年、日本を占領統治した連合国の機関。マッカーサーが最高司令官"
+};
+
+let countMap = {};
+let selectedChip = null;
+let timerInterval = null;
+let seconds = 0;
+let started = false;
+
+function buildCountMap() {
+  countMap = {};
+  document.querySelectorAll('.blank').forEach(b => {
+    const k = b.dataset.key;
+    countMap[k] = (countMap[k] || 0) + 1;
+  });
+}
+
+function renderBank() {
+  const bank = document.getElementById('word-bank');
+  bank.innerHTML = '';
+  bank.style.display = 'flex';
+  const pool = [];
+  Object.keys(countMap).forEach(k => {
+    for (let i = 0; i < countMap[k]; i++) pool.push(k);
+  });
+  pool.sort(() => Math.random() - 0.5);
+  pool.forEach(word => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.dataset.word = word;
+    chip.innerHTML = word;
+    if (WORD_TIPS[word]) {
+      chip.innerHTML += `<div class="chip-pop">${WORD_TIPS[word]}</div>`;
+    }
+    chip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (chip.classList.contains('used')) return;
+      if (chip.classList.contains('tip-active')) {
+        chip.classList.remove('tip-active');
+        if (selectedChip === chip) { selectedChip = null; return; }
+      }
+      if (selectedChip === chip) {
+        chip.classList.remove('selected-chip');
+        selectedChip = null;
+        return;
+      }
+      if (WORD_TIPS[word] && selectedChip !== chip) {
+        document.querySelectorAll('.word-chip.tip-active').forEach(c => c.classList.remove('tip-active'));
+        chip.classList.add('tip-active');
+        if (selectedChip) { selectedChip.classList.remove('selected-chip'); selectedChip = null; }
+        return;
+      }
+      document.querySelectorAll('.word-chip.selected-chip').forEach(c => c.classList.remove('selected-chip'));
+      chip.classList.add('selected-chip');
+      selectedChip = chip;
+    });
+    bank.appendChild(chip);
+  });
+}
+
+function startChallenge() {
+  if (started) return;
+  started = true;
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = '';
+    b.dataset.filled = '';
+  });
+  buildCountMap();
+  renderBank();
+  document.getElementById('start-btn').disabled = true;
+  document.getElementById('check-btn').disabled = false;
+  const total = document.querySelectorAll('.blank').length;
+  document.getElementById('total-display').textContent = total;
+  seconds = 0;
+  timerInterval = setInterval(() => {
+    seconds++;
+    const m = String(Math.floor(seconds/60)).padStart(2,'0');
+    const s = String(seconds%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent = `${m}:${s}`;
+  }, 1000);
+
+  document.querySelectorAll('.blank').forEach(blank => {
+    blank.addEventListener('click', () => {
+      if (!selectedChip) return;
+      const word = selectedChip.dataset.word;
+      blank.textContent = word;
+      blank.dataset.filled = word;
+      selectedChip.classList.add('used');
+      selectedChip.classList.remove('selected-chip');
+      selectedChip = null;
+      updateProgress();
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.word-chip')) {
+      document.querySelectorAll('.word-chip.selected-chip').forEach(c => c.classList.remove('selected-chip'));
+      document.querySelectorAll('.word-chip.tip-active').forEach(c => c.classList.remove('tip-active'));
+      selectedChip = null;
+    }
+  });
+}
+
+function updateProgress() {
+  const blanks = document.querySelectorAll('.blank');
+  const filled = Array.from(blanks).filter(b => b.dataset.filled).length;
+  const pct = blanks.length > 0 ? (filled / blanks.length) * 100 : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function checkAnswers() {
+  let correct = 0;
+  document.querySelectorAll('.blank').forEach(blank => {
+    const key = blank.dataset.key;
+    const filled = blank.dataset.filled || '';
+    if (filled === answers[key]) {
+      blank.classList.add('correct');
+      correct++;
+    }
+  });
+  clearInterval(timerInterval);
+  document.getElementById('score-display').textContent = correct;
+  const total = document.querySelectorAll('.blank').length;
+  if (correct === total) {
+    document.getElementById('next-btn').disabled = false;
+    const saved = JSON.parse(localStorage.getItem('gamba-progress') || '{}');
+    saved['rekishi24'] = { done: true, score: correct, total: total, time: seconds };
+    localStorage.setItem('gamba-progress', JSON.stringify(saved));
+  }
+}
+
+function resetAll() {
+  clearInterval(timerInterval);
+  started = false;
+  selectedChip = null;
+  seconds = 0;
+  document.getElementById('timer-display').textContent = '00:00';
+  document.getElementById('score-display').textContent = '0';
+  document.getElementById('total-display').textContent = '0';
+  document.getElementById('start-btn').disabled = false;
+  document.getElementById('check-btn').disabled = true;
+  document.getElementById('next-btn').disabled = true;
+  document.getElementById('word-bank').style.display = 'none';
+  document.getElementById('word-bank').innerHTML = '';
+  document.getElementById('progress-bar').style.width = '0%';
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = b.dataset.key;
+    b.dataset.filled = '';
+    b.classList.remove('correct');
+  });
+}
+
+function toggleExplain() {
+  const box = document.getElementById('explain-box');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+// タッチ対応
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.person-pop').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      el.classList.toggle('active');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.person-pop.active').forEach(el => el.classList.remove('active'));
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：第26章 高度経済成長と現代の日本</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #5b2d8e;padding-bottom:8px;font-size:24px;color:#1a1a2e}
+  h2{margin-top:20px;margin-bottom:8px;font-size:18px;border-left:5px solid #5b2d8e;padding-left:10px;color:#1a1a2e}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+
+  /* ── 語群バンク ── */
+  .word-bank-sticky-container{position:sticky;top:0;z-index:1001;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc;overflow:visible}
+  .word-bank{border:2px solid #5b2d8e;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none;overflow:visible}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;position:relative}
+  .word-chip.used{opacity:0.3}
+  .word-chip.selected-chip{border-color:#5b2d8e;background-color:#f3eaff;box-shadow:0 0 0 2px #c39bd3}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1a1a2e;color:#fff;border-radius:8px;padding:9px 13px;font-size:12px;line-height:1.7;z-index:3000;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1a1a2e}
+  .word-chip:hover .chip-pop,.word-chip.tip-active .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+
+  /* ── セクション ── */
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px;background:#5b2d8e}
+
+  /* ── 流れボックス ── */
+  .flow-box{display:flex;gap:0;margin:14px 0;flex-wrap:wrap}
+  .flow-item{flex:1;min-width:130px;padding:12px 14px;font-size:13px;line-height:1.7;position:relative}
+  .flow-item:not(:last-child)::after{content:"▶";position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:20px;color:#5b2d8e;z-index:1}
+  .flow-cause{background:#fff3cd;border-radius:8px 0 0 8px;border:2px solid #f0a500}
+  .flow-process{background:#ede0ff;border:2px solid #7c4dbc;border-left:none}
+  .flow-result{background:#e8f5e9;border-radius:0 8px 8px 0;border:2px solid #2e7d32;border-left:none}
+  .flow-label{font-weight:bold;font-size:11px;display:block;margin-bottom:4px;letter-spacing:1px}
+  .flow-cause .flow-label{color:#b7770d}
+  .flow-process .flow-label{color:#5b2d8e}
+  .flow-result .flow-label{color:#1b5e20}
+
+  /* ── なぜ？ボックス ── */
+  .why-box{background:#f5eeff;border-left:5px solid #5b2d8e;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px;line-height:1.9}
+  .why-box .label{font-weight:bold;color:#5b2d8e;margin-right:4px}
+
+  /* ── ポイントボックス ── */
+  .key-point{background:#fff8e1;border-left:5px solid #f0a500;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}
+  .key-point strong{color:#5b2d8e}
+
+  /* ── blank（穴埋め）── */
+  .blank{display:inline-block;min-width:90px;min-height:26px;border-bottom:2px solid #5b2d8e;margin:0 3px;text-align:center;cursor:pointer;font-weight:bold;color:#5b2d8e;vertical-align:middle}
+  .blank.correct{background-color:#ffeb3b}
+
+  /* ── person-pop ── */
+  .person-pop{display:inline-block;position:relative;border-bottom:2px dashed #5b2d8e;cursor:pointer;color:#2e0057;font-weight:bold}
+  .person-pop .pop-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:240px;background:#fff;border:2px solid #5b2d8e;border-radius:12px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,0.18);z-index:2000;text-align:center;font-weight:normal;font-size:13px;color:#222;pointer-events:none}
+  .person-pop .pop-box .pop-name{font-weight:bold;font-size:15px;color:#5b2d8e;margin-bottom:6px;display:block}
+  .person-pop .pop-box .pop-desc{font-size:12px;color:#444;line-height:1.7;text-align:left;display:block}
+  .person-pop .pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:#5b2d8e}
+  .person-pop:hover .pop-box,.person-pop.active .pop-box{display:block}
+
+  /* ── 年表 ── */
+  .timeline{border-left:3px solid #5b2d8e;padding-left:20px;margin:14px 0}
+  .timeline-item{margin-bottom:14px;position:relative}
+  .timeline-item::before{content:'●';position:absolute;left:-27px;color:#5b2d8e;font-size:14px}
+  .timeline-year{font-weight:bold;font-size:13px;color:#5b2d8e;background:#f3eaff;display:inline-block;padding:2px 10px;border-radius:4px;margin-bottom:4px}
+
+  /* ── 経済グリッド ── */
+  .reform-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
+  .reform-card{border-radius:8px;padding:14px;font-size:13px;line-height:1.8;border-left:4px solid #5b2d8e;background:#f8f4ff}
+  .reform-card .card-title{font-weight:bold;font-size:14px;color:#5b2d8e;margin-bottom:6px}
+
+  /* ── フッター ── */
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#5b2d8e;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #3a1a6b}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #5b2d8e;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #5b2d8e;background-color:#f5eeff;display:none;text-align:left;font-size:14px;line-height:1.8}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="index.html">← 単元一覧に戻る</a>
+<h1>📈 第26章 高度経済成長と現代の日本</h1>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 語句をタップすると説明、もう一度タップで選択</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== ① 高度経済成長 ========== -->
+<div class="section">
+  <span class="section-label">① 高度経済成長（1955〜73年）</span>
+  <h2>なぜ日本は戦後わずか20年で経済大国になれたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    1950年代後半から1970年代初めにかけて、日本の経済は年率約10%という驚異的な速さで成長しました。これを<span class="blank" data-key="高度経済成長">高度経済成長</span>といいます。朝鮮戦争の特需景気をきっかけに工業が復興し、政府・企業・国民が一体となって生産力を高めた結果、日本はアメリカに次ぐ<span class="blank" data-key="世界第2位">世界第2位</span>の経済大国になりました（1968年）。
+  </div>
+
+  <div class="reform-grid">
+    <div class="reform-card">
+      <div class="card-title">🏭 重化学工業の発展</div>
+      鉄鋼・石油化学・自動車・家電などの産業が急成長。「鉄は国家なり」として製鉄所が次々建設された
+    </div>
+    <div class="reform-card">
+      <div class="card-title">🚄 インフラ整備</div>
+      1964年、東京オリンピック開催に合わせて<span class="blank" data-key="東海道新幹線">東海道新幹線</span>が開通。東名・名神高速道路も整備され、物流が飛躍的に向上した
+    </div>
+    <div class="reform-card">
+      <div class="card-title">🏠 三種の神器</div>
+      白黒テレビ・電気洗濯機・電気冷蔵庫が「三種の神器」と呼ばれ、家庭に普及。生活が大きく便利になった
+    </div>
+    <div class="reform-card">
+      <div class="card-title">🏙️ 人口移動</div>
+      農村から都市への大移動（集団就職）が起きた。「金の卵」と呼ばれた若者が工場や商店で働き、産業を支えた
+    </div>
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 要因</span>
+      安い労働力・技術の輸入・政府の産業育成政策・安価な石油
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 成長</span>
+      輸出主導で外貨を稼ぎ、工場への設備投資を繰り返す「投資が投資を呼ぶ」好循環
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      1968年にGNPがアメリカに次いで世界第2位に。「Japan as No.1」と評された
+    </div>
+  </div>
+</div>
+
+<!-- ========== ② 公害問題と環境保護 ========== -->
+<div class="section">
+  <span class="section-label">② 公害問題と環境保護（1960〜70年代）</span>
+  <h2>経済成長の「影」—— 公害はなぜ起きたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    工場の排煙・排水が川・海・空気を汚染し、深刻な健康被害が各地で発生しました。これを<span class="blank" data-key="公害">公害</span>といいます。企業が「利益優先」で環境を無視したこと、政府が長年見過ごしたことが原因でした。被害を受けた住民が立ち上がり、裁判・運動を通じて環境保護が進みました。
+  </div>
+
+  <div class="reform-grid">
+    <div class="reform-card">
+      <div class="card-title">😢 水俣病</div>
+      熊本県水俣市。チッソ工場の有機水銀が海を汚染。魚を食べた住民・猫が神経を侵される重篤な病気に。「四大公害病」のひとつ
+    </div>
+    <div class="reform-card">
+      <div class="card-title">😢 四日市ぜんそく</div>
+      三重県四日市市。石油化学コンビナートの煤煙（SO₂）で住民が慢性気管支炎・ぜんそくに。四大公害病のひとつ
+    </div>
+    <div class="reform-card">
+      <div class="card-title">😢 イタイイタイ病</div>
+      富山県神通川流域。鉱山からのカドミウムが原因で骨がもろくなり、激痛が走る。四大公害病のひとつ
+    </div>
+    <div class="reform-card">
+      <div class="card-title">✅ 対策</div>
+      1967年 公害対策基本法制定。1971年 環境庁（現・環境省）設置。裁判で企業責任が認定され、補償・対策が進んだ
+    </div>
+  </div>
+</div>
+
+<!-- ========== ③ オイルショックと安定成長 ========== -->
+<div class="section">
+  <span class="section-label">③ オイルショックと安定成長（1973年〜）</span>
+  <h2>なぜ高度成長は終わったのか？その後の日本はどうなったか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    1973年の<span class="blank" data-key="石油危機">石油危機</span>（オイルショック）で、中東の産油国が石油の輸出を制限し価格を4倍に引き上げました。石油に依存していた日本経済は大打撃を受け、物価が急騰（インフレ）しました。「トイレットペーパーが買えなくなる」というデマが流れ、スーパーに長蛇の列ができるパニックが起きました。これにより高度経済成長は終わり、「安定成長」時代へ移行しました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      中東の第4次中東戦争をきっかけに、アラブ産油国が石油の輸出削減と価格4倍引き上げを断行
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 影響</span>
+      物価急騰（狂乱物価）・工場の生産縮小・戦後初のマイナス成長。「省エネ」「減量経営」が合言葉に
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      日本は省エネ技術・薄型・高品質の製品で競争力を維持。自動車・電機などの輸出がさらに伸びた
+    </div>
+  </div>
+</div>
+
+<!-- ========== ④ 日本の国際社会への復帰と外交 ========== -->
+<div class="section">
+  <span class="section-label">④ 国際関係の正常化（1965〜72年）</span>
+  <h2>日本はどのように隣国との関係を修復したのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    独立回復後も日本には外交的な課題が残っていました。隣国との戦争の清算・国交回復が必要でした。冷戦という国際環境の中で、日本はアジアとの関係正常化を少しずつ進めていきました。
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1965年</div>
+      <span class="blank" data-key="日韓基本条約">日韓基本条約</span>締結。韓国との国交を正常化。植民地支配への「請求権」問題を経済協力で決着させた（賠償ではなく無償・有償資金協力）
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1972年</div>
+      <span class="person-pop">田中角栄<span class="pop-box"><span class="pop-name">田中角栄</span><span class="pop-desc">第64・65代内閣総理大臣（1972〜74年）。「日本列島改造論」を掲げ、地方への公共事業投資を推進。日中国交正常化を実現したが、後にロッキード事件で逮捕された。</span></span></span>首相が訪中。<span class="blank" data-key="日中共同声明">日中共同声明</span>に署名し、中国（中華人民共和国）との国交を正常化。台湾とは断交
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1978年</div>
+      <span class="blank" data-key="日中平和友好条約">日中平和友好条約</span>締結。国交正常化から戦後賠償問題を含め法的に決着
+    </div>
+  </div>
+
+  <div class="key-point">
+    <strong>💡 ロシア（ソ連）との問題</strong>　日本とソ連は1956年の日ソ共同宣言で戦争状態を終えましたが、<strong>北方領土問題</strong>（歯舞・色丹・国後・択捉の4島）を巡って平和条約は未締結のまま現在に至ります。
+  </div>
+</div>
+
+<!-- ========== ⑤ まとめ：戦後〜現代の流れ ========== -->
+<div class="section">
+  <span class="section-label">⑤ まとめ：戦後〜現代の日本の歩み</span>
+  <h2>戦後日本の大きな流れを整理しよう</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1945〜52年</div>
+      GHQ占領期。民主化改革・日本国憲法制定・財閥解体・農地改革
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1950〜53年</div>
+      朝鮮戦争と特需景気。警察予備隊創設（後の自衛隊）
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1955〜73年</div>
+      <span class="blank" data-key="高度経済成長">高度経済成長</span>期。「所得倍増計画」・東京オリンピック・大阪万博。公害問題も深刻化
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1973年〜</div>
+      <span class="blank" data-key="石油危機">石油危機</span>により高度成長が終了。安定成長・省エネ技術の発展へ
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1980年代</div>
+      バブル経済（地価・株価の急騰）。日本企業が海外に大量進出。「ジャパン・アズ・ナンバーワン」
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1991年〜</div>
+      <span class="blank" data-key="バブル崩壊">バブル崩壊</span>。土地・株の価格が暴落し「失われた10年（20年）」と呼ばれる長期不況に突入
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1995年</div>
+      阪神・淡路大震災発生。ボランティア活動が活発化し「ボランティア元年」と呼ばれた
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2011年</div>
+      東日本大震災・福島第一原発事故。震災復興とエネルギー政策の転換が課題に
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🌟 まとめ</span>
+    敗戦→占領→独立→高度成長→公害→国際化→バブルと崩壊。日本は約70年で「廃墟から先進国」へと歩みました。その中で<span class="blank" data-key="公害">公害</span>・格差・少子高齢化など、現代社会の課題の多くが生まれました。<strong>経済成長の恩恵と代償を両方見る目</strong>が大切です。
+  </div>
+</div>
+
+<!-- ========== フッター ========== -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div id="score-display" style="font-weight:bold;font-size:15px;margin-bottom:8px;display:none"></div>
+    <div class="controls">
+      <button id="start-btn" onclick="startChallenge()">🚀 チャレンジ開始</button>
+      <button class="secondary" id="reset-btn" onclick="resetAll()" style="display:none">🔄 リセット</button>
+      <button id="check-btn" onclick="checkAnswers()" style="display:none">✅ 答え合わせ</button>
+      <button id="next-btn" onclick="location.href='rekishi26_drill.html'" disabled>次のドリルへ →</button>
+    </div>
+    <div class="timer-info" id="timer-info">⏱ 00:00</div>
+    <div class="explain-box" id="explain-box"></div>
+  </div>
+</div>
+
+<script>
+// ─── 答えの定義 ───
+const answers = {
+  "高度経済成長": "高度経済成長",
+  "世界第2位": "世界第2位",
+  "東海道新幹線": "東海道新幹線",
+  "公害": "公害",
+  "石油危機": "石油危機",
+  "日韓基本条約": "日韓基本条約",
+  "日中共同声明": "日中共同声明",
+  "日中平和友好条約": "日中平和友好条約",
+  "バブル崩壊": "バブル崩壊"
+};
+
+// ─── 語句ヒント ───
+const WORD_TIPS = {
+  "高度経済成長": "1955〜73年、日本の経済が年率約10%で急成長した時代。「所得倍増計画」が掲げられた",
+  "世界第2位": "1968年、日本のGNPがアメリカに次いで第2位に。西ドイツを抜いた",
+  "東海道新幹線": "1964年の東京オリンピック直前に開通。東京〜新大阪を約4時間で結んだ",
+  "公害": "工場の排煙・排水による環境汚染と健康被害。水俣病・イタイイタイ病・四日市ぜんそくが四大公害病",
+  "石油危機": "1973年の第4次中東戦争をきっかけに、石油価格が4倍に。高度成長を終わらせた",
+  "日韓基本条約": "1965年締結。日本と韓国が国交を正常化。植民地支配への賠償ではなく経済協力で決着",
+  "日中共同声明": "1972年、田中角栄首相が訪中して署名。中国（中華人民共和国）との国交正常化",
+  "日中平和友好条約": "1978年締結。日中の関係を法的に確定し、戦後処理を完結させた条約",
+  "バブル崩壊": "1991年、地価・株価の急落で好景気（バブル経済）が終わり、長期不況「失われた10年」が始まった"
+};
+
+// ─── 変数 ───
+let started = false;
+let selectedChip = null;
+let timerInterval = null;
+let seconds = 0;
+
+// ─── チャレンジ開始 ───
+function startChallenge() {
+  if (started) return;
+  started = true;
+  // 初期テキストを消して空欄にする
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = '';
+    b.dataset.filled = '';
+  });
+  buildCountMap();
+  renderBank();
+  document.getElementById('word-bank').style.display = 'flex';
+  document.getElementById('start-btn').style.display = 'none';
+  document.getElementById('reset-btn').style.display = 'inline-block';
+  document.getElementById('check-btn').style.display = 'inline-block';
+  startTimer();
+  // 空欄クリックイベント
+  document.querySelectorAll('.blank').forEach(b => {
+    b.addEventListener('click', () => {
+      if (!selectedChip) return;
+      const key = b.dataset.key;
+      // 既入力済みなら返却
+      if (b.dataset.filled) {
+        returnChip(b.dataset.filled);
+      }
+      b.textContent = selectedChip.dataset.word;
+      b.dataset.filled = selectedChip.dataset.word;
+      selectedChip.classList.add('used');
+      selectedChip.classList.remove('selected-chip');
+      selectedChip = null;
+    });
+  });
+}
+
+// ─── countMap（重複キー対応） ───
+let countMap = {};
+function buildCountMap() {
+  countMap = {};
+  document.querySelectorAll('.blank').forEach(b => {
+    const k = b.dataset.key;
+    countMap[k] = (countMap[k] || 0) + 1;
+  });
+}
+
+// ─── 語群バンク描画 ───
+function renderBank() {
+  const bank = document.getElementById('word-bank');
+  bank.innerHTML = '';
+  Object.entries(countMap).forEach(([word, cnt]) => {
+    for (let i = 0; i < cnt; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'word-chip';
+      chip.dataset.word = word;
+      chip.innerHTML = word + '<span class="tip-hint">💡</span>';
+      if (WORD_TIPS[word]) {
+        const pop = document.createElement('div');
+        pop.className = 'chip-pop';
+        pop.textContent = WORD_TIPS[word];
+        chip.appendChild(pop);
+      }
+      let tipShown = false;
+      chip.addEventListener('click', e => {
+        if (chip.classList.contains('used')) return;
+        if (!tipShown) {
+          // 第1回タップ：説明表示
+          document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('tip-active', 'selected-chip'));
+          if (selectedChip) { selectedChip.classList.remove('selected-chip'); selectedChip = null; }
+          chip.classList.add('tip-active');
+          tipShown = true;
+        } else {
+          // 第2回タップ：選択
+          document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('tip-active', 'selected-chip'));
+          chip.classList.add('selected-chip');
+          selectedChip = chip;
+          tipShown = false;
+        }
+      });
+      bank.appendChild(chip);
+    }
+  });
+}
+
+// ─── チップ返却 ───
+function returnChip(word) {
+  const chips = document.querySelectorAll('.word-chip');
+  for (const c of chips) {
+    if (c.dataset.word === word && c.classList.contains('used')) {
+      c.classList.remove('used');
+      return;
+    }
+  }
+}
+
+// ─── タイマー ───
+function startTimer() {
+  timerInterval = setInterval(() => {
+    seconds++;
+    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    document.getElementById('timer-info').textContent = `⏱ ${m}:${s}`;
+  }, 1000);
+}
+
+// ─── 答え合わせ ───
+function checkAnswers() {
+  clearInterval(timerInterval);
+  let correct = 0;
+  const blanks = document.querySelectorAll('.blank');
+  blanks.forEach(b => {
+    const key = b.dataset.key;
+    if (b.dataset.filled === answers[key]) {
+      b.classList.add('correct');
+      correct++;
+    } else {
+      b.style.borderBottom = '2px solid red';
+    }
+  });
+  const total = blanks.length;
+  const scoreEl = document.getElementById('score-display');
+  scoreEl.style.display = 'block';
+  scoreEl.textContent = `結果：${correct} / ${total} 正解 🎉`;
+
+  // localStorage保存
+  try {
+    const progress = JSON.parse(localStorage.getItem('gamba-progress') || '{}');
+    progress['rekishi26'] = { done: true, score: correct, total, time: seconds };
+    localStorage.setItem('gamba-progress', JSON.stringify(progress));
+  } catch(e) {}
+
+  if (correct === total) {
+    document.getElementById('next-btn').disabled = false;
+    document.getElementById('explain-box').style.display = 'block';
+    document.getElementById('explain-box').innerHTML =
+      '🎊 <strong>全問正解！</strong> 高度経済成長〜現代の日本の流れをマスターしました！<br>公害問題・石油危機・バブル崩壊など、経済の光と影を忘れずに。';
+  } else {
+    document.getElementById('explain-box').style.display = 'block';
+    document.getElementById('explain-box').innerHTML =
+      `❌ 不正解の空欄を確認してリセットで再挑戦しよう。`;
+  }
+}
+
+// ─── リセット ───
+function resetAll() {
+  clearInterval(timerInterval);
+  seconds = 0;
+  started = false;
+  selectedChip = null;
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = b.dataset.key;
+    b.dataset.filled = '';
+    b.classList.remove('correct');
+    b.style.borderBottom = '';
+  });
+  document.getElementById('word-bank').style.display = 'none';
+  document.getElementById('word-bank').innerHTML = '';
+  document.getElementById('start-btn').style.display = 'inline-block';
+  document.getElementById('reset-btn').style.display = 'none';
+  document.getElementById('check-btn').style.display = 'none';
+  document.getElementById('score-display').style.display = 'none';
+  document.getElementById('explain-box').style.display = 'none';
+  document.getElementById('timer-info').textContent = '⏱ 00:00';
+  document.getElementById('next-btn').disabled = true;
+}
+
+// ─── person-pop タップ対応 ───
+document.querySelectorAll('.person-pop').forEach(el => {
+  el.addEventListener('click', e => {
+    e.stopPropagation();
+    el.classList.toggle('active');
+  });
+});
+document.addEventListener('click', () => {
+  document.querySelectorAll('.person-pop').forEach(el => el.classList.remove('active'));
+});
+</script>
+</body>
+</html>

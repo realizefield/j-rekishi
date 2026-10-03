@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史GAMBA：第21章 確認問題</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:120px}
+  h1{border-bottom:3px solid #1a3a5c;padding-bottom:8px;font-size:22px;color:#1a1a2e}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .progress-bar{height:8px;background:#ddd;border-radius:4px;margin:12px 0}
+  .progress-fill{height:100%;background:#1a3a5c;border-radius:4px;transition:width 0.4s}
+  .score-bar{display:flex;justify-content:space-between;font-size:14px;color:#555;margin-bottom:8px}
+  .q-card{background:#fff;border-radius:10px;padding:20px;margin-bottom:16px;border:1px solid #ccc;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+  .q-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .q-num{background:#1a3a5c;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;flex-shrink:0}
+  .q-source{font-size:11px;color:#888;background:#f0f0f0;padding:2px 8px;border-radius:10px}
+  .q-text{font-size:15px;font-weight:600;line-height:1.8;margin-bottom:12px}
+  .choices{display:flex;flex-direction:column;gap:8px}
+  .choice{padding:10px 14px;border-radius:8px;border:2px solid #ddd;background:#fafafa;cursor:pointer;font-size:14px;text-align:left;transition:all 0.15s}
+  .choice:hover:not(:disabled){border-color:#1a3a5c;background:#eaf0ff}
+  .choice.correct{border-color:#2e7d32;background:#e8f5e9;color:#2e7d32;font-weight:bold}
+  .choice.wrong{border-color:#c62828;background:#ffebee;color:#c62828}
+  .choice.show-correct{border-color:#2e7d32;background:#e8f5e9;color:#2e7d32;font-weight:bold}
+  .feedback{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.7;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#e8f5e9;border-left:4px solid #2e7d32;color:#1b5e20}
+  .feedback.ng{background:#ffebee;border-left:4px solid #c62828;color:#7f0000}
+  /* 記述問題 */
+  .text-input{width:100%;padding:8px 12px;border:2px solid #ddd;border-radius:8px;font-size:15px;box-sizing:border-box;margin-bottom:8px}
+  .text-input:focus{outline:none;border-color:#1a3a5c}
+  .check-btn{background:#1a3a5c;color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:14px;font-weight:bold;cursor:pointer}
+  /* 結果 */
+  .result-area{display:none;text-align:center;background:#fff;border-radius:12px;padding:32px 20px;margin-top:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+  .result-area.show{display:block}
+  .result-score{font-size:52px;font-weight:bold;color:#1a3a5c}
+  .result-msg{font-size:16px;margin:8px 0 20px}
+  .self-eval{display:flex;gap:10px;justify-content:center;margin:16px 0}
+  .eval-btn{padding:10px 24px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer}
+  .eval-btn.a{background:#1565C0;color:#fff}
+  .eval-btn.b{background:#F57F17;color:#fff}
+  .eval-btn.c{background:#757575;color:#fff}
+  .retry-btn{background:#1a3a5c;color:#fff;border:none;border-radius:8px;padding:12px 32px;font-size:15px;font-weight:bold;cursor:pointer;margin-top:8px}
+  /* fixed footer */
+  .fixed-footer{position:fixed;bottom:0;left:0;width:100%;background:#fff;border-top:2px solid #ccc;padding:10px 0;z-index:100;box-shadow:0 -2px 8px rgba(0,0,0,0.08)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .footer-btn{padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer}
+  .footer-btn.primary{background:#1a3a5c;color:#fff;box-shadow:0 3px 0 #0d1f35}
+  .footer-btn.secondary{background:#6c757d;color:#fff;box-shadow:0 3px 0 #495057}
+  .footer-btn.result{background:#e65100;color:#fff;box-shadow:0 3px 0 #bf360c}
+  /* confetti */
+  .confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+  .confetti-piece{position:absolute;width:10px;height:10px;animation:fall 2s ease-in forwards}
+  @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<a class="back-to-index" href="index.html">← 単元一覧に戻る</a>
+<h1>🌍 第21章　第１次世界大戦　確認問題</h1>
+
+<div class="score-bar">
+  <span id="progress-label">0 / 12 問回答済み</span>
+  <span id="score-label">正解：0 問</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+<div id="quiz-container"></div>
+
+<div class="result-area" id="result-area">
+  <div style="font-size:36px">🎉</div>
+  <div class="result-score" id="result-score"></div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="self-eval">
+    <button class="eval-btn a" onclick="saveEval('A')">A よくできた</button>
+    <button class="eval-btn b" onclick="saveEval('B')">B もう少し</button>
+    <button class="eval-btn c" onclick="saveEval('C')">C 要復習</button>
+  </div>
+  <button class="retry-btn" onclick="retryAll()">もう一度チャレンジ</button>
+</div>
+
+<div class="fixed-footer">
+  <div class="footer-inner">
+    <button class="footer-btn secondary" onclick="location.href='rekishi21.html'">← 学習ページへ</button>
+    <button class="footer-btn primary" onclick="checkAll()">全問判定</button>
+    <button class="footer-btn result" onclick="showResult()">結果を見る</button>
+    <button class="footer-btn secondary" onclick="location.href='rekishi22.html'">次の単元へ →</button>
+  </div>
+</div>
+
+<div class="confetti-container" id="confetti-container"></div>
+
+<script>
+const quizData = [
+  {
+    id: 1,
+    source: "入試問題",
+    type: "4択",
+    text: "第一次世界大戦中、ヨーロッパへの輸出が増大し、船舶の世界的不足により（A）とよばれる大金持ちの海運業者があらわれた。Aとは何か。",
+    choices: ["財閥", "船成金", "地主", "問屋"],
+    answer: 1,
+    explanation: "第一次世界大戦中、船の世界的不足が起こり、日本の海運業者は物資輸送で巨利を得ました。このような人々を「船成金（ふねなりきん）」と呼びました。一方で物価が高騰し、多くの庶民は苦しみました。"
+  },
+  {
+    id: 2,
+    source: "入試問題",
+    type: "4択",
+    text: "1882年、急速に成長しているドイツを中心にドイツ・イタリア・オーストリアが結んだ軍事同盟を何というか。",
+    choices: ["三国協商", "三国同盟", "日英同盟", "日独伊三国同盟"],
+    answer: 1,
+    explanation: "1882年、フランスを孤立させるため、ドイツ・イタリア・オーストリアの三国が結んだ軍事同盟が「三国同盟」です。これに対抗してフランス・イギリス・ロシアが「三国協商」（1907）を結びました。"
+  },
+  {
+    id: 3,
+    source: "入試問題",
+    type: "4択",
+    text: "1914年、バルカン半島のボスニアの首都サラエボでオーストリア皇太子がセルビアの青年に暗殺された。この事件を何というか。",
+    choices: ["柳条湖事件", "五・一五事件", "サライエボ事件", "ハーグ密使事件"],
+    answer: 2,
+    explanation: "1914年のサライエボ（サライエボ）事件が第一次世界大戦の直接の引き金となりました。バルカン半島は民族・宗教の対立が絶えず「ヨーロッパの火薬庫」と呼ばれていました。"
+  },
+  {
+    id: 4,
+    source: "入試問題",
+    type: "4択",
+    text: "1917年、ロシアで社会主義革命が起きた。この革命を指導した人物はだれか。",
+    choices: ["スターリン", "トロツキー", "レーニン", "ゴルバチョフ"],
+    answer: 2,
+    explanation: "1917年のロシア革命はレーニン指導のもと起きた社会主義革命で、世界初の社会主義政権が誕生しました。ソヴィエト政権はドイツとブレスト＝リトフスク条約を結び第一次大戦から離脱しました。"
+  },
+  {
+    id: 5,
+    source: "入試問題",
+    type: "4択",
+    text: "第一次大戦でドイツが行った「無制限潜水艦作戦」により、アメリカ人を乗せたイギリス船が撃沈された。この船の名前は何か。",
+    choices: ["タイタニック号", "ルシタニア号", "ポーツマス号", "ビスマルク号"],
+    answer: 1,
+    explanation: "ドイツの無制限潜水艦作戦でイギリス船ルシタニア号が撃沈され、乗船していたアメリカ人約130人が亡くなりました。これによりアメリカ国内の参戦世論が高まり、アメリカは三国協商側で参戦しました。"
+  },
+  {
+    id: 6,
+    source: "入試問題",
+    type: "4択",
+    text: "第一次世界大戦の講和条約を何というか。",
+    choices: ["パリ条約", "ポーツマス条約", "ヴェルサイユ条約", "ワシントン条約"],
+    answer: 2,
+    explanation: "1919年のパリ講和会議でヴェルサイユ条約が結ばれました。ドイツに多額の賠償金と軍備縮小が課されましたが、この厳しい条件がドイツ国民の不満を生み、後の第二次世界大戦の一因となりました。"
+  },
+  {
+    id: 7,
+    source: "入試問題",
+    type: "4択",
+    text: "国際連盟の設立を提唱したアメリカ大統領はだれか。",
+    choices: ["ルーズベルト", "リンカーン", "ウィルソン", "トルーマン"],
+    answer: 2,
+    explanation: "アメリカ大統領ウィルソンが「平和に関する十四ヶ条」の中で国際連盟の設立を提唱しました。しかし皮肉なことに、提唱国であるアメリカは議会の反対で国際連盟に参加できませんでした。"
+  },
+  {
+    id: 8,
+    source: "入試問題",
+    type: "4択",
+    text: "国際連盟の本部が置かれた都市はどこか。",
+    choices: ["ロンドン", "パリ", "ベルリン", "ジュネーブ"],
+    answer: 3,
+    explanation: "国際連盟の本部はスイスのジュネーブに置かれました。事務局長（次長）には日本人の新渡戸稲造が就任しました。弱点は①提唱国アメリカが不参加②ソ連・ドイツは最初除外③全会一致制でした。"
+  },
+  {
+    id: 9,
+    source: "入試問題",
+    type: "4択",
+    text: "1919年、ウィルソン大統領が唱えた「民族自決」に励まされ、朝鮮で起きた独立運動を何というか。",
+    choices: ["五・四運動", "三・一運動", "義和団運動", "辛亥革命"],
+    answer: 1,
+    explanation: "1919年3月1日、朝鮮全土で「独立万歳」を叫んだ三・一運動が起きました。日本は軍隊を送り鎮圧しました。同年5月4日には中国（北京）でも五・四運動が起きました。"
+  },
+  {
+    id: 10,
+    source: "入試問題",
+    type: "4択",
+    text: "インドの弁護士で、イギリスに対して「非暴力・不服従」の独立運動を展開した人物はだれか。",
+    choices: ["ネルー", "ガンジー", "スカルノ", "孫文"],
+    answer: 1,
+    explanation: "ガンジーはインドの独立運動家で、「イギリスに対して暴力を使わず、イギリスの指示に従わない」という非暴力・不服従の運動を展開しました。インド独立の父として知られています。"
+  },
+  {
+    id: 11,
+    source: "入試問題",
+    type: "4択",
+    text: "1921年のワシントン会議で決まったこととして正しいものを選べ。",
+    choices: [
+      "国際連盟の設立が決まった",
+      "日英同盟の廃止と山東半島の中国への返還が決まった",
+      "ヴェルサイユ条約が結ばれた",
+      "シベリア出兵が決定した"
+    ],
+    answer: 1,
+    explanation: "1921年のワシントン会議では、①日英同盟の廃止　②日本の山東半島の権益を中国へ返還　が決まりました。また主力艦の保有比率（米5：英5：日3：仏1.67：伊1.67）も定められました。"
+  },
+  {
+    id: 12,
+    source: "入試問題",
+    type: "4択",
+    text: "日本は大隈重信内閣のとき、ある軍事同盟を理由にドイツに宣戦布告し、第一次大戦に参戦した。この軍事同盟とは何か。",
+    choices: ["三国同盟", "三国協商", "日英同盟", "日独伊三国同盟"],
+    answer: 2,
+    explanation: "日本は1902年にイギリスと結んだ「日英同盟」を根拠に、三国協商側でドイツに宣戦布告しました。日本は中国のドイツ領・青島と山東半島を占領し、1915年には二十一カ条の要求を中国に突きつけました。"
+  }
+];
+
+let answered = new Array(quizData.length).fill(false);
+let correct = new Array(quizData.length).fill(false);
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+  quizData.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `q-card-${idx}`;
+
+    let choicesHTML = '';
+    if (q.type === '4択') {
+      choicesHTML = `<div class="choices" id="choices-${idx}">` +
+        q.choices.map((c, ci) =>
+          `<button class="choice" id="choice-${idx}-${ci}" onclick="selectChoice(${idx},${ci})">${c}</button>`
+        ).join('') +
+        `</div>`;
+    }
+
+    card.innerHTML = `
+      <div class="q-head">
+        <div class="q-num">${idx + 1}</div>
+        <span class="q-source">${q.source}</span>
+      </div>
+      <div class="q-text">${q.text}</div>
+      ${choicesHTML}
+      <div class="feedback" id="feedback-${idx}"></div>
+    `;
+    container.appendChild(card);
+  });
+  updateProgress();
+}
+
+function selectChoice(qIdx, choiceIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = quizData[qIdx];
+  const isCorrect = choiceIdx === q.answer;
+  correct[qIdx] = isCorrect;
+
+  q.choices.forEach((_, ci) => {
+    const btn = document.getElementById(`choice-${qIdx}-${ci}`);
+    btn.disabled = true;
+    if (ci === q.answer) btn.classList.add('correct');
+    else if (ci === choiceIdx) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById(`feedback-${qIdx}`);
+  fb.className = `feedback show ${isCorrect ? 'ok' : 'ng'}`;
+  fb.innerHTML = isCorrect
+    ? `✅ 正解！　${q.explanation}`
+    : `❌ 不正解。正解は「${q.choices[q.answer]}」です。<br>${q.explanation}`;
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = quizData.length;
+  const done = answered.filter(Boolean).length;
+  const ok = correct.filter(Boolean).length;
+  document.getElementById('progress-label').textContent = `${done} / ${total} 問回答済み`;
+  document.getElementById('score-label').textContent = `正解：${ok} 問`;
+  document.getElementById('progress-fill').style.width = `${(done / total) * 100}%`;
+}
+
+function checkAll() {
+  quizData.forEach((q, idx) => {
+    if (!answered[idx]) {
+      const fb = document.getElementById(`feedback-${idx}`);
+      fb.className = 'feedback show ng';
+      fb.innerHTML = `❌ 未回答。正解は「${q.choices[q.answer]}」です。<br>${q.explanation}`;
+      q.choices.forEach((_, ci) => {
+        const btn = document.getElementById(`choice-${idx}-${ci}`);
+        btn.disabled = true;
+        if (ci === q.answer) btn.classList.add('show-correct');
+      });
+      answered[idx] = true;
+      correct[idx] = false;
+    }
+  });
+  updateProgress();
+}
+
+function showResult() {
+  checkAll();
+  const ok = correct.filter(Boolean).length;
+  const total = quizData.length;
+  const pct = Math.round(ok / total * 100);
+  document.getElementById('result-score').textContent = `${ok} / ${total}`;
+  document.getElementById('result-msg').textContent =
+    pct >= 90 ? '🎉 すばらしい！完璧な理解です！' :
+    pct >= 70 ? '👍 よくできました！苦手問題を確認しよう。' :
+    pct >= 50 ? '📖 学習ページで復習してからもう一度！' :
+                '💪 学習ページでしっかり復習しましょう！';
+  document.getElementById('result-area').classList.add('show');
+  document.getElementById('result-area').scrollIntoView({behavior:'smooth'});
+  if (pct >= 80) launchConfetti();
+}
+
+function saveEval(grade) {
+  try {
+    const p = JSON.parse(localStorage.getItem('gamba_progress') || '{}');
+    p['rekishi21_drill'] = { eval: grade, score: correct.filter(Boolean).length, total: quizData.length, date: new Date().toLocaleDateString() };
+    localStorage.setItem('gamba_progress', JSON.stringify(p));
+    alert(`自己評価「${grade}」を保存しました！`);
+  } catch(e) {}
+}
+
+function retryAll() {
+  answered = new Array(quizData.length).fill(false);
+  correct = new Array(quizData.length).fill(false);
+  document.getElementById('result-area').classList.remove('show');
+  buildQuiz();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function launchConfetti() {
+  const container = document.getElementById('confetti-container');
+  const colors = ['#1a3a5c','#F57F17','#E53935','#43A047','#8E24AA'];
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left = Math.random() * 100 + '%';
+      el.style.top = '-10px';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      el.style.animationDuration = (1 + Math.random() * 1.5) + 's';
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 3000);
+    }, i * 30);
+  }
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

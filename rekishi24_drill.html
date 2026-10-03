@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史GAMBA：第24章 確認問題</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:120px}
+  h1{border-bottom:3px solid #1a237e;padding-bottom:8px;font-size:22px;color:#1a1a2e}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .progress-bar{height:8px;background:#ddd;border-radius:4px;margin:12px 0}
+  .progress-fill{height:100%;background:#1a237e;border-radius:4px;transition:width 0.4s}
+  .score-bar{display:flex;justify-content:space-between;font-size:14px;color:#555;margin-bottom:8px}
+  .q-card{background:#fff;border-radius:10px;padding:20px;margin-bottom:16px;border:1px solid #ccc;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+  .q-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .q-num{background:#1a237e;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;flex-shrink:0}
+  .q-source{font-size:11px;color:#888;background:#f0f0f0;padding:2px 8px;border-radius:10px}
+  .q-text{font-size:15px;font-weight:600;line-height:1.8;margin-bottom:12px}
+  .choices{display:flex;flex-direction:column;gap:8px}
+  .choice{padding:10px 14px;border-radius:8px;border:2px solid #ddd;background:#fafafa;cursor:pointer;font-size:14px;text-align:left;transition:all 0.15s}
+  .choice:hover:not(:disabled){border-color:#1a237e;background:#e8eaf6}
+  .choice.correct{border-color:#2e7d32;background:#e8f5e9;color:#2e7d32;font-weight:bold}
+  .choice.wrong{border-color:#c62828;background:#ffebee;color:#c62828}
+  .choice.show-correct{border-color:#2e7d32;background:#e8f5e9;color:#2e7d32;font-weight:bold}
+  .feedback{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.7;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#e8f5e9;border-left:4px solid #2e7d32;color:#1b5e20}
+  .feedback.ng{background:#ffebee;border-left:4px solid #c62828;color:#7f0000}
+  .result-area{display:none;text-align:center;background:#fff;border-radius:12px;padding:32px 20px;margin-top:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+  .result-area.show{display:block}
+  .result-score{font-size:52px;font-weight:bold;color:#1a237e}
+  .result-msg{font-size:16px;margin:8px 0 20px}
+  .self-eval{display:flex;gap:10px;justify-content:center;margin:16px 0}
+  .eval-btn{padding:10px 24px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer}
+  .eval-btn.a{background:#1565C0;color:#fff}
+  .eval-btn.b{background:#F57F17;color:#fff}
+  .eval-btn.c{background:#757575;color:#fff}
+  .retry-btn{background:#1a237e;color:#fff;border:none;border-radius:8px;padding:12px 32px;font-size:15px;font-weight:bold;cursor:pointer;margin-top:8px}
+  .fixed-footer{position:fixed;bottom:0;left:0;width:100%;background:#fff;border-top:2px solid #ccc;padding:10px 0;z-index:100;box-shadow:0 -2px 8px rgba(0,0,0,0.08)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .footer-btn{padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer}
+  .footer-btn.primary{background:#1a237e;color:#fff;box-shadow:0 3px 0 #0d1257}
+  .footer-btn.secondary{background:#6c757d;color:#fff;box-shadow:0 3px 0 #495057}
+  .footer-btn.result{background:#e65100;color:#fff;box-shadow:0 3px 0 #bf360c}
+  .confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+  .confetti-piece{position:absolute;width:10px;height:10px;animation:fall 2s ease-in forwards}
+  @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="index.html">← 単元一覧に戻る</a>
+<h1>⚔️ 第24章　第二次世界大戦　確認問題</h1>
+
+<div class="score-bar">
+  <span id="progress-label">0 / 12 問回答済み</span>
+  <span id="score-label">正解：0 問</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+<div id="quiz-container"></div>
+
+<div class="result-area" id="result-area">
+  <div style="font-size:36px">🎉</div>
+  <div class="result-score" id="result-score"></div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="self-eval">
+    <button class="eval-btn a" onclick="saveEval('A')">A よくできた</button>
+    <button class="eval-btn b" onclick="saveEval('B')">B もう少し</button>
+    <button class="eval-btn c" onclick="saveEval('C')">C 要復習</button>
+  </div>
+  <button class="retry-btn" onclick="retryAll()">もう一度チャレンジ</button>
+</div>
+
+<div class="fixed-footer">
+  <div class="footer-inner">
+    <button class="footer-btn secondary" onclick="location.href='rekishi24.html'">← 学習ページへ</button>
+    <button class="footer-btn primary" onclick="checkAll()">全問判定</button>
+    <button class="footer-btn result" onclick="showResult()">結果を見る</button>
+    <button class="footer-btn secondary" onclick="location.href='rekishi25.html'">次の単元へ →</button>
+  </div>
+</div>
+<div class="confetti-container" id="confetti-container"></div>
+
+<script>
+const quizData=[
+  {
+    id:1,source:"入試問題",type:"4択",
+    text:"1939年、ドイツはある条約を結んでからポーランドに侵攻した。この条約を何というか。",
+    choices:["日独伊三国同盟","日ソ中立条約","独ソ不可侵条約","ヴェルサイユ条約"],
+    answer:2,
+    explanation:"1939年、ドイツはソ連との間に独ソ不可侵条約を結んでからポーランドに侵攻しました。社会主義国のソ連と手を組むことは考えられないとされていたため世界を驚かせました。1941年にドイツがこの条約を破ってソ連に侵攻しました。"
+  },
+  {
+    id:2,source:"入試問題",type:"4択",
+    text:"1940年に日本・ドイツ・イタリアの間で結ばれた軍事同盟を何というか。",
+    choices:["三国同盟","三国協商","日独伊三国同盟","日英同盟"],
+    answer:2,
+    explanation:"1940年に結ばれた日独伊三国同盟により日本はドイツ・イタリアと軍事的に結びつきました。いずれかの国がアメリカ・ソ連などに攻撃された場合は互いに援助することを約束しました。"
+  },
+  {
+    id:3,source:"入試問題（福井県）",type:"4択",
+    text:"次のア〜エを年代の古い順に正しく並べたものはどれか。\nア．国家総動員法の公布　イ．ポツダム宣言の受諾\nウ．第二次世界大戦の開始　エ．ハワイ真珠湾の攻撃",
+    choices:["ア→ウ→エ→イ","ウ→ア→エ→イ","ア→エ→ウ→イ","エ→ア→ウ→イ"],
+    answer:0,
+    explanation:"国家総動員法(1938年)→第二次世界大戦開始(1939年)→真珠湾攻撃(1941年)→ポツダム宣言受諾(1945年)の順です。国家総動員法は日中戦争長期化に対応するため第二次世界大戦開始前に制定されました。"
+  },
+  {
+    id:4,source:"入試問題",type:"4択",
+    text:"1941年12月8日、日本がアメリカのどこを奇襲攻撃して太平洋戦争が始まったか。",
+    choices:["グアム島","ミッドウェー島","ハワイの真珠湾","サイパン島"],
+    answer:2,
+    explanation:"1941年12月8日、日本海軍がハワイの真珠湾にあるアメリカ海軍基地を奇襲攻撃して太平洋戦争が始まりました。宣戦布告の通知が攻撃後になりアメリカ国民の反日感情が高まりました。"
+  },
+  {
+    id:5,source:"入試問題（和歌山県）",type:"4択",
+    text:"政府は国家総動員法によって大戦中、米や砂糖などの流通を統制し国民に分け与える制度を実施した。これを何というか。",
+    choices:["配給制","農地改革","財閥解体","勤労動員"],
+    answer:0,
+    explanation:"国家総動員法のもとで食料・日用品などの流通が配給制となりました。国民は配給手帳を持って決まった量しか買えなくなりました。「欲しがりません勝つまでは」のスローガンのもと国民生活は著しく制限されました。"
+  },
+  {
+    id:6,source:"入試問題",type:"4択",
+    text:"1942年、日本海軍がアメリカに大敗し戦局の転換点となった海戦を何というか。",
+    choices:["日本海海戦","ミッドウェー海戦","真珠湾攻撃","沖縄戦"],
+    answer:1,
+    explanation:"1942年6月のミッドウェー海戦で日本海軍は空母4隻を失う大敗を喫しました。それまで優勢だった日本軍の戦局はここから悪化の一途をたどり、以後はアメリカ軍の反攻が続きました。"
+  },
+  {
+    id:7,source:"入試問題（福井県）",type:"4択",
+    text:"空襲をさけるため、大都市の小学生が父母のもとを離れまとまって地方に避難したことを何というか。",
+    choices:["学徒出陣","集団疎開","勤労動員","皇民化政策"],
+    answer:1,
+    explanation:"1944年のサイパン島陥落後、日本本土への空襲が激化すると大都市の小学生は集団疎開を行い農村へ移動しました。親元を離れた子どもたちは農村での集団生活を余儀なくされました。"
+  },
+  {
+    id:8,source:"入試問題（岐阜県）",type:"4択",
+    text:"日独伊三国同盟を結んだときの日本の状況として正しいものはどれか。",
+    choices:[
+      "ポツダム宣言を受諾しようとしていた",
+      "日中戦争が長期化していた",
+      "義和団事件で中国へ出兵中であった",
+      "幕末に結ばれた不平等条約の改正交渉をしていた"
+    ],
+    answer:1,
+    explanation:"1940年に日独伊三国同盟が結ばれた時、日本は1937年から始まった日中戦争が長期化し泥沼状態に陥っていました。打開策として東南アジアへの南進を図り、ドイツ・イタリアと軍事的に連携しました。"
+  },
+  {
+    id:9,source:"入試問題",type:"4択",
+    text:"朝鮮では日本語の強制・神社参拝の強要・創氏改名などが行われた。これらの政策を何というか。",
+    choices:["農地改革","財閥解体","皇民化政策","普通選挙法"],
+    answer:2,
+    explanation:"日本は植民地の朝鮮・台湾の人々を「皇国臣民」として日本人に同化させる皇民化政策を行いました。日本語使用の強制・神社参拝・創氏改名（日本式氏名への変更）などが実施され、朝鮮の人々の強い反発を招きました。"
+  },
+  {
+    id:10,source:"入試問題（沖縄県）",type:"4択",
+    text:"太平洋戦争末期、原子爆弾が投下された2つの都市はどれか。",
+    choices:["東京と大阪","広島と長崎","京都と神戸","仙台と名古屋"],
+    answer:1,
+    explanation:"1945年8月6日に広島（犠牲者20万人以上）、8月9日に長崎（犠牲者7万人以上）に原子爆弾が投下されました。日本は唯一の被爆国として核兵器廃絶を国際社会に訴え続けています。"
+  },
+  {
+    id:11,source:"入試問題（神奈川県）",type:"4択",
+    text:"1945年に起きた次のa〜dを年代の古い順に正しく並べたものはどれか。\na．広島に原爆投下　b．ドイツが降伏　c．長崎に原爆投下　d．日本がポツダム宣言受諾",
+    choices:["a→b→c→d","b→a→c→d","b→c→a→d","a→c→b→d"],
+    answer:1,
+    explanation:"ドイツ降伏(5月8日)→広島原爆(8月6日)→長崎原爆(8月9日)→ポツダム宣言受諾(8月14日)の順です。ソ連参戦(8月8日)も広島原爆と長崎原爆の間に起きました。"
+  },
+  {
+    id:12,source:"入試問題",type:"4択",
+    text:"1945年8月15日、昭和天皇がラジオ放送で国民に敗戦を伝えた。この放送を何というか。",
+    choices:["玉音放送","大本営発表","ラジオ体操","NHK放送"],
+    answer:0,
+    explanation:"1945年8月15日、昭和天皇がラジオを通じてポツダム宣言受諾と終戦を国民に伝えた放送を「玉音放送」といいます。「玉音」とは天皇の声のことです。この日が日本の終戦の日とされています。"
+  }
+];
+
+let answered=new Array(quizData.length).fill(false);
+let correct=new Array(quizData.length).fill(false);
+
+function buildQuiz(){
+  const container=document.getElementById('quiz-container');
+  container.innerHTML='';
+  quizData.forEach((q,idx)=>{
+    const card=document.createElement('div');
+    card.className='q-card';
+    const choicesHTML=`<div class="choices" id="choices-${idx}">`+
+      q.choices.map((c,ci)=>`<button class="choice" id="choice-${idx}-${ci}" onclick="selectChoice(${idx},${ci})">${c}</button>`).join('')+`</div>`;
+    card.innerHTML=`
+      <div class="q-head"><div class="q-num">${idx+1}</div><span class="q-source">${q.source}</span></div>
+      <div class="q-text">${q.text.replace(/\n/g,'<br>')}</div>
+      ${choicesHTML}
+      <div class="feedback" id="feedback-${idx}"></div>`;
+    container.appendChild(card);
+  });
+  updateProgress();
+}
+
+function selectChoice(qIdx,choiceIdx){
+  if(answered[qIdx])return;
+  answered[qIdx]=true;
+  const q=quizData[qIdx];
+  const isCorrect=choiceIdx===q.answer;
+  correct[qIdx]=isCorrect;
+  q.choices.forEach((_,ci)=>{
+    const btn=document.getElementById(`choice-${qIdx}-${ci}`);
+    btn.disabled=true;
+    if(ci===q.answer)btn.classList.add('correct');
+    else if(ci===choiceIdx)btn.classList.add('wrong');
+  });
+  const fb=document.getElementById(`feedback-${qIdx}`);
+  fb.className=`feedback show ${isCorrect?'ok':'ng'}`;
+  fb.innerHTML=isCorrect?`✅ 正解！　${q.explanation}`:`❌ 不正解。正解は「${q.choices[q.answer]}」です。<br>${q.explanation}`;
+  updateProgress();
+}
+
+function updateProgress(){
+  const done=answered.filter(Boolean).length;
+  const ok=correct.filter(Boolean).length;
+  document.getElementById('progress-label').textContent=`${done} / ${quizData.length} 問回答済み`;
+  document.getElementById('score-label').textContent=`正解：${ok} 問`;
+  document.getElementById('progress-fill').style.width=`${(done/quizData.length)*100}%`;
+}
+
+function checkAll(){
+  quizData.forEach((q,idx)=>{
+    if(!answered[idx]){
+      const fb=document.getElementById(`feedback-${idx}`);
+      fb.className='feedback show ng';
+      fb.innerHTML=`❌ 未回答。正解は「${q.choices[q.answer]}」です。<br>${q.explanation}`;
+      q.choices.forEach((_,ci)=>{
+        const btn=document.getElementById(`choice-${idx}-${ci}`);
+        btn.disabled=true;
+        if(ci===q.answer)btn.classList.add('show-correct');
+      });
+      answered[idx]=true;correct[idx]=false;
+    }
+  });
+  updateProgress();
+}
+
+function showResult(){
+  checkAll();
+  const ok=correct.filter(Boolean).length;
+  const pct=Math.round(ok/quizData.length*100);
+  document.getElementById('result-score').textContent=`${ok} / ${quizData.length}`;
+  document.getElementById('result-msg').textContent=
+    pct>=90?'🎉 すばらしい！完璧な理解です！':
+    pct>=70?'👍 よくできました！苦手問題を確認しよう。':
+    pct>=50?'📖 学習ページで復習してからもう一度！':
+            '💪 学習ページでしっかり復習しましょう！';
+  document.getElementById('result-area').classList.add('show');
+  document.getElementById('result-area').scrollIntoView({behavior:'smooth'});
+  if(pct>=80)launchConfetti();
+}
+
+function saveEval(grade){
+  try{
+    const p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');
+    p['rekishi24_drill']={eval:grade,score:correct.filter(Boolean).length,total:quizData.length,date:new Date().toLocaleDateString()};
+    localStorage.setItem('gamba_progress',JSON.stringify(p));
+    alert(`自己評価「${grade}」を保存しました！`);
+  }catch(e){}
+}
+
+function retryAll(){
+  answered=new Array(quizData.length).fill(false);
+  correct=new Array(quizData.length).fill(false);
+  document.getElementById('result-area').classList.remove('show');
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function launchConfetti(){
+  const container=document.getElementById('confetti-container');
+  const colors=['#1a237e','#F57F17','#E53935','#43A047','#8E24AA'];
+  for(let i=0;i<60;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='confetti-piece';
+      el.style.left=Math.random()*100+'%';
+      el.style.top='-10px';
+      el.style.background=colors[Math.floor(Math.random()*colors.length)];
+      el.style.borderRadius=Math.random()>0.5?'50%':'0';
+      el.style.animationDuration=(1+Math.random()*1.5)+'s';
+      container.appendChild(el);
+      setTimeout(()=>el.remove(),3000);
+    },i*30);
+  }
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

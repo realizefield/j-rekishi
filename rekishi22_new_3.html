@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：第22章 大正デモクラシーと大衆文化</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #1a5276;padding-bottom:8px;font-size:24px;color:#1a1a2e}
+  h2{margin-top:20px;margin-bottom:8px;font-size:18px;border-left:5px solid #1a5276;padding-left:10px;color:#1a1a2e}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+
+  /* ── 語群バンク ── */
+  .word-bank-sticky-container{position:sticky;top:0;z-index:1001;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc;overflow:visible}
+  .word-bank{border:2px solid #1a5276;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none;overflow:visible}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;position:relative}
+  .word-chip.used{opacity:0.3}
+  .word-chip.selected-chip{border-color:#1a5276;background-color:#d6eaf8;box-shadow:0 0 0 2px #85c1e9}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1a1a2e;color:#fff;border-radius:8px;padding:9px 13px;font-size:12px;line-height:1.7;z-index:3000;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1a1a2e}
+  .word-chip:hover .chip-pop,.word-chip.tip-active .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+
+  /* ── セクション ── */
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px;background:#1a5276}
+
+  /* ── 流れボックス（原因・過程・結果） ── */
+  .flow-box{display:flex;gap:0;margin:14px 0;flex-wrap:wrap}
+  .flow-item{flex:1;min-width:130px;padding:12px 14px;font-size:13px;line-height:1.7;position:relative}
+  .flow-item:not(:last-child)::after{content:"▶";position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:20px;color:#1a5276;z-index:1}
+  .flow-cause{background:#fff3cd;border-radius:8px 0 0 8px;border:2px solid #f0a500}
+  .flow-process{background:#dce9ff;border:2px solid #3a7dce;border-left:none}
+  .flow-result{background:#e2f8e2;border-radius:0 8px 8px 0;border:2px solid #2e7d32;border-left:none}
+  .flow-label{font-weight:bold;font-size:11px;display:block;margin-bottom:4px;letter-spacing:1px}
+  .flow-cause .flow-label{color:#b7770d}
+  .flow-process .flow-label{color:#1a4a9e}
+  .flow-result .flow-label{color:#1b5e20}
+
+  /* ── なぜ？ボックス ── */
+  .why-box{background:#eaf4ff;border-left:5px solid #1a5276;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px;line-height:1.9}
+  .why-box .label{font-weight:bold;color:#1a5276;margin-right:4px}
+
+  /* ── ポイントボックス ── */
+  .key-point{background:#fff8e1;border-left:5px solid #f0a500;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}
+  .key-point strong{color:#1a5276}
+
+  /* ── blank（穴埋め）── */
+  .blank{display:inline-block;min-width:90px;min-height:26px;border-bottom:2px solid #1a5276;margin:0 3px;text-align:center;cursor:pointer;font-weight:bold;color:#1a5276;vertical-align:middle}
+  .blank.correct{background-color:#ffeb3b}
+
+  /* ── person-pop ── */
+  .person-pop{display:inline-block;position:relative;border-bottom:2px dashed #1a5276;cursor:pointer;color:#0d3349;font-weight:bold}
+  .person-pop .pop-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:240px;background:#fff;border:2px solid #1a5276;border-radius:12px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,0.18);z-index:2000;text-align:center;font-weight:normal;font-size:13px;color:#222;pointer-events:none}
+  .person-pop .pop-box .pop-name{font-weight:bold;font-size:15px;color:#1a5276;margin-bottom:6px;display:block}
+  .person-pop .pop-box .pop-desc{font-size:12px;color:#444;line-height:1.7;text-align:left;display:block}
+  .person-pop .pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:#1a5276}
+  .person-pop:hover .pop-box,.person-pop.active .pop-box{display:block}
+
+  /* ── フッター ── */
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#1a5276;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #0d3349}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #1a5276;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #1a5276;background-color:#eaf4ff;display:none;text-align:left;font-size:14px;line-height:1.8}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="index.html">← 単元一覧に戻る</a>
+<h1>🗳️ 第22章 大正デモクラシーと大衆文化</h1>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 語句をタップすると説明、もう一度タップで選択</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== ① 大正デモクラシーの背景 ========== -->
+<div class="section">
+  <span class="section-label">① 大正デモクラシーとは何か？</span>
+  <h2>なぜ「民主主義」を求める声が高まったのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    明治時代は藩閥（薩摩・長州出身の指導者たち）が政治を支配していました。しかし第1次世界大戦でヨーロッパの民主主義国が勝利すると、日本でも「国民が政治に参加すべき」という空気が広がりました。これが「大正デモクラシー」です。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      藩閥・軍閥による政治支配への不満。第1次世界大戦で民主主義国が勝利
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      <span class="person-pop">吉野作造<span class="pop-box"><span class="pop-name">吉野作造（よしの さくぞう）</span><span class="pop-desc">東京帝国大学教授。民本主義を唱え、普通選挙と政党政治の実現を主張した大正デモクラシーの理論的指導者。</span></span></span>が「<span class="blank" data-key="民本主義">民本主義</span>」を唱え、国民の意思を政治に反映させることを主張
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      民衆が政治参加を求める「大正デモクラシー」の動きが全国に広がる
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">📝 ポイント</span>
+    <strong>民本主義</strong>とは「民衆の幸福・意思を基本にした政治」という意味。「民主主義」（国民が主権をもつ）とは少し違い、天皇のもとで国民の声を大切にしようという考えです。
+  </div>
+
+  <p>
+    また<span class="person-pop">美濃部達吉<span class="pop-box"><span class="pop-name">美濃部達吉（みのべ たつきち）</span><span class="pop-desc">憲法学者。天皇機関説（天皇は国家の最高機関）を主張し、議会政治の根拠を示した。後に軍部から激しく攻撃された。</span></span></span>は「<span class="blank" data-key="天皇機関説">天皇機関説</span>」を唱え、天皇も国家の機関の一つとして憲法に従って統治するという考えを示しました。これは議会政治（国民の代表が政治を行う）を正当化する根拠になりました。
+  </p>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    当時は「天皇の権限は絶対」という考えが主流でしたが、美濃部は「憲法の範囲内で天皇が統治する」と解釈することで、議会が実質的な力をもつことを理論的に支えました。
+  </div>
+</div>
+
+<!-- ========== ② 護憲運動と政党内閣 ========== -->
+<div class="section">
+  <span class="section-label">② 護憲運動から政党内閣へ</span>
+  <h2>なぜ「憲法を守れ」という運動が起きたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    1912年、軍部と結びついた桂太郎が強引に内閣を作りました。「また藩閥内閣か」と怒った民衆や政党が「憲法に基づいた政治を守れ（護憲）」と立ち上がりました。これが<strong>第一次護憲運動</strong>です。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      藩閥・軍部出身の桂太郎が内閣を強引に組閣（1912年）
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      「憲法に基づく政治を守れ！」と民衆・政党が<span class="blank" data-key="護憲運動">護憲運動</span>を展開（大正政変）
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      桂内閣が倒れる。「民意が内閣を倒した」と全国に衝撃
+    </div>
+  </div>
+
+  <h2>平民宰相・原敬の登場</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    1918年、<strong>米騒動</strong>（米の値上がりに怒った民衆が全国で暴動）がきっかけで寺内内閣が倒れました。次の首相に選ばれたのは、武士の身分でも華族でもない「平民」出身の原敬でした。国民は大喜びしました。
+  </div>
+
+  <p>
+    1918年、<strong>米騒動</strong>（第1次世界大戦中の物価上昇で米の値段が急騰し、全国各地で民衆が米屋や富商を襲った事件）が起きました。その責任を取って寺内内閣が総辞職し、<span class="person-pop">原敬<span class="pop-box"><span class="pop-name">原敬（はら たかし）</span><span class="pop-desc">第19代内閣総理大臣。爵位をもたない「平民宰相」として国民に人気。立憲政友会を率い、本格的な政党内閣を実現した。1921年に暗殺された。</span></span></span>が首相になりました。
+  </p>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      1918年、米の急騰で<span class="blank" data-key="米騒動">米騒動</span>が全国に広がる（富山の女性が発端）
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      寺内内閣が総辞職。立憲政友会の原敬が首相に就任
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      本格的な<span class="blank" data-key="政党内閣">政党内閣</span>が成立（陸・海・外務大臣以外は全員政党員）
+    </div>
+  </div>
+
+  <div class="key-point">
+    <strong>💡 政党内閣とは？</strong>　国民の選んだ代議士（政党員）が大臣になって政治を行う内閣のこと。藩閥・軍部の言いなりではなく、民意を反映した政治ができる。
+  </div>
+</div>
+
+<!-- ========== ③ 普通選挙法と治安維持法 ========== -->
+<div class="section">
+  <span class="section-label">③ 普通選挙法と治安維持法（セットで覚えよう）</span>
+  <h2>なぜ「普通選挙法」と「治安維持法」は同じ年に成立したのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    「選挙権を全員に与える」と「体制を批判する人を取り締まる」は一見矛盾しますが、政府には理由がありました。民衆の求める普通選挙を認める代わりに、「共産主義や社会主義などの危険な思想をもつ人は逮捕できる」という安全装置を同時に設けたのです。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 背景</span>
+      長年の「普通選挙を実現せよ」という民衆運動の高まり。一方、ロシア革命後、社会主義思想への政府の警戒
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      加藤高明内閣（1925年）が2つの法律を同時に成立させる
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      民主化（選挙権拡大）と弾圧（思想統制）が同時に進む
+    </div>
+  </div>
+
+  <p>
+    1925年、<span class="person-pop">加藤高明<span class="pop-box"><span class="pop-name">加藤高明（かとう たかあき）</span><span class="pop-desc">第24・25代内閣総理大臣。憲政会総裁。1925年に普通選挙法と治安維持法を同年に成立させた。</span></span></span>内閣は、<span class="blank" data-key="普通選挙法">普通選挙法</span>と<span class="blank" data-key="治安維持法">治安維持法</span>を同じ年に成立させました。
+  </p>
+
+  <div class="key-point">
+    <strong>普通選挙法（1925年）</strong>　満25歳以上のすべての<strong>男子</strong>に選挙権を与えた。それまでは一定額以上の税金を納める人だけが選挙権をもっていた（制限選挙）。有権者数が約4倍に増えた。<br>
+    <strong>治安維持法（1925年）</strong>　天皇制や私有財産制度を否定する思想・運動を取り締まる法律。社会主義者・共産主義者への弾圧に使われた。
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    普通選挙法で選挙権が広がれば、社会主義政党が勢力を伸ばす可能性があります。政府はそれを警戒し、同時に治安維持法で思想統制を行いました。「アメとムチ」の政策です。
+  </div>
+</div>
+
+<!-- ========== ④ 関東大震災 ========== -->
+<div class="section">
+  <span class="section-label">④ 関東大震災（1923年）</span>
+  <h2>関東大震災はどんな影響を与えたか？</h2>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      1923年9月1日、マグニチュード7.9の大地震が関東地方を直撃
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      死者・行方不明者10万人以上。火災が東京・横浜を壊滅。「朝鮮人が井戸に毒を入れた」などのデマが広まる
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      朝鮮人・中国人・社会主義者が殺害される（差別と偏見による悲劇）。都市が再建され、近代的な東京に生まれ変わる
+    </div>
+  </div>
+
+  <p>
+    1923年9月1日の<span class="blank" data-key="関東大震災">関東大震災</span>は、死者・行方不明者10万人以上を出した日本最大級の自然災害です。混乱の中でデマが広まり、多くの朝鮮人・中国人が殺害されるという悲劇も起きました。
+  </p>
+</div>
+
+<!-- ========== ⑤ 社会運動の広がり ========== -->
+<div class="section">
+  <span class="section-label">⑤ さまざまな社会運動の広がり</span>
+  <h2>なぜこの時期に様々な社会運動が生まれたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    大正デモクラシーの空気の中で、「自分たちの権利を主張してよい」という意識が高まりました。労働者・被差別部落の人々・女性など、これまで声をあげにくかった人々が組織を作り、権利を求め始めました。
+  </div>
+
+  <h2>① 労働運動</h2>
+  <p>
+    工業化が進む中、工場労働者が低賃金・長時間労働の改善を求めて団結しました。1912年に<span class="person-pop">鈴木文治<span class="pop-box"><span class="pop-name">鈴木文治（すずき ぶんじ）</span><span class="pop-desc">労働運動の指導者。1912年に友愛会を設立。友愛会は後に日本労働総同盟へと発展した。</span></span></span>らが設立した<span class="blank" data-key="友愛会">友愛会</span>は、やがて<strong>日本労働総同盟</strong>に発展しました。
+  </p>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      工場での低賃金・長時間労働。第1次世界大戦後の不況で労働環境が悪化
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      1912年 友愛会結成 → 日本労働総同盟へ発展。各地でストライキが多発
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      労働運動の組織化が進む。治安維持法による弾圧も強まる
+    </div>
+  </div>
+
+  <h2>② 部落解放運動</h2>
+  <p>
+    江戸時代から続く身分差別に苦しむ被差別部落の人々が、1922年に<span class="blank" data-key="全国水平社">全国水平社</span>を結成しました。「人の世に熱と光を」というスローガンのもと、差別撤廃を訴えました。
+  </p>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    明治時代に「解放令」が出されましたが、実際の差別はなくなりませんでした。大正デモクラシーの中で「もう黙っていられない」と立ち上がりました。全国水平社の宣言は「人間を尊重せよ」という力強いものでした。
+  </div>
+
+  <h2>③ 女性解放運動</h2>
+  <p>
+    <span class="person-pop">平塚らいてう<span class="pop-box"><span class="pop-name">平塚らいてう（ひらつか らいちょう）</span><span class="pop-desc">女性解放運動家・作家。1911年に女性文芸誌「青鞜」を創刊。「元始、女性は太陽であった」という宣言で有名。女性の参政権運動にも取り組んだ。</span></span></span>は1911年に女性文芸誌「<span class="blank" data-key="青鞜">青鞜</span>」を創刊し、「元始、女性は太陽であった」という宣言で女性の自立を訴えました。また、女性の参政権（選挙権）獲得を求める運動も活発になりました。
+  </p>
+
+  <div class="key-point">
+    <strong>💡 この時期の社会運動まとめ</strong><br>
+    労働者 → 友愛会・日本労働総同盟で賃金・待遇改善を要求<br>
+    被差別部落 → 全国水平社で差別撤廃を要求<br>
+    女性 → 青鞜社・平塚らいてうが女性の権利・参政権を要求<br>
+    ➡ みんな「自分たちの権利を認めろ」と声を上げた時代
+  </div>
+</div>
+
+<!-- ========== ⑥ 大正文化 ========== -->
+<div class="section">
+  <span class="section-label">⑥ 大正文化</span>
+  <h2>大正時代に花開いた文学・文化</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    第1次世界大戦で日本経済は好景気になり、都市部では中流階級（サラリーマン）が増えました。教育の普及で「読む人」が増え、文学・音楽・映画などの大衆文化が発展しました。
+  </div>
+
+  <h2>① 文学</h2>
+  <p>
+    大正時代の文学には様々な流れがありました。
+  </p>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">🌿 白樺派</span>
+      人道主義・理想主義<br>
+      <span class="person-pop">武者小路実篤<span class="pop-box"><span class="pop-name">武者小路実篤（むしゃのこうじ さねあつ）</span><span class="pop-desc">白樺派の作家。代表作「友情」「お目出たき人」など。理想主義的な人間愛を描いた。</span></span></span>「友情」<br>
+      <span class="person-pop">志賀直哉<span class="pop-box"><span class="pop-name">志賀直哉（しが なおや）</span><span class="pop-desc">白樺派の作家。「小説の神様」と呼ばれた。代表作「暗夜行路」「城の崎にて」。</span></span></span>「暗夜行路」
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">🖊️ 新思潮派</span>
+      現実的・技巧的<br>
+      <span class="person-pop">芥川龍之介<span class="pop-box"><span class="pop-name">芥川龍之介（あくたがわ りゅうのすけ）</span><span class="pop-desc">新思潮派の作家。「羅生門」「鼻」「蜘蛛の糸」など。緻密な文体で人間心理を描いた。現代の芥川賞はその名を冠する。</span></span></span>「<span class="blank" data-key="羅生門">羅生門</span>」「鼻」
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✊ プロレタリア文学</span>
+      労働者・貧困の現実を描く<br>
+      <span class="person-pop">小林多喜二<span class="pop-box"><span class="pop-name">小林多喜二（こばやし たきじ）</span><span class="pop-desc">プロレタリア文学の代表的作家。「蟹工船」で蟹の缶詰工場での過酷な労働を描いた。1933年に特高警察に逮捕され、拷問で死亡した。</span></span></span>「<span class="blank" data-key="蟹工船">蟹工船</span>」
+    </div>
+  </div>
+
+  <h2>② ラジオ放送の開始</h2>
+  <p>
+    1925年、日本で<span class="blank" data-key="ラジオ">ラジオ</span>放送が始まりました（社団法人東京放送局）。新聞に続く新しいメディアとして、情報・娯楽を広く国民に届けました。
+  </p>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ大事？</span>
+    ラジオは文字が読めない人にも情報を届けられます。1930年代には政府がラジオを国民への情報伝達・動員に活用するようになります。大正時代のラジオ普及が、のちの戦時体制にもつながっています。
+  </div>
+
+  <h2>まとめ：大正時代の流れ</h2>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 大正デモクラシー</span>
+      吉野作造の民本主義<br>
+      第一次護憲運動<br>
+      米騒動→<span class="blank" data-key="原敬">原敬</span>内閣（平民宰相）
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 社会運動</span>
+      労働運動（友愛会）<br>
+      部落解放（全国水平社）<br>
+      女性解放（青鞜・平塚らいてう）
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 1925年</span>
+      普通選挙法成立（男子普通選挙）<br>
+      治安維持法成立（思想弾圧）<br>
+      ラジオ放送開始
+    </div>
+  </div>
+</div>
+
+<!-- ========== フッター ========== -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div id="progress-bar-area" style="width:100%;background:#ddd;border-radius:8px;height:10px;margin-bottom:8px">
+      <div id="progress-bar" style="height:10px;background:#1a5276;border-radius:8px;width:0%;transition:width 0.3s"></div>
+    </div>
+    <div class="controls">
+      <button id="start-btn" onclick="startChallenge()">🚀 チャレンジ開始</button>
+      <button class="secondary" onclick="resetAll()">🔄 リセット</button>
+      <button id="check-btn" onclick="checkAnswers()" disabled>✅ 答え合わせ</button>
+      <button id="explain-btn" class="secondary" onclick="toggleExplain()">💡 解説を見る</button>
+      <button id="next-btn" onclick="location.href='rekishi22_drill.html'" disabled>次へ ▶</button>
+    </div>
+    <div class="timer-info">⏱ <span id="timer-display">00:00</span>　正解: <span id="score-display">0</span> / <span id="total-display">0</span></div>
+  </div>
+</div>
+
+<div class="explain-box" id="explain-box">
+  <strong>📖 第22章 解説まとめ</strong><br><br>
+  <strong>大正デモクラシー：</strong>吉野作造の「民本主義」・美濃部達吉の「天皇機関説」が理論的支柱。第一次護憲運動（1912年）で民衆が内閣を倒した。<br><br>
+  <strong>米騒動→原敬内閣（1918年）：</strong>米の急騰で全国に暴動（米騒動）。責任を取った寺内内閣に代わり、平民出身の原敬が本格的政党内閣を樹立。<br><br>
+  <strong>普通選挙法・治安維持法（1925年）：</strong>加藤高明内閣が同年に成立させた。男子普通選挙（25歳以上）実現と同時に、社会主義思想への弾圧も強化。<br><br>
+  <strong>社会運動：</strong>友愛会（労働者）・全国水平社（部落解放・1922年）・青鞜社/平塚らいてう（女性解放）が活動。<br><br>
+  <strong>大正文化：</strong>白樺派（武者小路実篤・志賀直哉）・新思潮派（芥川龍之介「羅生門」）・プロレタリア文学（小林多喜二「蟹工船」）。1925年ラジオ放送開始。<br><br>
+  <strong>関東大震災（1923年）：</strong>死者・行方不明者10万人以上。デマによる朝鮮人・中国人殺害という悲劇も。
+</div>
+
+<script>
+const answers = {
+  "民本主義": "民本主義",
+  "天皇機関説": "天皇機関説",
+  "護憲運動": "護憲運動",
+  "米騒動": "米騒動",
+  "政党内閣": "政党内閣",
+  "普通選挙法": "普通選挙法",
+  "治安維持法": "治安維持法",
+  "関東大震災": "関東大震災",
+  "友愛会": "友愛会",
+  "全国水平社": "全国水平社",
+  "青鞜": "青鞜",
+  "羅生門": "羅生門",
+  "蟹工船": "蟹工船",
+  "ラジオ": "ラジオ",
+  "原敬": "原敬"
+};
+
+const WORD_TIPS = {
+  "民本主義": "吉野作造が唱えた「民衆の幸福・意思を政治の基本に」という考え方",
+  "天皇機関説": "美濃部達吉が唱えた「天皇も国家機関の一つとして憲法に従う」という解釈",
+  "護憲運動": "「憲法に基づいた政治を守れ」と民衆・政党が立ち上がった運動",
+  "米騒動": "1918年、米の急騰に怒った民衆が全国で起こした暴動。富山の女性たちが発端",
+  "政党内閣": "国民が選んだ政党の議員が大臣になって組織する内閣",
+  "普通選挙法": "1925年成立。25歳以上の男子全員に選挙権を与えた（女性はまだ含まれない）",
+  "治安維持法": "1925年成立。社会主義・共産主義思想を取り締まる法律",
+  "関東大震災": "1923年9月1日。マグニチュード7.9の大地震。死者・行方不明者10万人以上",
+  "友愛会": "1912年、鈴木文治らが設立した労働者の組合。のちに日本労働総同盟へ発展",
+  "全国水平社": "1922年、被差別部落の人々が差別撤廃のために結成した組織",
+  "青鞜": "平塚らいてうが1911年に創刊した女性文芸誌。女性解放運動の出発点",
+  "羅生門": "芥川龍之介の代表作。「老婆と男」の話を通して人間の本性を描いた",
+  "蟹工船": "小林多喜二の代表作。カムチャツカ沖の蟹缶詰工場船での過酷な労働を描いたプロレタリア文学",
+  "ラジオ": "1925年に放送開始。文字が読めない人にも情報が届く新しいメディア",
+  "原敬": "1918年に就任した「平民宰相」。爵位をもたない初の本格的政党内閣を樹立"
+};
+
+let countMap = {};
+let selectedChip = null;
+let timerInterval = null;
+let seconds = 0;
+let started = false;
+
+function buildCountMap() {
+  countMap = {};
+  document.querySelectorAll('.blank').forEach(b => {
+    const k = b.dataset.key;
+    countMap[k] = (countMap[k] || 0) + 1;
+  });
+}
+
+function renderBank() {
+  const bank = document.getElementById('word-bank');
+  bank.innerHTML = '';
+  bank.style.display = 'flex';
+  const pool = [];
+  Object.keys(countMap).forEach(k => {
+    for (let i = 0; i < countMap[k]; i++) pool.push(k);
+  });
+  pool.sort(() => Math.random() - 0.5);
+  pool.forEach(word => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.dataset.word = word;
+    chip.innerHTML = word;
+    if (WORD_TIPS[word]) {
+      chip.innerHTML += `<div class="chip-pop">${WORD_TIPS[word]}</div>`;
+    }
+    chip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (chip.classList.contains('used')) return;
+      if (chip.classList.contains('tip-active')) {
+        chip.classList.remove('tip-active');
+        if (selectedChip === chip) { selectedChip = null; return; }
+      }
+      if (selectedChip === chip) {
+        chip.classList.remove('selected-chip');
+        selectedChip = null;
+        return;
+      }
+      if (WORD_TIPS[word] && selectedChip !== chip) {
+        document.querySelectorAll('.word-chip.tip-active').forEach(c => c.classList.remove('tip-active'));
+        chip.classList.add('tip-active');
+        if (selectedChip) { selectedChip.classList.remove('selected-chip'); selectedChip = null; }
+        return;
+      }
+      document.querySelectorAll('.word-chip.selected-chip').forEach(c => c.classList.remove('selected-chip'));
+      chip.classList.add('selected-chip');
+      selectedChip = chip;
+    });
+    bank.appendChild(chip);
+  });
+}
+
+function startChallenge() {
+  if (started) return;
+  started = true;
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = '';
+    b.dataset.filled = '';
+  });
+  buildCountMap();
+  renderBank();
+  document.getElementById('start-btn').disabled = true;
+  document.getElementById('check-btn').disabled = false;
+  const total = document.querySelectorAll('.blank').length;
+  document.getElementById('total-display').textContent = total;
+  seconds = 0;
+  timerInterval = setInterval(() => {
+    seconds++;
+    const m = String(Math.floor(seconds/60)).padStart(2,'0');
+    const s = String(seconds%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent = `${m}:${s}`;
+  }, 1000);
+
+  document.querySelectorAll('.blank').forEach(blank => {
+    blank.addEventListener('click', () => {
+      if (!selectedChip) return;
+      const word = selectedChip.dataset.word;
+      blank.textContent = word;
+      blank.dataset.filled = word;
+      selectedChip.classList.add('used');
+      selectedChip.classList.remove('selected-chip');
+      selectedChip = null;
+      updateProgress();
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.word-chip')) {
+      document.querySelectorAll('.word-chip.selected-chip').forEach(c => c.classList.remove('selected-chip'));
+      document.querySelectorAll('.word-chip.tip-active').forEach(c => c.classList.remove('tip-active'));
+      selectedChip = null;
+    }
+  });
+}
+
+function updateProgress() {
+  const blanks = document.querySelectorAll('.blank');
+  const filled = Array.from(blanks).filter(b => b.dataset.filled).length;
+  const pct = blanks.length > 0 ? (filled / blanks.length) * 100 : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function checkAnswers() {
+  let correct = 0;
+  document.querySelectorAll('.blank').forEach(blank => {
+    const key = blank.dataset.key;
+    const filled = blank.dataset.filled || '';
+    if (filled === answers[key]) {
+      blank.classList.add('correct');
+      correct++;
+    }
+  });
+  clearInterval(timerInterval);
+  document.getElementById('score-display').textContent = correct;
+  const total = document.querySelectorAll('.blank').length;
+  if (correct === total) {
+    document.getElementById('next-btn').disabled = false;
+    const saved = JSON.parse(localStorage.getItem('gamba-progress') || '{}');
+    saved['rekishi22'] = { done: true, score: correct, total: total, time: seconds };
+    localStorage.setItem('gamba-progress', JSON.stringify(saved));
+  }
+}
+
+function resetAll() {
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = '';
+    b.dataset.filled = '';
+    b.classList.remove('correct');
+  });
+  document.querySelectorAll('.word-chip').forEach(c => {
+    c.classList.remove('used', 'selected-chip', 'tip-active');
+  });
+  selectedChip = null;
+  clearInterval(timerInterval);
+  seconds = 0;
+  document.getElementById('timer-display').textContent = '00:00';
+  document.getElementById('score-display').textContent = '0';
+  document.getElementById('progress-bar').style.width = '0%';
+  started = false;
+  document.getElementById('start-btn').disabled = false;
+  document.getElementById('check-btn').disabled = true;
+  document.getElementById('next-btn').disabled = true;
+  document.getElementById('word-bank').style.display = 'none';
+  document.getElementById('word-bank').innerHTML = '';
+}
+
+function toggleExplain() {
+  const box = document.getElementById('explain-box');
+  box.style.display = box.style.display === 'block' ? 'none' : 'block';
+}
+
+// person-popタップ対応
+document.addEventListener('click', (e) => {
+  const pp = e.target.closest('.person-pop');
+  if (pp) {
+    e.stopPropagation();
+    const isActive = pp.classList.contains('active');
+    document.querySelectorAll('.person-pop.active').forEach(el => el.classList.remove('active'));
+    if (!isActive) pp.classList.add('active');
+    return;
+  }
+  document.querySelectorAll('.person-pop.active').forEach(el => el.classList.remove('active'));
+});
+</script>
+</body>
+</html>

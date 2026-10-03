@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史GAMBA：第23章 確認問題</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:120px}
+  h1{border-bottom:3px solid #7b2d00;padding-bottom:8px;font-size:22px;color:#1a1a2e}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+  .progress-bar{height:8px;background:#ddd;border-radius:4px;margin:12px 0}
+  .progress-fill{height:100%;background:#7b2d00;border-radius:4px;transition:width 0.4s}
+  .score-bar{display:flex;justify-content:space-between;font-size:14px;color:#555;margin-bottom:8px}
+  .q-card{background:#fff;border-radius:10px;padding:20px;margin-bottom:16px;border:1px solid #ccc;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+  .q-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .q-num{background:#7b2d00;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;flex-shrink:0}
+  .q-source{font-size:11px;color:#888;background:#f0f0f0;padding:2px 8px;border-radius:10px}
+  .q-text{font-size:15px;font-weight:600;line-height:1.8;margin-bottom:12px}
+  .choices{display:flex;flex-direction:column;gap:8px}
+  .choice{padding:10px 14px;border-radius:8px;border:2px solid #ddd;background:#fafafa;cursor:pointer;font-size:14px;text-align:left;transition:all 0.15s}
+  .choice:hover:not(:disabled){border-color:#7b2d00;background:#fff3e0}
+  .choice.correct{border-color:#2e7d32;background:#e8f5e9;color:#2e7d32;font-weight:bold}
+  .choice.wrong{border-color:#c62828;background:#ffebee;color:#c62828}
+  .choice.show-correct{border-color:#2e7d32;background:#e8f5e9;color:#2e7d32;font-weight:bold}
+  .feedback{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.7;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#e8f5e9;border-left:4px solid #2e7d32;color:#1b5e20}
+  .feedback.ng{background:#ffebee;border-left:4px solid #c62828;color:#7f0000}
+  .result-area{display:none;text-align:center;background:#fff;border-radius:12px;padding:32px 20px;margin-top:16px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+  .result-area.show{display:block}
+  .result-score{font-size:52px;font-weight:bold;color:#7b2d00}
+  .result-msg{font-size:16px;margin:8px 0 20px}
+  .self-eval{display:flex;gap:10px;justify-content:center;margin:16px 0}
+  .eval-btn{padding:10px 24px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer}
+  .eval-btn.a{background:#1565C0;color:#fff}
+  .eval-btn.b{background:#F57F17;color:#fff}
+  .eval-btn.c{background:#757575;color:#fff}
+  .retry-btn{background:#7b2d00;color:#fff;border:none;border-radius:8px;padding:12px 32px;font-size:15px;font-weight:bold;cursor:pointer;margin-top:8px}
+  .fixed-footer{position:fixed;bottom:0;left:0;width:100%;background:#fff;border-top:2px solid #ccc;padding:10px 0;z-index:100;box-shadow:0 -2px 8px rgba(0,0,0,0.08)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .footer-btn{padding:10px 22px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer}
+  .footer-btn.primary{background:#7b2d00;color:#fff;box-shadow:0 3px 0 #4e1c00}
+  .footer-btn.secondary{background:#6c757d;color:#fff;box-shadow:0 3px 0 #495057}
+  .footer-btn.result{background:#e65100;color:#fff;box-shadow:0 3px 0 #bf360c}
+  .confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+  .confetti-piece{position:absolute;width:10px;height:10px;animation:fall 2s ease-in forwards}
+  @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="index.html">← 単元一覧に戻る</a>
+<h1>📉 第23章　世界恐慌と日本の中国侵略　確認問題</h1>
+
+<div class="score-bar">
+  <span id="progress-label">0 / 12 問回答済み</span>
+  <span id="score-label">正解：0 問</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+<div id="quiz-container"></div>
+
+<div class="result-area" id="result-area">
+  <div style="font-size:36px">🎉</div>
+  <div class="result-score" id="result-score"></div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="self-eval">
+    <button class="eval-btn a" onclick="saveEval('A')">A よくできた</button>
+    <button class="eval-btn b" onclick="saveEval('B')">B もう少し</button>
+    <button class="eval-btn c" onclick="saveEval('C')">C 要復習</button>
+  </div>
+  <button class="retry-btn" onclick="retryAll()">もう一度チャレンジ</button>
+</div>
+
+<div class="fixed-footer">
+  <div class="footer-inner">
+    <button class="footer-btn secondary" onclick="location.href='rekishi23.html'">← 学習ページへ</button>
+    <button class="footer-btn primary" onclick="checkAll()">全問判定</button>
+    <button class="footer-btn result" onclick="showResult()">結果を見る</button>
+    <button class="footer-btn secondary" onclick="location.href='rekishi24.html'">次の単元へ →</button>
+  </div>
+</div>
+<div class="confetti-container" id="confetti-container"></div>
+
+<script>
+const quizData=[
+  {
+    id:1,source:"入試問題（熊本県）",type:"4択",
+    text:"1929年、アメリカのどの都市で株価が大暴落し、世界恐慌のきっかけとなったか。",
+    choices:["ロサンゼルス","ワシントンD.C.","ニューヨーク","シカゴ"],
+    answer:2,
+    explanation:"1929年10月24日「暗黒の木曜日」、ニューヨークのウォール街の証券取引所で株価が大暴落しました。これが世界恐慌の引き金となり、ヨーロッパを含む世界中に不況が広がりました。"
+  },
+  {
+    id:2,source:"入試問題",type:"4択",
+    text:"世界恐慌に対してアメリカが行った、政府が積極的に経済に介入し公共事業で失業者を救済した政策を何というか。",
+    choices:["ブロック経済","五カ年計画","ニューディール政策","ファシズム"],
+    answer:2,
+    explanation:"フランクリン＝ルーズベルト大統領の「ニューディール（新規まきなおし）」政策は、テネシー川流域開発公社（TVA）によるダム建設など、政府が直接経済に介入した世界初の政策です。"
+  },
+  {
+    id:3,source:"入試問題（香川県）",type:"4択",
+    text:"世界恐慌への対応として、イギリス・フランスが行った、本国と植民地との結びつきを強め外国商品に高い関税をかけた経済政策を何というか。",
+    choices:["ニューディール政策","ブロック経済","五カ年計画","計画経済"],
+    answer:1,
+    explanation:"ブロック経済は本国と植民地の間の関税を低くし、域外の外国商品には高い関税をかけて締め出す政策です。植民地の少ないドイツ・日本・イタリアを苦境に追い込み、軍事的膨張の一因となりました。"
+  },
+  {
+    id:4,source:"入試問題",type:"4択",
+    text:"世界恐慌の影響を受けなかった国はどこか。その理由とともに正しいものを選べ。",
+    choices:[
+      "アメリカ ─ ニューディール政策で素早く立て直したから",
+      "ソ連 ─ 計画経済を実施していたため市場経済の影響を受けなかったから",
+      "イギリス ─ 広大な植民地があったから",
+      "ドイツ ─ ヴェルサイユ条約を破棄していたから"
+    ],
+    answer:1,
+    explanation:"ソ連はスターリンによる五カ年計画（計画経済）を実施していたため、株価暴落などの資本主義経済の影響を受けませんでした。重工業化と農業の集団化を進めていました。"
+  },
+  {
+    id:5,source:"入試問題",type:"4択",
+    text:"1931年、関東軍が奉天郊外で南満州鉄道を爆破し満州を占領した事件を何というか。",
+    choices:["盧溝橋事件","五・一五事件","満州事変","柳条湖事件"],
+    answer:2,
+    explanation:"満州事変（1931年）は関東軍が柳条湖で南満州鉄道を自ら爆破し、これを中国軍のしわざとして満州を占領した事件です。翌1932年に溥儀を擁立して満州国を建国しました。"
+  },
+  {
+    id:6,source:"入試問題",type:"4択",
+    text:"満州事変後、国際連盟が派遣した調査団の名称は何か。",
+    choices:["ワシントン調査団","リットン調査団","パリ調査団","ジュネーブ調査団"],
+    answer:1,
+    explanation:"国際連盟はイギリスのリットン卿を団長とするリットン調査団を1932年に派遣しました。「満州国の建国は認められず、日本軍は撤退すべき」という調査結果を報告。これを不服とした日本は1933年に国際連盟を脱退しました。"
+  },
+  {
+    id:7,source:"入試問題",type:"4択",
+    text:"1932年、満州国の建国に反対した犬養毅首相が海軍青年将校に暗殺された事件は何か。",
+    choices:["二・二六事件","五・四運動","五・一五事件","三・一運動"],
+    answer:2,
+    explanation:"五・一五事件（1932年5月15日）で犬養毅首相が暗殺されました。「話せばわかる」という言葉が有名です。この事件以後、政党内閣の時代は終わりを告げ、軍部の政治的発言力が増しました。"
+  },
+  {
+    id:8,source:"入試問題",type:"4択",
+    text:"1936年、陸軍青年将校が首相官邸などを占拠し天皇親政を求めた事件を何というか。",
+    choices:["五・一五事件","二・二六事件","満州事変","盧溝橋事件"],
+    answer:1,
+    explanation:"二・二六事件（1936年2月26日）は陸軍青年将校が約1,400人の兵を率いて首相官邸・警視庁などを占拠した事件。頼みにしていた昭和天皇の怒りを買い失敗しましたが、この後軍国主義が強まりました。"
+  },
+  {
+    id:9,source:"入試問題",type:"4択",
+    text:"1937年に日中戦争が始まったきっかけとなった、北京郊外での日中両軍衝突事件を何というか。",
+    choices:["サライエボ事件","柳条湖事件","盧溝橋事件","南京事件"],
+    answer:2,
+    explanation:"1937年7月7日、北京郊外の盧溝橋で夜間演習中の日本軍に銃弾が発射されたことをきっかけに日中両軍が衝突し、日中戦争が始まりました。"
+  },
+  {
+    id:10,source:"入試問題",type:"4択",
+    text:"日中戦争が始まると、中国では蒋介石の国民政府と毛沢東の共産党が協力して日本に対抗する組織を作った。この組織を何というか。",
+    choices:["三国協商","抗日民族統一戦線","中国同盟会","五・四運動"],
+    answer:1,
+    explanation:"蒋介石（国民党）と毛沢東（共産党）は内戦を一時棚上げにし、1937年に抗日民族統一戦線を結成して日本に対抗しました。この団結により日中戦争は8年間の長期戦となりました。"
+  },
+  {
+    id:11,source:"入試問題（岡山県）",type:"4択",
+    text:"1938年、長引く日中戦争に対応するため、政府が議会の承認なしに国民を徴用し物資を徴発できる法律が制定された。これを何というか。",
+    choices:["治安維持法","普通選挙法","国家総動員法","大政翼賛会"],
+    answer:2,
+    explanation:"国家総動員法（1938年）は政府が議会なしに戦争遂行のため国民生活のすべてを統制できる法律です。食料は配給制となり、この法律により議会（政党）の力は著しく弱まりました。"
+  },
+  {
+    id:12,source:"入試問題",type:"4択",
+    text:"1940年に結成され、政党を解散させて市町村から隣組まで組織化し政府の命令を国民に行き渡らせた組織を何というか。",
+    choices:["国際連盟","大政翼賛会","全国水平社","日本労働総同盟"],
+    answer:1,
+    explanation:"大政翼賛会（1940年）は政党を解散させ国民を一元管理した戦時翼賛組織です。市町村から町内会・隣組まで組織化され、実質的に一党独裁体制が確立しました。"
+  }
+];
+
+let answered=new Array(quizData.length).fill(false);
+let correct=new Array(quizData.length).fill(false);
+
+function buildQuiz(){
+  const container=document.getElementById('quiz-container');
+  container.innerHTML='';
+  quizData.forEach((q,idx)=>{
+    const card=document.createElement('div');
+    card.className='q-card';
+    card.id=`q-card-${idx}`;
+    const choicesHTML=`<div class="choices" id="choices-${idx}">`+
+      q.choices.map((c,ci)=>`<button class="choice" id="choice-${idx}-${ci}" onclick="selectChoice(${idx},${ci})">${c}</button>`).join('')+`</div>`;
+    card.innerHTML=`
+      <div class="q-head"><div class="q-num">${idx+1}</div><span class="q-source">${q.source}</span></div>
+      <div class="q-text">${q.text}</div>
+      ${choicesHTML}
+      <div class="feedback" id="feedback-${idx}"></div>`;
+    container.appendChild(card);
+  });
+  updateProgress();
+}
+
+function selectChoice(qIdx,choiceIdx){
+  if(answered[qIdx])return;
+  answered[qIdx]=true;
+  const q=quizData[qIdx];
+  const isCorrect=choiceIdx===q.answer;
+  correct[qIdx]=isCorrect;
+  q.choices.forEach((_,ci)=>{
+    const btn=document.getElementById(`choice-${qIdx}-${ci}`);
+    btn.disabled=true;
+    if(ci===q.answer)btn.classList.add('correct');
+    else if(ci===choiceIdx)btn.classList.add('wrong');
+  });
+  const fb=document.getElementById(`feedback-${qIdx}`);
+  fb.className=`feedback show ${isCorrect?'ok':'ng'}`;
+  fb.innerHTML=isCorrect?`✅ 正解！　${q.explanation}`:`❌ 不正解。正解は「${q.choices[q.answer]}」です。<br>${q.explanation}`;
+  updateProgress();
+}
+
+function updateProgress(){
+  const done=answered.filter(Boolean).length;
+  const ok=correct.filter(Boolean).length;
+  document.getElementById('progress-label').textContent=`${done} / ${quizData.length} 問回答済み`;
+  document.getElementById('score-label').textContent=`正解：${ok} 問`;
+  document.getElementById('progress-fill').style.width=`${(done/quizData.length)*100}%`;
+}
+
+function checkAll(){
+  quizData.forEach((q,idx)=>{
+    if(!answered[idx]){
+      const fb=document.getElementById(`feedback-${idx}`);
+      fb.className='feedback show ng';
+      fb.innerHTML=`❌ 未回答。正解は「${q.choices[q.answer]}」です。<br>${q.explanation}`;
+      q.choices.forEach((_,ci)=>{
+        const btn=document.getElementById(`choice-${idx}-${ci}`);
+        btn.disabled=true;
+        if(ci===q.answer)btn.classList.add('show-correct');
+      });
+      answered[idx]=true;correct[idx]=false;
+    }
+  });
+  updateProgress();
+}
+
+function showResult(){
+  checkAll();
+  const ok=correct.filter(Boolean).length;
+  const pct=Math.round(ok/quizData.length*100);
+  document.getElementById('result-score').textContent=`${ok} / ${quizData.length}`;
+  document.getElementById('result-msg').textContent=
+    pct>=90?'🎉 すばらしい！完璧な理解です！':
+    pct>=70?'👍 よくできました！苦手問題を確認しよう。':
+    pct>=50?'📖 学習ページで復習してからもう一度！':
+            '💪 学習ページでしっかり復習しましょう！';
+  document.getElementById('result-area').classList.add('show');
+  document.getElementById('result-area').scrollIntoView({behavior:'smooth'});
+  if(pct>=80)launchConfetti();
+}
+
+function saveEval(grade){
+  try{
+    const p=JSON.parse(localStorage.getItem('gamba_progress')||'{}');
+    p['rekishi23_drill']={eval:grade,score:correct.filter(Boolean).length,total:quizData.length,date:new Date().toLocaleDateString()};
+    localStorage.setItem('gamba_progress',JSON.stringify(p));
+    alert(`自己評価「${grade}」を保存しました！`);
+  }catch(e){}
+}
+
+function retryAll(){
+  answered=new Array(quizData.length).fill(false);
+  correct=new Array(quizData.length).fill(false);
+  document.getElementById('result-area').classList.remove('show');
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function launchConfetti(){
+  const container=document.getElementById('confetti-container');
+  const colors=['#7b2d00','#F57F17','#E53935','#43A047','#1565C0'];
+  for(let i=0;i<60;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='confetti-piece';
+      el.style.left=Math.random()*100+'%';
+      el.style.top='-10px';
+      el.style.background=colors[Math.floor(Math.random()*colors.length)];
+      el.style.borderRadius=Math.random()>0.5?'50%':'0';
+      el.style.animationDuration=(1+Math.random()*1.5)+'s';
+      container.appendChild(el);
+      setTimeout(()=>el.remove(),3000);
+    },i*30);
+  }
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

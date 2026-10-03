@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：第21章 第1次世界大戦</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #7b1c1c;padding-bottom:8px;font-size:24px;color:#1a1a2e}
+  h2{margin-top:20px;margin-bottom:8px;font-size:18px;border-left:5px solid #7b1c1c;padding-left:10px;color:#1a1a2e}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+
+  /* ── 語群バンク ── */
+  .word-bank-sticky-container{position:sticky;top:0;z-index:1001;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc;overflow:visible}
+  .word-bank{border:2px solid #7b1c1c;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none;overflow:visible}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;position:relative}
+  .word-chip.used{opacity:0.3}
+  .word-chip.selected-chip{border-color:#c0392b;background-color:#fde8e8;box-shadow:0 0 0 2px #f5b7b1}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1a1a2e;color:#fff;border-radius:8px;padding:9px 13px;font-size:12px;line-height:1.7;z-index:3000;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1a1a2e}
+  .word-chip:hover .chip-pop,.word-chip.tip-active .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+
+  /* ── セクション ── */
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px;background:#7b1c1c}
+
+  /* ── 流れボックス（原因・過程・結果） ── */
+  .flow-box{display:flex;gap:0;margin:14px 0;flex-wrap:wrap}
+  .flow-item{flex:1;min-width:130px;padding:12px 14px;font-size:13px;line-height:1.7;position:relative}
+  .flow-item:not(:last-child)::after{content:"▶";position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:20px;color:#7b1c1c;z-index:1}
+  .flow-cause{background:#fff3cd;border-radius:8px 0 0 8px;border:2px solid #f0a500}
+  .flow-process{background:#dce9ff;border:2px solid #3a7dce;border-left:none}
+  .flow-result{background:#e2f8e2;border-radius:0 8px 8px 0;border:2px solid #2e7d32;border-left:none}
+  .flow-label{font-weight:bold;font-size:11px;display:block;margin-bottom:4px;letter-spacing:1px}
+  .flow-cause .flow-label{color:#b7770d}
+  .flow-process .flow-label{color:#1a4a9e}
+  .flow-result .flow-label{color:#1b5e20}
+
+  /* ── なぜ？ボックス ── */
+  .why-box{background:#eaf4ff;border-left:5px solid #1a5276;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px;line-height:1.9}
+  .why-box .label{font-weight:bold;color:#1a5276;margin-right:4px}
+
+  /* ── ポイントボックス ── */
+  .key-point{background:#fff8e1;border-left:5px solid #f0a500;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}
+  .key-point strong{color:#7b1c1c}
+
+  /* ── blank（穴埋め）── */
+  .blank{display:inline-block;min-width:90px;min-height:26px;border-bottom:2px solid #7b1c1c;margin:0 3px;text-align:center;cursor:pointer;font-weight:bold;color:#7b1c1c;vertical-align:middle}
+  .blank.correct{background-color:#ffeb3b}
+
+  /* ── person-pop ── */
+  .person-pop{display:inline-block;position:relative;border-bottom:2px dashed #7b1c1c;cursor:pointer;color:#5a0e0e;font-weight:bold}
+  .person-pop .pop-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:240px;background:#fff;border:2px solid #7b1c1c;border-radius:12px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,0.18);z-index:2000;text-align:center;font-weight:normal;font-size:13px;color:#222;pointer-events:none}
+  .person-pop .pop-box .pop-name{font-weight:bold;font-size:15px;color:#7b1c1c;margin-bottom:6px;display:block}
+  .person-pop .pop-box .pop-desc{font-size:12px;color:#444;line-height:1.7;text-align:left;display:block}
+  .person-pop .pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:#7b1c1c}
+  .person-pop:hover .pop-box,.person-pop.active .pop-box{display:block}
+
+  /* ── フッター ── */
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#7b1c1c;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #4a0e0e}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #7b1c1c;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #7b1c1c;background-color:#fff3f3;display:none;text-align:left;font-size:14px;line-height:1.8}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="index.html">← 単元一覧に戻る</a>
+<h1>💥 第21章 第1次世界大戦</h1>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 語句をタップすると説明、もう一度タップで選択</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== ① 開戦前の国際関係 ========== -->
+<div class="section">
+  <span class="section-label">① 第1次世界大戦前の国際関係</span>
+  <h2>なぜヨーロッパは2つの陣営に分かれたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    1870年の普仏戦争でフランスを破ったドイツは、フランスの復讐を恐れました。そこでドイツは周囲の国と同盟を結び、フランスを孤立させようとしました。一方フランスも対抗して同盟を広げました。こうして2つの軍事ブロックが生まれました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      1870年普仏戦争でドイツがフランスを破る。ドイツはフランスの復讐を恐れる
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      ドイツ・イタリア・オーストリアが<strong>三国同盟</strong>（1882年）<br>
+      フランス・イギリス・ロシアが<strong>三国協商</strong>（1907年）
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      ヨーロッパが2大軍事ブロックに分かれ、対立が深まる
+    </div>
+  </div>
+
+  <p>フランスを取り囲むように<span class="blank" data-id="A">三国同盟</span>（1882年）が結ばれました。ドイツ・<span class="blank" data-id="B">イタリア</span>・<span class="blank" data-id="C">オーストリア</span>の3か国です。</p>
+  <p>対抗して1907年、ドイツの急成長を恐れた<span class="blank" data-id="D">フランス</span>・<span class="blank" data-id="E">イギリス</span>・<span class="blank" data-id="F">ロシア</span>が<span class="blank" data-id="G">三国協商</span>を結びました。</p>
+
+  <div class="key-point">⭐ <strong>覚え方</strong>：三国同盟＝独・伊・墺（「どいつ・いたりあ・おーすとりあ」）　三国協商＝仏・英・露（「ふらんす・いぎりす・ろしあ」）</div>
+</div>
+
+<!-- ========== ② 第1次世界大戦の始まり ========== -->
+<div class="section">
+  <span class="section-label">② 第1次世界大戦の始まり</span>
+  <h2>なぜ一つの暗殺事件が世界大戦に発展したのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    バルカン半島はスラブ系・ゲルマン系など多くの民族が入り混じり、各国が領土を狙っていた「火薬庫」でした。ここで暗殺事件が起きると、同盟関係によって次々と国が戦争に引きずり込まれました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      バルカン半島は民族対立が激しく「ヨーロッパの<strong>火薬庫</strong>」と呼ばれた
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      1914年<strong>サライエボ事件</strong>→オーストリアがセルビアに宣戦→同盟網で拡大
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      1週間でヨーロッパ全土が第1次世界大戦に突入
+    </div>
+  </div>
+
+  <p><span class="blank" data-id="H">バルカン</span>半島は民族や宗教の対立が絶えず、「ヨーロッパの<span class="blank" data-id="I">火薬庫</span>」とよばれていました。</p>
+  <p>1914年、オーストリア皇太子夫妻がボスニアの首都<span class="blank" data-id="J">サライエボ</span>を訪問中、セルビアの青年に暗殺されました（サライエボ事件）。オーストリアはセルビアに宣戦布告。セルビアを支援するロシアも参戦し、同盟関係で一気に拡大して<span class="blank" data-id="K">第1次世界大戦</span>が始まりました（1914年）。</p>
+
+  <h2>なぜ日本は第1次世界大戦に参加したのか？</h2>
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    日本はイギリスと軍事同盟（日英同盟）を結んでいました。イギリスが三国協商側として参戦したため、日本にも参戦の義務が生じました。また、日本にとってはアジアのドイツ領を獲得するチャンスでもありました。
+  </div>
+
+  <p>日本は1902年にイギリスと結んだ<span class="blank" data-id="L">日英同盟</span>を理由にドイツに宣戦布告し、三国<span class="blank" data-id="M">協商</span>側として参戦しました。中国のドイツ領である青島と<span class="blank" data-id="N">山東</span>半島を占領しました。</p>
+
+  <h2>なぜ日本は「二十一カ条の要求」を出したのか？</h2>
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    列強がヨーロッパの戦争に集中している間に、日本は中国への影響力を一気に拡大しようとしました。山東省を占領していた日本は、それを口実に中国への権益拡大を強引に要求しました。
+  </div>
+
+  <p>1915年、日本は中華民国の大統領<span class="person-pop">袁世凱<span class="pop-box"><span class="pop-name">袁世凱（えんせいがい 1859〜1916）</span><span class="pop-desc">中华民国初代大总统。辛亥革命後に孫文から実権を奪いました。日本の二十一カ条の要求をほぼ認めさせられましたが、国内の反発（五四運動の遠因）を招きました。</span></span></span>政府に<span class="blank" data-id="O">二十一カ条</span>の要求を突きつけ、強引に認めさせました。山東省の権益継承・旅順・大連の租借期限延長などが主な内容で、中国の国民感情は反日に向かいました。</p>
+</div>
+
+<!-- ========== ③ 戦争の広がりと終わり ========== -->
+<div class="section">
+  <span class="section-label">③ 戦争の広がりと終わり</span>
+  <h2>なぜロシアは戦争から抜け、アメリカは参戦したのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    ロシアでは戦争の長期化で国民の不満が爆発し、革命が起きました。一方アメリカは当初中立でしたが、ドイツの無制限潜水艦作戦でアメリカ人の命が奪われたため、参戦に踏み切りました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ ロシア側の原因</span>
+      日露戦争以来の疲弊＋第1次大戦の長期化で国民の不満が爆発
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      1917年<strong>ロシア革命</strong>→<strong>レーニン</strong>が指導する社会主義政府が誕生
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      ロシアが戦線離脱。世界初の社会主義国家ソビエト政権が誕生
+    </div>
+  </div>
+
+  <p>1917年、<span class="person-pop">レーニン<span class="pop-box"><span class="pop-name">レーニン（1870〜1924）</span><span class="pop-desc">ロシアの革命家。マルクスの社会主義思想を実践に移した人物。ロシア革命を指導し、ソビエト政権を樹立しました。「すべての権力をソビエトへ」のスローガンで知られます。</span></span></span>が率いる<span class="blank" data-id="P">ロシア</span>革命が起こり、世界初の社会主義政府が誕生。ロシアは<span class="blank" data-id="Q">戦線離脱</span>しました。</p>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ アメリカ側の原因</span>
+      ドイツが無制限潜水艦作戦→アメリカ人乗客が犠牲に
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      アメリカの世論が参戦に傾く→1917年参戦
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      三国協商側が優勢になり、1918年ドイツが降伏
+    </div>
+  </div>
+
+  <p><span class="blank" data-id="R">アメリカ</span>は最初中立でしたが、ドイツの無制限潜水艦作戦（イギリス船ルシタニア号撃沈など）に怒り、1917年に三国<span class="blank" data-id="S">協商</span>側に参戦。1918年<span class="blank" data-id="T">ドイツ</span>が降伏し、4年余りの大戦が終わりました。</p>
+</div>
+
+<!-- ========== ④ 戦後の世界秩序 ========== -->
+<div class="section">
+  <span class="section-label">④ 戦後処理と新しい世界秩序</span>
+  <h2>なぜ国際連盟は力を持てなかったのか？</h2>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      1919年<strong>パリ講和会議</strong>→<strong>ヴェルサイユ条約</strong>：ドイツへの多額の賠償金
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      ウィルソンの十四カ条提案→<strong>国際連盟</strong>設立（1920年）
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      提唱国<strong>アメリカが不参加</strong>→全会一致制で機能不全→第2次大戦へ
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    国際連盟はアメリカ大統領ウィルソンが提唱しましたが、アメリカ議会が「外国の戦争に巻き込まれる」として加盟を拒否しました。また全会一致でしか決定できないため、実際には何も決められませんでした。この弱点が後の第2次世界大戦を防げなかった原因の一つです。
+  </div>
+
+  <p>1919年<span class="blank" data-id="U">パリ講和</span>会議が開かれました。アメリカ大統領<span class="person-pop">ウィルソン<span class="pop-box"><span class="pop-name">ウィルソン（1856〜1924）</span><span class="pop-desc">アメリカ第28代大統領。「平和に関する十四カ条」を提唱し国際連盟設立を主導しました。しかしアメリカ議会の反対で自国の連盟加盟は実現しませんでした。</span></span></span>の「十四カ条」をもとに話し合いが行われ、<span class="blank" data-id="V">ヴェルサイユ</span>条約が締結されました。ドイツは多額の賠償金支払いを義務づけられました（これが第2次大戦の遠因となります）。</p>
+
+  <p>1920年、世界平和を目的に<span class="blank" data-id="W">国際連盟</span>が設立されました。本部は<span class="blank" data-id="X">ジュネーブ</span>（スイス）。事務局長に日本の<span class="person-pop">新渡戸稲造<span class="pop-box"><span class="pop-name">新渡戸稲造（1862〜1933）</span><span class="pop-desc">日本の農学者・教育者。国際連盟事務次長を務めた国際人。「武士道」の著者として有名。旧五千円札の肖像です。</span></span></span>が就任しましたが、提唱国の<span class="blank" data-id="Y">アメリカ</span>が議会の反対で不参加。全会一致制のため機能が弱く、後の侵略を止められませんでした。</p>
+
+  <h2>なぜアジアで民族運動が広がったのか？</h2>
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    ウィルソンの「民族自決」（各民族が自分たちの国を自分たちで決める）という考えがアジアにも広まりました。しかし実際には、植民地とされたアジアには適用されませんでした。その矛盾への怒りが運動の背景にあります。
+  </div>
+
+  <p>1919年、朝鮮で日本からの独立を求める<span class="blank" data-id="Z">三・一</span>運動が起きました。日本は軍隊を送り鎮圧しました。同年、中国では山東半島返還を求めて<span class="blank" data-id="AA">五・四</span>運動が起きました。インドでは<span class="person-pop">ガンジー<span class="pop-box"><span class="pop-name">ガンジー（1869〜1948）</span><span class="pop-desc">インドの独立運動の父。「非暴力・不服従」を唱え、武力を使わずイギリスへの抵抗を続けました。「マハトマ（偉大な魂）」の称号で呼ばれます。</span></span></span>が<span class="blank" data-id="AB">非暴力</span>・<span class="blank" data-id="AC">不服従</span>の独立運動を指導しました。</p>
+</div>
+
+<!-- ========== ⑤ 軍縮会議と日本経済 ========== -->
+<div class="section">
+  <span class="section-label">⑤ 軍縮会議と戦後の日本経済</span>
+  <h2>なぜ戦勝国も軍縮をしなければならなかったのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    第1次大戦では戦車・航空機・毒ガスなど新兵器が大量に使われ、戦費がかさみました。各国が競って軍艦を増やすと財政が破綻してしまいます。特にアメリカは日本の軍事力拡大を警戒し、会議を主導して軍備制限を求めました。
+  </div>
+
+  <p>1921年、アメリカが主催した<span class="blank" data-id="AD">ワシントン</span>会議が開かれ、主力艦の保有割合（米5：英5：日3）が決まりました。また①<span class="blank" data-id="AE">日英</span>同盟の廃止、②日本の<span class="blank" data-id="AF">山東</span>半島権益の中国返還が決まりました。</p>
+  <p>1930年には<span class="blank" data-id="AG">ロンドン</span>軍縮会議が開かれ、補助艦の保有制限が決まりました。</p>
+
+  <div class="key-point">⭐ <strong>第1次大戦と日本経済</strong>：ヨーロッパへの輸出増加→大戦景気→<strong>船成金</strong>（船会社の大もうけ）が現れる一方で、物価高騰→庶民は苦しい生活</div>
+</div>
+
+<!-- ========== まとめ ========== -->
+<div class="section">
+  <span class="section-label">📋 第21章まとめ</span>
+  <h2>第1次世界大戦の大きな流れ</h2>
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 背景・原因</span>
+      三国同盟 vs 三国協商の2大ブロック対立＋バルカン半島の民族対立
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      サライエボ事件(1914)→大戦勃発→日本参戦・二十一カ条→ロシア革命→アメリカ参戦→ドイツ降伏(1918)
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      ヴェルサイユ条約・国際連盟設立(1920)・アジアに民族運動広まる
+    </div>
+  </div>
+  <div class="explain-box" id="explain-box" style="display:block;background:#fff8e1;border-left:5px solid #f0a500">
+    <strong>⚠️ 注意！この章のよく出るひっかけ</strong><br>
+    ①「国際連盟を提唱したアメリカが加盟しなかった」→なぜ？アメリカ議会の反対<br>
+    ②「日本は三国協商側（イギリス側）で参戦」→日英同盟が理由<br>
+    ③「ヴェルサイユ条約のドイツへの厳しい賠償が第2次大戦の種になった」
+  </div>
+</div>
+
+<!-- ========== フッター ========== -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div class="controls">
+      <button onclick="startChallenge()">🚀 チャレンジ開始</button>
+      <button onclick="checkAnswers()">✅ 判定</button>
+      <button class="secondary" onclick="toggleExplain()">💡 解説</button>
+      <button id="next-btn" onclick="location.href='rekishi21_drill.html'" disabled>次へ（確認問題） →</button>
+    </div>
+    <div class="timer-info" id="timer-info">⏱ タイム：--</div>
+  </div>
+</div>
+
+<script>
+const answers = {
+  "A":"三国同盟","B":"イタリア","C":"オーストリア","D":"フランス","E":"イギリス","F":"ロシア","G":"三国協商",
+  "H":"バルカン","I":"火薬庫","J":"サライエボ","K":"第1次世界大戦",
+  "L":"日英同盟","M":"協商","N":"山東","O":"二十一カ条",
+  "P":"ロシア","Q":"戦線離脱","R":"アメリカ","S":"協商","T":"ドイツ",
+  "U":"パリ講和","V":"ヴェルサイユ","W":"国際連盟","X":"ジュネーブ","Y":"アメリカ",
+  "Z":"三・一","AA":"五・四","AB":"非暴力","AC":"不服従",
+  "AD":"ワシントン","AE":"日英","AF":"山東","AG":"ロンドン"
+};
+
+const WORD_TIPS = {
+  "三国同盟":"ドイツ・イタリア・オーストリアの軍事同盟（1882年）",
+  "イタリア":"三国同盟の一員だが、後に三国協商側に寝返った",
+  "オーストリア":"三国同盟の一員。サライエボ事件後にセルビアへ宣戦",
+  "フランス":"普仏戦争でドイツに敗れたフランス。三国協商の中心",
+  "イギリス":"三国協商の一員。日英同盟で日本とも結んでいた",
+  "ロシア":"三国協商の一員。1917年のロシア革命で戦線離脱",
+  "三国協商":"フランス・イギリス・ロシアの三国による協力関係（1907年）",
+  "バルカン":"南東ヨーロッパの半島。複数の民族が入り混じる「火薬庫」",
+  "火薬庫":"バルカン半島の別名。小さな事件が大爆発を起こす危険な場所",
+  "サライエボ":"ボスニアの首都。オーストリア皇太子が暗殺された場所",
+  "第1次世界大戦":"1914〜1918年。史上初の世界規模の戦争",
+  "日英同盟":"1902年締結。日本がイギリス側で参戦する根拠となった同盟",
+  "協商":"三国協商側（フランス・イギリス・ロシア）のこと",
+  "山東":"中国の半島。もとドイツ領。日本が占領→後に中国へ返還",
+  "二十一カ条":"1915年に日本が中国に要求した21項目の権益拡大要求",
+  "ロシア":"1917年に社会主義革命が起き、世界初の社会主義国家が誕生",
+  "戦線離脱":"ロシアがドイツとブレスト＝リトフスク条約を結び戦争から抜けたこと",
+  "アメリカ":"1917年に参戦。提唱国なのに国際連盟に加盟しなかった",
+  "ドイツ":"1918年に降伏。ヴェルサイユ条約で多額の賠償金を課された",
+  "パリ講和":"1919年のパリ講和会議。ヴェルサイユ条約の締結場所",
+  "ヴェルサイユ":"ヴェルサイユ条約（1919年）でドイツの賠償金等が決定",
+  "国際連盟":"1920年設立の国際機関。本部ジュネーブ。アメリカは不参加",
+  "ジュネーブ":"スイスの都市。国際連盟の本部が置かれた",
+  "三・一":"1919年朝鮮の独立運動。日本が武力で鎮圧した",
+  "五・四":"1919年中国の反日民族運動。山東半島返還を求めた",
+  "非暴力":"ガンジーのスローガン。武力を使わずに抵抗する方法",
+  "不服従":"ガンジーのスローガン。イギリスの命令に従わないこと",
+  "ワシントン":"1921〜22年のワシントン会議。海軍軍縮・日英同盟廃止",
+  "日英":"日英同盟。ワシントン会議で廃止が決定された",
+  "ロンドン":"1930年のロンドン軍縮会議。補助艦の保有制限を決定"
+};
+
+// countMap（重複語句対応）
+function buildCountMap(answers){
+  const map={};
+  for(const v of Object.values(answers)){ map[v]=(map[v]||0)+1; }
+  return map;
+}
+
+let timerInterval=null,startTime=null,challenged=false,selectedChip=null;
+
+function renderBank(){
+  const bank=document.getElementById('word-bank');
+  bank.innerHTML='';
+  bank.style.display='flex';
+  const countMap=buildCountMap(answers);
+  const usedMap={};
+  for(const[id,val] of Object.entries(answers)){
+    usedMap[val]=(usedMap[val]||0);
+  }
+  const rendered={};
+  for(const val of Object.values(answers)){
+    if(!rendered[val]){ rendered[val]=0; }
+    const times=countMap[val];
+    for(let i=rendered[val];i<times;i++){
+      const chip=document.createElement('span');
+      chip.className='word-chip';
+      chip.textContent=val;
+      chip.dataset.word=val;
+      const tip=WORD_TIPS[val];
+      if(tip){
+        const pop=document.createElement('span');
+        pop.className='chip-pop';
+        pop.textContent=tip;
+        chip.appendChild(pop);
+      }
+      chip.addEventListener('click',function(e){
+        if(tip){
+          if(chip.classList.contains('tip-active')){
+            chip.classList.remove('tip-active');
+            selectChip(chip);
+          } else {
+            document.querySelectorAll('.word-chip.tip-active').forEach(c=>c.classList.remove('tip-active'));
+            chip.classList.add('tip-active');
+          }
+        } else { selectChip(chip); }
+      });
+      bank.appendChild(chip);
+    }
+    rendered[val]++;
+  }
+  // シャッフル
+  const chips=[...bank.children];
+  chips.sort(()=>Math.random()-0.5);
+  chips.forEach(c=>bank.appendChild(c));
+}
+
+function selectChip(chip){
+  if(chip.classList.contains('used')) return;
+  document.querySelectorAll('.word-chip.selected-chip').forEach(c=>c.classList.remove('selected-chip'));
+  if(selectedChip===chip){ selectedChip=null; return; }
+  selectedChip=chip;
+  chip.classList.add('selected-chip');
+}
+
+function startChallenge(){
+  if(challenged) return;
+  challenged=true;
+  renderBank();
+  document.querySelectorAll('.blank').forEach(b=>{
+    b.addEventListener('click',function(){
+      if(!selectedChip) return;
+      b.textContent=selectedChip.dataset.word;
+      selectedChip.classList.add('used');
+      selectedChip.classList.remove('selected-chip');
+      selectedChip=null;
+    });
+  });
+  startTime=Date.now();
+  timerInterval=setInterval(()=>{
+    const s=Math.floor((Date.now()-startTime)/1000);
+    document.getElementById('timer-info').textContent='⏱ タイム：'+Math.floor(s/60)+'分'+('0'+s%60).slice(-2)+'秒';
+  },1000);
+}
+
+function checkAnswers(){
+  if(!challenged) return;
+  clearInterval(timerInterval);
+  let correct=0,total=0;
+  document.querySelectorAll('.blank').forEach(b=>{
+    const id=b.dataset.id;
+    total++;
+    if(b.textContent===answers[id]){ b.classList.add('correct'); correct++; }
+    else { b.classList.remove('correct'); }
+  });
+  if(correct===total){ document.getElementById('next-btn').disabled=false; }
+  alert(correct+'/'+total+' 正解！'+(correct===total?'\n🎉 全問正解！確認問題へ進もう！':''));
+}
+
+function toggleExplain(){
+  const box=document.getElementById('explain-box');
+  box.style.display=box.style.display==='none'?'block':'none';
+}
+
+// person-popタップ対応
+document.addEventListener('click',function(e){
+  const pp=e.target.closest('.person-pop');
+  if(pp){
+    document.querySelectorAll('.person-pop.active').forEach(p=>{ if(p!==pp) p.classList.remove('active'); });
+    pp.classList.toggle('active');
+  } else {
+    document.querySelectorAll('.person-pop.active').forEach(p=>p.classList.remove('active'));
+  }
+  document.querySelectorAll('.word-chip.tip-active').forEach(c=>{
+    if(!c.contains(e.target)) c.classList.remove('tip-active');
+  });
+});
+
+// localStorage進捗
+(function(){
+  const id='rekishi21_new';
+  const saved=localStorage.getItem('gamba_abc_'+id);
+  // 初回表示時にABC状態を復元する場合はここで処理
+})();
+</script>
+</body>
+</html>

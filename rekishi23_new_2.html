@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歴史学習GAMBA：第23章 大恐慌とファシズムの台頭</title>
+<style>
+  body{font-family:"Meiryo",sans-serif;max-width:960px;margin:20px auto;line-height:1.9;background-color:#f4f4f9;font-size:16px;padding-bottom:300px}
+  h1{border-bottom:3px solid #4a235a;padding-bottom:8px;font-size:24px;color:#1a1a2e}
+  h2{margin-top:20px;margin-bottom:8px;font-size:18px;border-left:5px solid #4a235a;padding-left:10px;color:#1a1a2e}
+  .back-to-index{display:inline-flex;align-items:center;gap:6px;background:#2c3e8c;color:#fff!important;border:none;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:12px;text-decoration:none}
+
+  /* ── 語群バンク ── */
+  .word-bank-sticky-container{position:sticky;top:0;z-index:1001;background-color:#f4f4f9;padding:10px 0;border-bottom:2px solid #ccc;overflow:visible}
+  .word-bank{border:2px solid #4a235a;border-radius:8px;padding:12px;min-height:60px;flex-wrap:wrap;gap:8px;background-color:#fff;display:none;overflow:visible}
+  .word-chip{padding:8px 12px;border-radius:18px;border:1px solid #888;background-color:#fff;cursor:pointer;font-size:14px;position:relative}
+  .word-chip.used{opacity:0.3}
+  .word-chip.selected-chip{border-color:#4a235a;background-color:#f4ecf7;box-shadow:0 0 0 2px #d2b4de}
+  .chip-pop{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1a1a2e;color:#fff;border-radius:8px;padding:9px 13px;font-size:12px;line-height:1.7;z-index:3000;pointer-events:none;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
+  .chip-pop::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1a1a2e}
+  .word-chip:hover .chip-pop,.word-chip.tip-active .chip-pop{display:block}
+  .tip-hint{font-size:11px;color:#888;margin-left:6px;font-weight:normal}
+
+  /* ── セクション ── */
+  .section{background-color:#fff;border-radius:8px;padding:20px;border:1px solid #ccc;margin-bottom:16px}
+  .section-label{display:inline-block;color:#fff;font-size:13px;font-weight:bold;padding:3px 14px;border-radius:12px;margin-bottom:10px;background:#4a235a}
+
+  /* ── 流れボックス（原因・過程・結果） ── */
+  .flow-box{display:flex;gap:0;margin:14px 0;flex-wrap:wrap}
+  .flow-item{flex:1;min-width:130px;padding:12px 14px;font-size:13px;line-height:1.7;position:relative}
+  .flow-item:not(:last-child)::after{content:"▶";position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:20px;color:#4a235a;z-index:1}
+  .flow-cause{background:#fff3cd;border-radius:8px 0 0 8px;border:2px solid #f0a500}
+  .flow-process{background:#dce9ff;border:2px solid #3a7dce;border-left:none}
+  .flow-result{background:#e2f8e2;border-radius:0 8px 8px 0;border:2px solid #2e7d32;border-left:none}
+  .flow-label{font-weight:bold;font-size:11px;display:block;margin-bottom:4px;letter-spacing:1px}
+  .flow-cause .flow-label{color:#b7770d}
+  .flow-process .flow-label{color:#1a4a9e}
+  .flow-result .flow-label{color:#1b5e20}
+
+  /* ── なぜ？ボックス ── */
+  .why-box{background:#f5eef8;border-left:5px solid #4a235a;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px;line-height:1.9}
+  .why-box .label{font-weight:bold;color:#4a235a;margin-right:4px}
+
+  /* ── ポイントボックス ── */
+  .key-point{background:#fff8e1;border-left:5px solid #f0a500;padding:10px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}
+  .key-point strong{color:#4a235a}
+
+  /* ── 国別カード ── */
+  .country-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
+  .country-card{border-radius:8px;padding:14px;font-size:13px;line-height:1.8}
+  .card-usa{background:#e8f4fd;border:2px solid #2e86c1}
+  .card-uk{background:#eafaf1;border:2px solid #27ae60}
+  .card-de{background:#fdf2e9;border:2px solid #ca6f1e}
+  .card-it{background:#fef9e7;border:2px solid #d4ac0d}
+  .card-su{background:#fdedec;border:2px solid #e74c3c}
+  .country-card .card-title{font-weight:bold;font-size:14px;margin-bottom:6px}
+
+  /* ── blank（穴埋め）── */
+  .blank{display:inline-block;min-width:90px;min-height:26px;border-bottom:2px solid #4a235a;margin:0 3px;text-align:center;cursor:pointer;font-weight:bold;color:#4a235a;vertical-align:middle}
+  .blank.correct{background-color:#ffeb3b}
+
+  /* ── person-pop ── */
+  .person-pop{display:inline-block;position:relative;border-bottom:2px dashed #4a235a;cursor:pointer;color:#2c0e38;font-weight:bold}
+  .person-pop .pop-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:240px;background:#fff;border:2px solid #4a235a;border-radius:12px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,0.18);z-index:2000;text-align:center;font-weight:normal;font-size:13px;color:#222;pointer-events:none}
+  .person-pop .pop-box .pop-name{font-weight:bold;font-size:15px;color:#4a235a;margin-bottom:6px;display:block}
+  .person-pop .pop-box .pop-desc{font-size:12px;color:#444;line-height:1.7;text-align:left;display:block}
+  .person-pop .pop-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:#4a235a}
+  .person-pop:hover .pop-box,.person-pop.active .pop-box{display:block}
+
+  /* ── フッター ── */
+  .fixed-footer-controls{position:fixed;bottom:0;left:0;width:100%;background-color:#fff;border-top:2px solid #ccc;padding:12px 0;z-index:1000;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .footer-inner{max-width:960px;margin:0 auto;padding:0 20px;text-align:center}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  button{padding:10px 20px;border-radius:8px;border:none;background-color:#4a235a;color:#fff;cursor:pointer;font-size:15px;font-weight:bold;box-shadow:0 3px 0 #2c0e38}
+  button.secondary{background-color:#6c757d;box-shadow:0 3px 0 #495057}
+  button#next-btn{background-color:#1976d2;box-shadow:0 3px 0 #0d5aa7}
+  button#next-btn:disabled{background-color:#90bef5;box-shadow:none}
+  .timer-info{margin-top:10px;padding:6px 15px;font-size:16px;border:1px solid #4a235a;background-color:#fff;display:inline-block}
+  .explain-box{margin-top:12px;padding:14px;border-left:5px solid #4a235a;background-color:#f5eef8;display:none;text-align:left;font-size:14px;line-height:1.8}
+</style>
+</head>
+<body>
+<a class="back-to-index" href="index.html">← 単元一覧に戻る</a>
+<h1>📉 第23章 大恐慌と独裁政治の台頭</h1>
+
+<div class="word-bank-sticky-container">
+  <div style="font-weight:bold;font-size:14px;margin-bottom:5px;">【語群】（チャレンジ開始を押すとここに語句が出ます）<span class="tip-hint">💡 語句をタップすると説明、もう一度タップで選択</span></div>
+  <div class="word-bank" id="word-bank"></div>
+</div>
+
+<!-- ========== ① 世界恐慌とは何か ========== -->
+<div class="section">
+  <span class="section-label">① 世界恐慌（1929年）とは何か？</span>
+  <h2>なぜ1929年にアメリカで大恐慌が始まったのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    第1次世界大戦後、アメリカは「世界の工場・銀行」として好景気が続きました。企業や人々が株式に投資し、株価が上がり続けました。しかし1929年10月、突然株価が大暴落。銀行が倒産し、企業が潰れ、失業者が街にあふれ出しました。これが全世界に広がりました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      1920年代のアメリカで株式投機（株を買って儲けようとする動き）が過熱。生産過剰（作りすぎ）で商品が売れ残り始める
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      1929年10月24日（暗黒の木曜日）、<span class="blank" data-key="ウォール街">ウォール街</span>で株価大暴落。銀行・企業が次々と倒産
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      <span class="blank" data-key="世界恐慌">世界恐慌</span>（1929年）。アメリカから世界中に経済危機が波及。失業者が急増
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ世界中に広がったの？</span>
+    アメリカは第1次世界大戦後、ヨーロッパ各国にお金を貸していました。アメリカが「お金を返せ」と言い始めると、ヨーロッパの国々も資金難になり、銀行が倒産し始めました。経済のつながりで、一国の危機が世界中に連鎖したのです。
+  </div>
+</div>
+
+<!-- ========== ② 各国の対応 ========== -->
+<div class="section">
+  <span class="section-label">② 各国はどう対応したか？</span>
+  <h2>恐慌への対応で世界が「二極化」した</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ大事？</span>
+    この恐慌への対応の違いが、のちの第2次世界大戦の原因の一つになります。植民地をもつ国は「植民地との閉じた経済圏」で乗り切れましたが、植民地の少ない国は行き詰まり、独裁・侵略へと向かいました。
+  </div>
+
+  <div class="country-grid">
+    <div class="country-card card-usa">
+      <div class="card-title">🇺🇸 アメリカ</div>
+      <span class="person-pop">フランクリン=ルーズベルト<span class="pop-box"><span class="pop-name">フランクリン=ルーズベルト</span><span class="pop-desc">第32代アメリカ大統領。「新規まき直し」という意味の政策で世界恐慌に立ち向かった。政府が大規模な公共事業に投資した。</span></span></span>大統領が「<span class="blank" data-key="ニューディール">ニューディール</span>」政策を実施。政府が大規模な公共事業（ダム建設など）に投資し、失業者を雇用した
+    </div>
+    <div class="country-card card-uk">
+      <div class="card-title">🇬🇧 イギリス・🇫🇷 フランス</div>
+      植民地との貿易を優先し、他国の商品に高い関税をかける「<span class="blank" data-key="ブロック経済">ブロック経済</span>」を実施。植民地という「仲間」の中だけで経済を回した
+    </div>
+    <div class="country-card card-su">
+      <div class="card-title">🇷🇺 ソ連</div>
+      <span class="person-pop">スターリン<span class="pop-box"><span class="pop-name">スターリン</span><span class="pop-desc">ソ連の最高指導者（1924年〜1953年）。国家主導の計画経済で工業化を強引に推進。一方で反対派を粛清した独裁者。</span></span></span>指導のもと「<span class="blank" data-key="五カ年計画">五カ年計画</span>」で計画経済を推進。資本主義経済とは別の仕組みだったため、恐慌の影響をほとんど受けなかった
+    </div>
+    <div class="country-card card-de">
+      <div class="card-title">🇩🇪 ドイツ</div>
+      植民地がなく、植民地を使った経済圏も作れない。失業者が急増し、社会が不安定に。このすきに<span class="person-pop">ヒトラー<span class="pop-box"><span class="pop-name">アドルフ・ヒトラー</span><span class="pop-desc">ナチス（国家社会主義ドイツ労働者党）の指導者。1933年首相就任。「ユダヤ人が悪い」というスケープゴートを使い独裁権力を握った。ホロコースト（ユダヤ人大虐殺）の責任者。</span></span></span>率いるナチス党が台頭
+    </div>
+    <div class="country-card card-it">
+      <div class="card-title">🇮🇹 イタリア</div>
+      第1次世界大戦後から経済が不安定。<span class="person-pop">ムッソリーニ<span class="pop-box"><span class="pop-name">ベニート・ムッソリーニ</span><span class="pop-desc">イタリアのファシスト党の指導者。1922年に首相就任。「ファシスト」という言葉の語源。ドイツのヒトラーと同盟を結んだ。</span></span></span>率いる<span class="blank" data-key="ファシスト党">ファシスト党</span>が政権を握り、独裁政治・対外侵略へ
+    </div>
+  </div>
+
+  <div class="key-point">
+    <strong>💡 ブロック経済とは？</strong>　自国と植民地（仲間の国）の間では自由貿易、それ以外の国には高い関税をかけて締め出す政策。自分たちだけで完結した「ブロック（かたまり）」を作る。植民地の少ないドイツ・日本・イタリアは使えず、行き詰まった。
+  </div>
+</div>
+
+<!-- ========== ③ ファシズムとは何か ========== -->
+<div class="section">
+  <span class="section-label">③ ファシズムとは何か？</span>
+  <h2>なぜ民主主義の国でも独裁が生まれたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    恐慌で生活が苦しくなると、人々は「誰かを悪者にして、強いリーダーに解決してほしい」と思うようになります。ドイツではユダヤ人が悪者にされ、「強いドイツを取り戻す」というヒトラーの演説が民衆の心をつかみました。民主的な選挙で独裁者が選ばれるというパラドックスが起きたのです。
+  </div>
+
+  <p>
+    <span class="blank" data-key="ファシズム">ファシズム</span>とは「国家（民族）を最優先にし、強力な独裁者が率いる全体主義」のことです。個人の自由より国家の力を重視し、反対意見を弾圧しました。
+  </p>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      世界恐慌による失業・貧困。第1次世界大戦の敗戦国（ドイツ）の屈辱。社会の不安定化
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      イタリア：ムッソリーニのファシスト党（1922年〜）<br>
+      ドイツ：ヒトラーのナチス党（1933年〜）<br>
+      民主主義の制度を使って権力を握り、その後制度を破壊
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      独裁・言論弾圧・軍拡・他民族差別・対外侵略へ。第2次世界大戦の遠因に
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 ドイツとイタリアの違い</span>
+    <strong>イタリア（ムッソリーニ・独裁政党）</strong>：第1次世界大戦後の経済混乱が起源。1922年政権獲得。<br>
+    <strong>ドイツ（ヒトラー・ナチス）</strong>：敗戦国の屈辱＋大恐慌が追い打ち。1933年政権獲得。ユダヤ人迫害（ホロコースト）が特徴。
+  </div>
+</div>
+
+<!-- ========== ④ ソ連・社会主義 ========== -->
+<div class="section">
+  <span class="section-label">④ ソ連はなぜ恐慌の影響を受けなかったのか？</span>
+  <h2>スターリンとソ連の計画経済</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    ソ連（ロシア革命後に生まれた社会主義国家）は「私有財産なし・国家が経済を計画・管理する」という資本主義とは全く別の仕組みをもっていました。株価暴落は「株式市場がある資本主義国」の問題なので、ソ連にはそもそも影響しませんでした。
+  </div>
+
+  <p>
+    <span class="person-pop">スターリン<span class="pop-box"><span class="pop-name">スターリン（ヨシフ・スターリン）</span><span class="pop-desc">レーニンの死後、ソ連の最高権力者となった。五カ年計画で急速な工業化・農業集団化を推進。反対派への弾圧（スターリン大粛清）でも知られる独裁者。</span></span></span>は「<span class="blank" data-key="五カ年計画">五カ年計画</span>」により、国家主導で工場建設・農業集団化（コルホーズ）を強引に進め、ソ連を短期間で工業国家に変えました。
+  </p>
+
+  <div class="key-point">
+    <strong>💡 五カ年計画とは？</strong>　国家が「5年でこれだけ作れ」と計画を立て、それを強制的に実行する政策。農民を農業集団（コルホーズ）に強制的に入れ、反対する者は粛清（処刑・収容所送り）された。恐慌の影響は受けなかったが、多大な犠牲を伴った。
+  </div>
+</div>
+
+<!-- ========== ⑤ 日本への影響 ========== -->
+<div class="section">
+  <span class="section-label">⑤ 世界恐慌が日本に与えた影響</span>
+  <h2>なぜ日本でも「昭和恐慌」が起きたのか？</h2>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ？</span>
+    当時の日本経済はアメリカへの輸出（特に生糸）に大きく依存していました。アメリカが不況になると、日本の輸出が激減。農村では生糸・米の値段が暴落し、農家が深刻な貧困に陥りました。
+  </div>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 原因</span>
+      世界恐慌（1929年）でアメリカの輸入が激減。日本の主要輸出品「生糸」の値段が暴落
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 過程</span>
+      「昭和恐慌」（1930〜31年）。農村の貧困が深刻化。都市でも企業倒産・失業者急増。浜口内閣の金解禁政策（不況をさらに悪化させた）
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      社会不安が高まり、軍部が「満州を占領して活路を開け」という主張を強める。<span class="blank" data-key="満州事変">満州事変</span>（1931年）へとつながる
+    </div>
+  </div>
+
+  <div class="why-box">
+    <span class="label">🤔 なぜ軍部が台頭したの？</span>
+    政治家や財閥が不況の解決策を見つけられない中、「軍が満州（中国東北部）を占領して資源を確保すれば日本経済は立て直せる」という主張が国民に受け入れられていきました。行き詰まった経済が、対外侵略への道を開いたのです。
+  </div>
+
+  <p>
+    1931年、関東軍（満州に駐留していた日本陸軍）が南満州鉄道の線路を自ら爆破し、中国軍の仕業として攻撃を開始しました（<span class="blank" data-key="柳条湖事件">柳条湖事件</span>）。これが日本による満州占領の始まりです。
+  </p>
+</div>
+
+<!-- ========== まとめ ========== -->
+<div class="section">
+  <span class="section-label">まとめ：世界はどう変わったか</span>
+
+  <div class="flow-box">
+    <div class="flow-item flow-cause">
+      <span class="flow-label">⚡ 世界恐慌（1929）</span>
+      アメリカの株価暴落→銀行倒産→失業者急増→世界に波及
+    </div>
+    <div class="flow-item flow-process">
+      <span class="flow-label">⏩ 各国の対応で分断</span>
+      アメリカ：大規模公共事業で雇用創出<br>
+      英仏：植民地との閉じた経済圏を形成<br>
+      ソ連：国家主導の計画経済（影響なし）<br>
+      独伊：独裁政党が台頭・権力掌握<br>
+      日本：昭和恐慌→軍部台頭
+    </div>
+    <div class="flow-item flow-result">
+      <span class="flow-label">✅ 結果</span>
+      世界が「民主主義」対「ファシズム・軍国主義」に二極化。第2次世界大戦へ向かう緊張が高まる
+    </div>
+  </div>
+
+  <div class="key-point">
+    <strong>💡 この章の核心</strong>：世界恐慌は「経済の問題」だったのに、なぜ戦争につながったのか。行き詰まった経済→社会不安→強いリーダー・侵略への誘惑、という連鎖が第2次世界大戦を生み出しました。現代でも同じようなことが起きうるという意味で、とても重要な歴史的教訓です。
+  </div>
+</div>
+
+<!-- ========== フッター ========== -->
+<div class="fixed-footer-controls">
+  <div class="footer-inner">
+    <div id="progress-bar-area" style="width:100%;background:#ddd;border-radius:8px;height:10px;margin-bottom:8px">
+      <div id="progress-bar" style="height:10px;background:#4a235a;border-radius:8px;width:0%;transition:width 0.3s"></div>
+    </div>
+    <div class="controls">
+      <button id="start-btn" onclick="startChallenge()">🚀 チャレンジ開始</button>
+      <button class="secondary" onclick="resetAll()">🔄 リセット</button>
+      <button id="check-btn" onclick="checkAnswers()" disabled>✅ 答え合わせ</button>
+      <button id="explain-btn" class="secondary" onclick="toggleExplain()">💡 解説を見る</button>
+      <button id="next-btn" onclick="location.href='rekishi23_drill.html'" disabled>次へ ▶</button>
+    </div>
+    <div class="timer-info">⏱ <span id="timer-display">00:00</span>　正解: <span id="score-display">0</span> / <span id="total-display">0</span></div>
+  </div>
+</div>
+
+<div class="explain-box" id="explain-box">
+  <strong>📖 第23章 解説まとめ</strong><br><br>
+  <strong>世界恐慌（1929年）：</strong>アメリカのウォール街で株価大暴落。銀行・企業が連鎖倒産し、失業者が急増。世界中に波及。<br><br>
+  <strong>各国の対応：</strong><br>
+  ・アメリカ→フランクリン=ルーズベルト大統領がニューディール政策（公共事業で雇用創出）<br>
+  ・イギリス・フランス→ブロック経済（植民地との貿易を優先、他国を締め出し）<br>
+  ・ソ連→スターリンの五カ年計画（計画経済のため恐慌の影響なし）<br>
+  ・イタリア→ムッソリーニのファシスト党が独裁<br>
+  ・ドイツ→ヒトラーのナチス党が台頭（ユダヤ人迫害・軍拡）<br><br>
+  <strong>ファシズム：</strong>国家・民族を最優先にし、強力な独裁者が率いる全体主義。民主主義を否定し、反対意見を弾圧。<br><br>
+  <strong>日本への影響（昭和恐慌）：</strong>アメリカへの輸出（生糸）が激減→農村が貧困→社会不安→軍部台頭→満州事変（1931年・柳条湖事件がきっかけ）へ。
+</div>
+
+<script>
+const answers = {
+  "ウォール街": "ウォール街",
+  "世界恐慌": "世界恐慌",
+  "ニューディール": "ニューディール",
+  "ブロック経済": "ブロック経済",
+  "五カ年計画": "五カ年計画",
+  "ファシスト党": "ファシスト党",
+  "ファシズム": "ファシズム",
+  "満州事変": "満州事変",
+  "柳条湖事件": "柳条湖事件"
+};
+
+const WORD_TIPS = {
+  "ウォール街": "アメリカ・ニューヨークの金融街。ニューヨーク証券取引所がある",
+  "世界恐慌": "1929年に始まった世界規模の経済危機。恐慌とは急激な経済の落ち込みのこと",
+  "ニューディール": "フランクリン=ルーズベルト大統領の政策。政府が積極的に経済に介入して雇用を生み出した",
+  "ブロック経済": "自国と植民地の間だけで経済を回し、他国を高関税で締め出す政策",
+  "五カ年計画": "ソ連が国家主導で5年単位の工業化計画を強制実施した政策",
+  "ファシスト党": "ムッソリーニが率いたイタリアの独裁政党。ファシズムという言葉の語源",
+  "ファシズム": "国家・民族を最優先にし、強力な独裁者が率いる全体主義的な政治思想・体制",
+  "満州事変": "1931年、日本の関東軍が満州（中国東北部）を占領した事件",
+  "柳条湖事件": "1931年、関東軍が南満州鉄道の線路を自ら爆破して中国軍の仕業に見せかけた事件。満州事変のきっかけ"
+};
+
+let countMap = {};
+let selectedChip = null;
+let timerInterval = null;
+let seconds = 0;
+let started = false;
+
+function buildCountMap() {
+  countMap = {};
+  document.querySelectorAll('.blank').forEach(b => {
+    const k = b.dataset.key;
+    countMap[k] = (countMap[k] || 0) + 1;
+  });
+}
+
+function renderBank() {
+  const bank = document.getElementById('word-bank');
+  bank.innerHTML = '';
+  bank.style.display = 'flex';
+  const pool = [];
+  Object.keys(countMap).forEach(k => {
+    for (let i = 0; i < countMap[k]; i++) pool.push(k);
+  });
+  pool.sort(() => Math.random() - 0.5);
+  pool.forEach(word => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.dataset.word = word;
+    chip.innerHTML = word;
+    if (WORD_TIPS[word]) {
+      chip.innerHTML += `<div class="chip-pop">${WORD_TIPS[word]}</div>`;
+    }
+    chip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (chip.classList.contains('used')) return;
+      if (chip.classList.contains('tip-active')) {
+        chip.classList.remove('tip-active');
+        if (selectedChip === chip) { selectedChip = null; return; }
+      }
+      if (selectedChip === chip) {
+        chip.classList.remove('selected-chip');
+        selectedChip = null;
+        return;
+      }
+      if (WORD_TIPS[word] && selectedChip !== chip) {
+        document.querySelectorAll('.word-chip.tip-active').forEach(c => c.classList.remove('tip-active'));
+        chip.classList.add('tip-active');
+        if (selectedChip) { selectedChip.classList.remove('selected-chip'); selectedChip = null; }
+        return;
+      }
+      document.querySelectorAll('.word-chip.selected-chip').forEach(c => c.classList.remove('selected-chip'));
+      chip.classList.add('selected-chip');
+      selectedChip = chip;
+    });
+    bank.appendChild(chip);
+  });
+}
+
+function startChallenge() {
+  if (started) return;
+  started = true;
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = '';
+    b.dataset.filled = '';
+  });
+  buildCountMap();
+  renderBank();
+  document.getElementById('start-btn').disabled = true;
+  document.getElementById('check-btn').disabled = false;
+  const total = document.querySelectorAll('.blank').length;
+  document.getElementById('total-display').textContent = total;
+  seconds = 0;
+  timerInterval = setInterval(() => {
+    seconds++;
+    const m = String(Math.floor(seconds/60)).padStart(2,'0');
+    const s = String(seconds%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent = `${m}:${s}`;
+  }, 1000);
+
+  document.querySelectorAll('.blank').forEach(blank => {
+    blank.addEventListener('click', () => {
+      if (!selectedChip) return;
+      const word = selectedChip.dataset.word;
+      blank.textContent = word;
+      blank.dataset.filled = word;
+      selectedChip.classList.add('used');
+      selectedChip.classList.remove('selected-chip');
+      selectedChip = null;
+      updateProgress();
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.word-chip')) {
+      document.querySelectorAll('.word-chip.selected-chip').forEach(c => c.classList.remove('selected-chip'));
+      document.querySelectorAll('.word-chip.tip-active').forEach(c => c.classList.remove('tip-active'));
+      selectedChip = null;
+    }
+  });
+}
+
+function updateProgress() {
+  const blanks = document.querySelectorAll('.blank');
+  const filled = Array.from(blanks).filter(b => b.dataset.filled).length;
+  const pct = blanks.length > 0 ? (filled / blanks.length) * 100 : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function checkAnswers() {
+  let correct = 0;
+  document.querySelectorAll('.blank').forEach(blank => {
+    const key = blank.dataset.key;
+    const filled = blank.dataset.filled || '';
+    if (filled === answers[key]) {
+      blank.classList.add('correct');
+      correct++;
+    }
+  });
+  clearInterval(timerInterval);
+  document.getElementById('score-display').textContent = correct;
+  const total = document.querySelectorAll('.blank').length;
+  if (correct === total) {
+    document.getElementById('next-btn').disabled = false;
+    const saved = JSON.parse(localStorage.getItem('gamba-progress') || '{}');
+    saved['rekishi23'] = { done: true, score: correct, total: total, time: seconds };
+    localStorage.setItem('gamba-progress', JSON.stringify(saved));
+  }
+}
+
+function resetAll() {
+  document.querySelectorAll('.blank').forEach(b => {
+    b.textContent = '';
+    b.dataset.filled = '';
+    b.classList.remove('correct');
+  });
+  document.querySelectorAll('.word-chip').forEach(c => {
+    c.classList.remove('used', 'selected-chip', 'tip-active');
+  });
+  selectedChip = null;
+  clearInterval(timerInterval);
+  seconds = 0;
+  document.getElementById('timer-display').textContent = '00:00';
+  document.getElementById('score-display').textContent = '0';
+  document.getElementById('progress-bar').style.width = '0%';
+  started = false;
+  document.getElementById('start-btn').disabled = false;
+  document.getElementById('check-btn').disabled = true;
+  document.getElementById('next-btn').disabled = true;
+  document.getElementById('word-bank').style.display = 'none';
+  document.getElementById('word-bank').innerHTML = '';
+}
+
+function toggleExplain() {
+  const box = document.getElementById('explain-box');
+  box.style.display = box.style.display === 'block' ? 'none' : 'block';
+}
+
+// person-popタップ対応
+document.addEventListener('click', (e) => {
+  const pp = e.target.closest('.person-pop');
+  if (pp) {
+    e.stopPropagation();
+    const isActive = pp.classList.contains('active');
+    document.querySelectorAll('.person-pop.active').forEach(el => el.classList.remove('active'));
+    if (!isActive) pp.classList.add('active');
+    return;
+  }
+  document.querySelectorAll('.person-pop.active').forEach(el => el.classList.remove('active'));
+});
+</script>
+</body>
+</html>
